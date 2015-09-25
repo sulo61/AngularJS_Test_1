@@ -4,12 +4,17 @@ from beacons import views
 
 __author__ = 'Mateusz'
 
-list_ = {
+methods = {
     'get': 'list',
     'post': 'create',
 }
 urlpatterns = [
-    url(r'beacons/', views.CreateBeacon.as_view(list_), name="beacons"),
+    url(r'beacons/', views.BeaconView.as_view(methods), name="beacons"),
+    url(r'campaigns/(?P<pk>[0-9]+)/beacons', views.CampaignBeaconView.as_view(methods), name="campaign-beacon"),
+    url(r'campaigns/', views.CampaignView.as_view(methods), name="campaigns"),
+
+
+
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
