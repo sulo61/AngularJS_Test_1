@@ -1,3 +1,4 @@
+import time
 from rest_framework import serializers
 
 from beacons.models import Beacon, Campaign, Shop, OpeningHours
@@ -59,8 +60,12 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
         day_before = None
         for opening_hour in opening_hours:
             if not opening_hour:
-                return False
-                # raise ValidationError("opening_hour can not be empty")
+                raise ValidationError(detail={'open_hours': ['This field is required']})
+
+            if time.strptime(opening_hour.get('open_time'), "%H:%M:%S.%f") >= \
+                    time.strptime(opening_hour.get('close_time'), "%H:%M:%S.%f"):
+                raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
+
             for day in opening_hour.get('days'):
                 if day_before is None:
                     day_before = day
