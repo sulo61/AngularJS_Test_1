@@ -28,6 +28,7 @@ urlpatterns = [
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
+        'beacons': reverse('beacons', request=request, format=format),
         'shops': reverse('shops', request=request, format=format),
         'campaigns': reverse('campaigns', request=request, format=format),
         'docs': reverse('django.swagger.base.view', request=request, format=format),

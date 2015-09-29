@@ -20,7 +20,7 @@ class Campaign(models.Model, TimestampMixin):
 class Beacon(models.Model):
     title = models.CharField(max_length=100, blank=False)
     user = models.ForeignKey('auth.User', related_name='beacons')
-    campaign = models.ForeignKey('Campaign', related_name='beacons')
+    campaign = models.ForeignKey('Campaign', related_name='beacons', blank=True, null=True)
 
     def __str__(self):
         return self.title

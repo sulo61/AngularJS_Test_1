@@ -50,7 +50,7 @@ class CampaignBeaconView(ModelViewSet):
         serializer = BeaconSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(campaign=self.get_object())
-            return Response({'status': 'Beacon created and set!'})
+            return Response(serializer.data)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -59,7 +59,7 @@ class CampaignBeaconView(ModelViewSet):
         return self.get_object().beacons.all()
 
 
-class BeaconView(ModelViewSet):
+class BeaconCampaignView(ModelViewSet):
     serializer_class = BeaconSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -89,3 +89,21 @@ class ShopView(ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.shops.all()
+
+
+class BeaconView(ModelViewSet):
+    serializer_class = BeaconSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.request.user.beacons.all()
+
+    @detail_route(methods=['post'])
+    def create(self, request):
+        serializer = BeaconSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
