@@ -1,4 +1,4 @@
-from beacons.permissions import IsOwner
+from beacons.permissions import IsCampaignOwner
 from rest_framework import status
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import NotFound
@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializer
 
 
 class CampaignView(ModelViewSet):
@@ -20,7 +20,7 @@ class CampaignView(ModelViewSet):
         serializer = CampaignSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
-            return Response({'status': 'Campaign created!'})
+            return Response(serializer.data)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -38,7 +38,7 @@ class CampaignRetrieveView(ModelViewSet):
 
 class CampaignBeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
-    permission_classes = (IsAuthenticated, IsOwner)
+    permission_classes = (IsAuthenticated, IsCampaignOwner)
 
     def get_object(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -107,3 +107,27 @@ class BeaconView(ModelViewSet):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class CampaignAdView(ModelViewSet):
+    serializer_class = AdSerializer
+    # TODO: create proper perrmission for create ad
+    permission_classes = (IsAuthenticated, )
+
+    def get_object(self):
+        obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def create(self, request, *args, **kwargs):
+        serializer = AdSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(campaign=self.get_object())
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # TODO: change adds to ads
+    def get_queryset(self):
+        return self.get_object().adds.all()

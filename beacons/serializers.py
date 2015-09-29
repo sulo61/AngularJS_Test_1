@@ -1,7 +1,7 @@
 import time
 from rest_framework import serializers
 
-from beacons.models import Beacon, Campaign, Shop, OpeningHours
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad
 from rest_framework.exceptions import ValidationError
 
 
@@ -75,3 +75,10 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
                 day_before = day
         return True
+
+
+class AdSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ad
+        fields = ('title', 'description')

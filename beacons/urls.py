@@ -11,6 +11,7 @@ methods = {
 urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view({'get': 'retrieve', }),
         name="campaign"),
+    url(r'campaigns/(?P<pk>[0-9]+)/ads/$', views.CampaignAdView.as_view(methods), name="campaign-ads"),
     url(r'campaigns/(?P<pk>[0-9]+)/beacons/$', views.CampaignBeaconView.as_view(methods), name="campaign-beacon"),
     url(r'campaigns/(?P<pk>[0-9]+)/beacons/(?P<beacon_id>[0-9]+)/$', views.BeaconCampaignView.as_view({'get': 'retrieve', }),
         name="beacon"),
