@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializer
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializer, AdSerializerCreate
 
 
 class CampaignView(ModelViewSet):
@@ -110,9 +110,14 @@ class BeaconView(ModelViewSet):
 
 
 class CampaignAdView(ModelViewSet):
-    serializer_class = AdSerializer
     # TODO: create proper perrmission for create ad
     permission_classes = (IsAuthenticated, )
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return AdSerializerCreate
+        elif self.request.method == 'GET':
+            return AdSerializer
 
     def get_object(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))

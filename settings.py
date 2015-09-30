@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'psycopg2',
     'unittest',
+    'imagekit',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -107,7 +108,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = ''
+
+STATIC_URL = '/images/'
+
+STATICFILES_DIRS = ( os.path.join('images'), )
 
 REST_FRAMEWORK = {
     'PAGINATE_BY': 5,

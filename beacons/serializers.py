@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad
 from rest_framework.exceptions import ValidationError
+import settings
 
 
 class BeaconSerializer(serializers.HyperlinkedModelSerializer):
@@ -78,7 +79,22 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AdSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
+
+    def get_image_url_json(self, obj):
+        try:
+            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+            print self.context['request'].get_host()
+            return uri
+        except ValueError:
+            return None
 
     class Meta:
         model = Ad
-        fields = ('title', 'description')
+        fields = ('title', 'description', 'image_url')
+
+
+class AdSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = ('title', 'description', 'image')

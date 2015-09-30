@@ -30,6 +30,7 @@ class Ad(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     campaign = models.ForeignKey('Campaign', related_name='adds')
+    image = models.ImageField(upload_to='images/ads', blank=True, null=True)
 
 
 DAYS_OF_WEEK = (
