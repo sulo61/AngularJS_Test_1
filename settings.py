@@ -112,7 +112,7 @@ STATIC_ROOT = ''
 
 STATIC_URL = '/images/'
 
-STATICFILES_DIRS = ( os.path.join('images'), )
+STATICFILES_DIRS = (os.path.join('images'),)
 
 REST_FRAMEWORK = {
     'PAGINATE_BY': 5,

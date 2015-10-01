@@ -15,11 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.templatetags.static import static
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-import settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -30,6 +28,8 @@ urlpatterns = [
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
+        'login': reverse('login', request=request, format=format),
+        'register': reverse('register', request=request, format=format),
         'beacons': reverse('beacons', request=request, format=format),
         'shops': reverse('shops', request=request, format=format),
         'campaigns': reverse('campaigns', request=request, format=format),

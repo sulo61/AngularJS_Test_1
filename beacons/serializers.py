@@ -1,9 +1,26 @@
 import time
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad
 from rest_framework.exceptions import ValidationError
 import settings
+
+
+class UserSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
+    class Meta:
+        model = User
+        fields = ("id", 'username', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
 
 class BeaconSerializer(serializers.HyperlinkedModelSerializer):

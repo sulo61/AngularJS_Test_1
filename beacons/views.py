@@ -1,3 +1,7 @@
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+
 from beacons.permissions import IsCampaignOwner
 from rest_framework import status
 from rest_framework.decorators import detail_route
@@ -8,7 +12,44 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, AdSerializerList
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
+    AdSerializerList, \
+    UserSerializer
+
+
+class CreateViewUser(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def post_save(self, obj, created=False):
+        token = Token.objects.create(user=obj)
+        obj.key = token
+
+
+class ObtainToken(ObtainAuthToken):
+    """
+        Obtain user token
+    """
+
+    def post(self, request):
+        """
+        ---
+        parameters:
+            - name: username
+              description: User name
+              required: true
+              type: string
+
+            - name: password
+              description: User password
+              required: true
+              type: string
+        type:
+            token:
+                description: User token
+                type: string
+        """
+        return super(ObtainToken, self).post(request)
 
 
 class CampaignView(ModelViewSet):
@@ -111,7 +152,7 @@ class BeaconView(ModelViewSet):
 
 class CampaignAdView(ModelViewSet):
     # TODO: create proper perrmission for create ad
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -133,6 +174,7 @@ class CampaignAdView(ModelViewSet):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # TODO: change adds to ads
+            # TODO: change adds to ads
+
     def get_queryset(self):
         return self.get_object().ads.all()
