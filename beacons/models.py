@@ -29,7 +29,7 @@ class Beacon(models.Model):
 class Ad(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
-    campaign = models.ForeignKey('Campaign', related_name='adds')
+    campaign = models.ForeignKey('Campaign', related_name='ads')
     image = models.ImageField(upload_to='images/ads', blank=True, null=True)
 
 

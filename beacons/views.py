@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializer, AdSerializerCreate
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, AdSerializerList
 
 
 class CampaignView(ModelViewSet):
@@ -115,9 +115,9 @@ class CampaignAdView(ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return AdSerializerCreate
+            return AdSerializerList
         elif self.request.method == 'GET':
-            return AdSerializer
+            return AdSerializerCreate
 
     def get_object(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -125,7 +125,7 @@ class CampaignAdView(ModelViewSet):
         return obj
 
     def create(self, request, *args, **kwargs):
-        serializer = AdSerializer(data=request.data)
+        serializer = AdSerializerCreate(data=request.data)
         if serializer.is_valid():
             serializer.save(campaign=self.get_object())
             return Response(serializer.data)
@@ -135,4 +135,4 @@ class CampaignAdView(ModelViewSet):
 
         # TODO: change adds to ads
     def get_queryset(self):
-        return self.get_object().adds.all()
+        return self.get_object().ads.all()

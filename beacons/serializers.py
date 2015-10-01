@@ -78,7 +78,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
         return True
 
 
-class AdSerializer(serializers.ModelSerializer):
+class AdSerializerCreate(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
 
     def get_image_url_json(self, obj):
@@ -94,7 +94,7 @@ class AdSerializer(serializers.ModelSerializer):
         fields = ('title', 'description', 'image_url')
 
 
-class AdSerializerCreate(serializers.ModelSerializer):
+class AdSerializerList(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = ('title', 'description', 'image')
