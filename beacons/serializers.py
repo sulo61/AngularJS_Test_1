@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon
 from rest_framework.exceptions import ValidationError
+from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueValidator
 import settings
 
@@ -93,7 +94,7 @@ class AdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        fields = ('title', 'description', 'image_url')
+        fields = ('id', 'title', 'description', 'image_url')
 
 
 class AdSerializerCreate(serializers.ModelSerializer):
@@ -105,7 +106,7 @@ class AdSerializerCreate(serializers.ModelSerializer):
 class CampaignAddActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActionBeacon
-        fields = ('beacon', 'ad')
+        fields = ('id', 'beacon', 'ad')
 
     def get_fields(self):
         fields = super(CampaignAddActionSerializer, self).get_fields()
@@ -119,3 +120,9 @@ class BeaconActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = ('title', '')
+
+
+class ActionSerializer(ModelSerializer):
+    class Meta:
+        model = ActionBeacon
+        fields = ('id', 'beacon', 'ad')

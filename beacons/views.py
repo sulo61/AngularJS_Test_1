@@ -1,4 +1,4 @@
-from beacons.permissions import IsCampaignOwner
+from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
 from rest_framework import status
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import NotFound
@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign, Beacon
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializer, AdSerializerCreate, \
-    CampaignAddActionSerializer, BeaconActionSerializer
+    CampaignAddActionSerializer, ActionSerializer
 
 
 class CampaignView(ModelViewSet):
@@ -142,7 +142,7 @@ class CampaignAdView(ModelViewSet):
 
 class CampaignAddAction(ModelViewSet):
     serializer_class = CampaignAddActionSerializer
-    permission_classes = (IsCampaignOwner,)
+    permission_classes = (IsAdOwner,)
 
     def get_object(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -158,14 +158,13 @@ class CampaignAddAction(ModelViewSet):
 
 class BeaconRetrieve(ModelViewSet):
     serializer_class = AdSerializer
-    permission_classes = (IsCampaignOwner,)
+    permission_classes = (IsAdOwner,)
 
     def get_queryset(self):
         return self.request.user.beacons
 
     def get_object(self):
         beacon = get_object_or_404(Beacon, pk=self.kwargs.get('pk'))
-        self.check_object_permissions(self.request, beacon)
         return beacon.action.ad
 
     def get_serializer_class(self):
@@ -175,11 +174,12 @@ class BeaconRetrieve(ModelViewSet):
         return super(BeaconRetrieve, self).create(request, *args, **kwargs)
 
 
+class ActionView(ModelViewSet):
+    serializer_class = ActionSerializer
+    permission_classes = (IsActionOwner,)
 
-
-
-
-
-
-
-
+    def get_object(self):
+        campaign = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        action_pl = self.kwargs.get('action_pk')
+        actions_get = campaign.actions.get(pk=action_pl)
+        return actions_get
