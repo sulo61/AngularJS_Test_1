@@ -71,3 +71,9 @@ class Award(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     points = models.IntegerField(blank=True)
+
+
+class ActionBeacon(models.Model):
+    campaign = models.ForeignKey('Campaign', related_name='actions')
+    beacon = models.OneToOneField(Beacon, blank=True, null=True, related_name='action')
+    ad = models.OneToOneField(Ad, blank=True, null=True, related_name='action')
