@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", 'username', 'password')
+        fields = ("id", 'username', 'password', 'email', 'first_name', 'last_name')
         extra_kwargs = {'password': {'write_only': True}}
 
 
@@ -125,8 +125,14 @@ class CampaignAddActionSerializer(serializers.ModelSerializer):
 
     def get_fields(self):
         fields = super(CampaignAddActionSerializer, self).get_fields()
-        fields['beacon'].queryset = self.context['view'].request.user.beacons
-        get = self.context['view'].request._request.resolver_match.kwargs.get('pk')
+        if len(self.context) == 0:
+            return fields
+        request = self.context['view'].request
+        user = request.user
+        fields['beacon'].queryset = user.beacons
+        if not user:
+            return fields
+        get = request._request.resolver_match.kwargs.get('pk')
         fields['ad'].queryset = get_object_or_404(Campaign, pk=get).ads
         return fields
 
