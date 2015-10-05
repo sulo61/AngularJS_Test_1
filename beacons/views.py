@@ -1,14 +1,17 @@
 from django.contrib.auth.models import User
+import rest_framework
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
 from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
 from rest_framework import status
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, api_view, authentication_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.serializers import AdSerializerList, \
@@ -22,6 +25,27 @@ class CreateViewUser(ModelViewSet):
     def post_save(self, obj, created=False):
         token = Token.objects.create(user=obj)
         obj.key = token
+
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
+def get_user(request, format=None):
+    map = {}
+    user = request.user
+    map['last_name'] = user.last_name
+    map['first_name'] = user.first_name
+    map['email'] = user.email
+    return Response(map)
+
+
+class UserProfile(APIView):
+    def get(self, request, format=None):
+        map = {}
+        user = request.user
+        map['last_name'] = user.last_name
+        map['first_name'] = user.first_name
+        map['email'] = user.email
+        return Response(map)
 
 
 class ObtainToken(ObtainAuthToken):

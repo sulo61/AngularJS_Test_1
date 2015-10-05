@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from beacons import views
-from beacons.views import CreateViewUser, ObtainToken
+from beacons.views import CreateViewUser, ObtainToken, UserProfile
 
 __author__ = 'Mateusz'
 
@@ -15,11 +15,13 @@ retrieve = {
     'patch': 'update',
 }
 
+retrieve_only = {'get': 'retrieve', }
 urlpatterns = [
     url(r'^login/', ObtainToken.as_view(), name="login"),
-    url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
+    url(r'^register/$', CreateViewUser.as_view({'get': 'list'}), name='register'),
+    url(r'^user/$', views.get_user, name='user'),
 
-    url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view({'get': 'retrieve', }),
+    url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view(retrieve_only),
         name="campaign"),
     url(r'campaigns/(?P<pk>[0-9]+)/actions/(?P<action_pk>[0-9]+)/$', views.ActionView.as_view(retrieve),
         name="campaign-action"),
