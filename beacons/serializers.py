@@ -1,10 +1,11 @@
 import time
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon
 from rest_framework.exceptions import ValidationError
-import settings
+from rest_framework.serializers import ModelSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -108,10 +109,35 @@ class AdSerializerCreate(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        fields = ('title', 'description', 'image_url')
+        fields = ('id', 'title', 'description', 'image_url')
 
 
 class AdSerializerList(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = ('title', 'description', 'image')
+
+
+class CampaignAddActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActionBeacon
+        fields = ('id', 'beacon', 'ad')
+
+    def get_fields(self):
+        fields = super(CampaignAddActionSerializer, self).get_fields()
+        fields['beacon'].queryset = self.context['view'].request.user.beacons
+        get = self.context['view'].request._request.resolver_match.kwargs.get('pk')
+        fields['ad'].queryset = get_object_or_404(Campaign, pk=get).ads
+        return fields
+
+
+class BeaconActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = ('title', '')
+
+
+class ActionSerializer(ModelSerializer):
+    class Meta:
+        model = ActionBeacon
+        fields = ('id', 'beacon', 'ad')

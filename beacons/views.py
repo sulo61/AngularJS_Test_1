@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
-from beacons.permissions import IsCampaignOwner
+from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
 from rest_framework import status
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import NotFound
@@ -11,9 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from beacons.models import Campaign
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
-    AdSerializerList, \
+from beacons.serializers import AdSerializerList, \
     UserSerializer
 
 
@@ -50,6 +48,11 @@ class ObtainToken(ObtainAuthToken):
                 type: string
         """
         return super(ObtainToken, self).post(request)
+
+
+from beacons.models import Campaign, Beacon
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
+    CampaignAddActionSerializer, ActionSerializer
 
 
 class CampaignView(ModelViewSet):
@@ -152,7 +155,7 @@ class BeaconView(ModelViewSet):
 
 class CampaignAdView(ModelViewSet):
     # TODO: create proper perrmission for create ad
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsCampaignOwner)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -178,3 +181,58 @@ class CampaignAdView(ModelViewSet):
 
     def get_queryset(self):
         return self.get_object().ads.all()
+
+
+class CampaignAddAction(ModelViewSet):
+    serializer_class = CampaignAddActionSerializer
+    permission_classes = (IsAdOwner,)
+
+    def get_object(self):
+        obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def perform_create(self, serializer):
+        serializer.save(campaign=self.get_object())
+
+    def get_queryset(self):
+        return self.get_object().actions.all()
+
+
+class BeaconRetrieve(ModelViewSet):
+    serializer_class = AdSerializerList
+    permission_classes = (IsAdOwner,)
+
+    def get_queryset(self):
+        return self.request.user.beacons
+
+    def get_object(self):
+        beacon = get_object_or_404(Beacon, pk=self.kwargs.get('pk'))
+        return beacon.action.ad
+
+    def get_serializer_class(self):
+        return super(BeaconRetrieve, self).get_serializer_class()
+
+    def create(self, request, *args, **kwargs):
+        return super(BeaconRetrieve, self).create(request, *args, **kwargs)
+
+
+class ActionView(ModelViewSet):
+    serializer_class = ActionSerializer
+    permission_classes = (IsActionOwner,)
+
+    def get_object(self):
+        campaign = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        action_pl = self.kwargs.get('action_pk')
+        actions_get = campaign.actions.get(pk=action_pl)
+        return actions_get
+
+
+class AdViewRetrieve(ModelViewSet):
+    serializer_class = AdSerializerCreate
+    permission_classes = (IsAdOwner,)
+
+    def get_object(self):
+        campaign = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        action_pl = self.kwargs.get('ad_pk')
+        return campaign.ads.get(pk=action_pl)
