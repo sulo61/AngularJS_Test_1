@@ -18,6 +18,7 @@ retrieve = {
 urlpatterns = [
     url(r'^login/', ObtainToken.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
+
     url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view({'get': 'retrieve', }),
         name="campaign"),
     url(r'campaigns/(?P<pk>[0-9]+)/actions/(?P<action_pk>[0-9]+)/$', views.ActionView.as_view(retrieve),
@@ -32,6 +33,7 @@ urlpatterns = [
         views.BeaconCampaignView.as_view(retrieve),
         name="beacon"),
     url(r'campaigns/$', views.CampaignView.as_view(methods), name="campaigns"),
+
     url(r'shops/$', views.ShopView.as_view(methods), name="shops"),
     url(r'beacons/$', views.BeaconView.as_view(methods), name="beacons"),
     url(r'beacons/(?P<pk>[0-9]+)/action/$', views.BeaconRetrieve.as_view(retrieve), name="beacons"),
