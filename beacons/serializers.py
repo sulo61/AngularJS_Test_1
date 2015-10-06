@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 
@@ -158,3 +158,69 @@ class ActionSerializer(ModelSerializer):
     class Meta:
         model = ActionBeacon
         fields = ('id', 'beacon', 'ad')
+
+
+class PromotionSerializerGet(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
+
+    def get_image_url_json(self, obj):
+        try:
+            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+            print self.context['request'].get_host()
+            return uri
+        except ValueError:
+            return None
+
+    class Meta:
+        model = Promotion
+        fields = ('id', 'title', 'description', 'points', 'image_url')
+
+
+class PromotionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Promotion
+        fields = ('id', 'title', 'description', 'image', 'points',)
+
+
+class PromotionSerializerGet(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
+
+    def get_image_url_json(self, obj):
+        try:
+            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+            print self.context['request'].get_host()
+            return uri
+        except ValueError:
+            return None
+
+    class Meta:
+        model = Promotion
+        fields = ('id', 'title', 'description', 'points', 'image_url')
+
+
+class PromotionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Promotion
+        fields = ('id', 'title', 'description', 'image', 'points',)
+
+
+class AwardSerializerGet(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
+
+    def get_image_url_json(self, obj):
+        try:
+            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+            print self.context['request'].get_host()
+            return uri
+        except ValueError:
+            return None
+
+    class Meta:
+        model = Award
+        fields = ('id', 'title', 'description', 'points', 'image_url')
+
+
+class AwardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Award
+        fields = ('id', 'title', 'description', 'image', 'points',)

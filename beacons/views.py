@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-import rest_framework
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -14,6 +13,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
+from beacons.models import Campaign, Beacon
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
+    CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
+    AwardSerializer
 from beacons.serializers import AdSerializerList, \
     UserSerializer, UserProfileView
 
@@ -79,11 +82,6 @@ class ObtainToken(ObtainAuthToken):
                 type: string
         """
         return super(ObtainToken, self).post(request)
-
-
-from beacons.models import Campaign, Beacon
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
-    CampaignAddActionSerializer, ActionSerializer
 
 
 class CampaignView(ModelViewSet):
@@ -267,3 +265,63 @@ class AdViewRetrieve(ModelViewSet):
         campaign = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
         action_pl = self.kwargs.get('ad_pk')
         return campaign.ads.get(pk=action_pl)
+
+
+class PromotionCreateView(ModelViewSet):
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PromotionSerializerGet
+        else:
+            return PromotionSerializerGet
+
+    def get_queryset(self):
+        promotions_all = get_object_or_404(Campaign, pk=self.kwargs.get('pk')).promotions.all()
+        return promotions_all
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('promotion_pk'))
+
+
+class PromotionView(PromotionCreateView):
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PromotionSerializerGet
+        else:
+            return PromotionsSerializer
+
+    def get_object(self):
+        query_set = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        return query_set
+
+    def perform_create(self, serializer):
+        serializer.save(campaign=self.get_object())
+        
+        
+class AwardCreateView(ModelViewSet):
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PromotionSerializerGet
+        else:
+            return PromotionSerializerGet
+
+    def get_queryset(self):
+        promotions_all = get_object_or_404(Campaign, pk=self.kwargs.get('pk')).awards.all()
+        return promotions_all
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('award_pk'))
+
+
+class AwardView(AwardCreateView):
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return AwardSerializerGet
+        else:
+            return AwardSerializer
+
+    def get_object(self):
+        query_set = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        return query_set
+
+    def perform_create(self, serializer):
+        serializer.save(campaign=self.get_object())

@@ -69,6 +69,8 @@ class Promotion(models.Model):
     title = models.CharField(max_length=100, blank=False)
     points = models.IntegerField(blank=True)
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='images/promotions', blank=True, null=True)
+    campaign = models.ForeignKey('Campaign', related_name='promotions')
 
 
 class Scenario(models.Model):
@@ -79,9 +81,12 @@ class Award(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     points = models.IntegerField(blank=True)
+    image = models.ImageField(upload_to='images/awards', blank=True, null=True)
+    campaign = models.ForeignKey('Campaign', related_name='awards')
 
 
 class ActionBeacon(models.Model):
     campaign = models.ForeignKey('Campaign', related_name='actions')
     beacon = models.OneToOneField(Beacon, blank=True, null=True, related_name='action')
     ad = models.OneToOneField(Ad, blank=True, null=True, related_name='action')
+    points = models.IntegerField(default=0)

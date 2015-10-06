@@ -43,6 +43,14 @@ urlpatterns = [
     # url(r'beacons/(?P<pk>[0-9]+)/$', views.BeaconRetrieve.as_view(retrieve), name="beacons"),
 
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    url(r'campaigns/(?P<pk>[0-9]+)/promotions/$', views.PromotionView.as_view(methods), name='promotions'),
+    url(r'campaigns/(?P<pk>[0-9]+)/promotions/(?P<promotion_pk>[0-9]+)/$', views.PromotionCreateView.as_view(retrieve),
+        name='promotions_crud'),
+
+    url(r'campaigns/(?P<pk>[0-9]+)/awards/$', views.AwardView.as_view(methods), name='promotions'),
+    url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/$', views.AwardView.as_view(retrieve),
+        name='promotions_crud'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
