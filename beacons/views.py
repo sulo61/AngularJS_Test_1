@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.serializers import AdSerializerList, \
-    UserSerializer
+    UserSerializer, UserProfileView
 
 
 class CreateViewUser(ModelViewSet):
@@ -30,12 +30,19 @@ class CreateViewUser(ModelViewSet):
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
 def get_user(request, format=None):
-    map = {}
     user = request.user
-    map['last_name'] = user.last_name
-    map['first_name'] = user.first_name
-    map['email'] = user.email
+    map = {
+        'id': user.pk,
+        'last_name': user.last_name,
+        'first_name': user.first_name,
+        'email': user.email,
+    }
     return Response(map)
+
+
+class UserProfileCRUD(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserProfileView
 
 
 class UserProfile(APIView):
@@ -179,7 +186,7 @@ class BeaconView(ModelViewSet):
 
 class CampaignAdView(ModelViewSet):
     # TODO: create proper perrmission for create ad
-    permission_classes = (IsAuthenticated, IsCampaignOwner)
+    permission_classes = (IsAuthenticated, IsAdOwner)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -193,7 +200,7 @@ class CampaignAdView(ModelViewSet):
         return obj
 
     def create(self, request, *args, **kwargs):
-        serializer = AdSerializerCreate(data=request.data)
+        serializer = AdSerializerList(data=request.data)
         if serializer.is_valid():
             serializer.save(campaign=self.get_object())
             return Response(serializer.data)

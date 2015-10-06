@@ -21,7 +21,18 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", 'username', 'password', 'email', 'first_name', 'last_name')
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'username': {'write_only': True}
+        }
+        read_only_fields = ('id',)
+
+
+class UserProfileView(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+        read_only_fields = ('id',)
 
 
 class BeaconSerializer(serializers.HyperlinkedModelSerializer):
@@ -109,13 +120,13 @@ class AdSerializerCreate(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        fields = ('id', 'title', 'description', 'image_url')
+        fields = ('id', 'title', 'description', 'image_url', 'type')
 
 
 class AdSerializerList(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        fields = ('title', 'description', 'image')
+        fields = ('title', 'description', 'image', 'type')
 
 
 class CampaignAddActionSerializer(serializers.ModelSerializer):

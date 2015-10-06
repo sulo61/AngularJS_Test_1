@@ -26,7 +26,15 @@ class Beacon(models.Model):
         return self.title
 
 
+choices = {
+    (0, 'full_width_image_only'),
+    (1, 'full_width_image_With_content'),
+    (2, 'left_image_With_content'),
+}
+
+
 class Ad(models.Model):
+    type = models.IntegerField(default=0, choices=choices)
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     campaign = models.ForeignKey('Campaign', related_name='ads')

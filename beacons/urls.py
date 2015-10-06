@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from beacons import views
-from beacons.views import CreateViewUser, ObtainToken, UserProfile
+from beacons.views import CreateViewUser, ObtainToken, UserProfile, UserProfileCRUD
 
 __author__ = 'Mateusz'
 
@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^login/', ObtainToken.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'get': 'list'}), name='register'),
     url(r'^user/$', views.get_user, name='user'),
+    url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
 
     url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view(retrieve_only),
         name="campaign"),
