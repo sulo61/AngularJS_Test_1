@@ -163,6 +163,11 @@ class ShopView(ModelViewSet):
     def get_queryset(self):
         return self.request.user.shops.all()
 
+    def update(self, request, *args, **kwargs):
+        request._data = request.data
+        request._full_data = request.data
+        return super(ShopView, self).update(request, *args, **kwargs)
+
 
 class BeaconView(ModelViewSet):
     serializer_class = BeaconSerializer

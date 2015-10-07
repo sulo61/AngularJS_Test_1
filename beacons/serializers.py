@@ -58,7 +58,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Shop
-        fields = ('id', 'name', 'opening_hours')
+        fields = ('id', 'name', 'opening_hours', 'address', 'latitude', 'longitude')
 
     def create(self, validated_data):
         opening_hours_data = validated_data.pop('opening_hours')
@@ -69,7 +69,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     def is_valid(self, raise_exception=False):
         valid = super(ShopSerializer, self).is_valid(raise_exception)
-        opening_hours = self.data.get('opening_hours')
+        opening_hours = self.validated_data.get('opening_hours')
         if valid:
             valid = self.valid_days(opening_hours)
 
@@ -78,10 +78,9 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
     def valid_days(self, opening_hours):
         if not opening_hours:
             return False
-
         hours_ = opening_hours[0]
         if hours_.get('days')[0] != 1:
-            raise ValidationError(detail={'open_hours': ['Days should starts with 0']})
+            raise ValidationError(detail={'open_hours': ['Days should starts with 1']})
 
         hours_last = opening_hours[-1]
         if hours_last.get('days')[-1] != 7:
@@ -92,8 +91,10 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
             if not opening_hour:
                 raise ValidationError(detail={'open_hours': ['This field is required']})
 
-            if time.strptime(opening_hour.get('open_time'), "%H:%M:%S") >= \
-                    time.strptime(opening_hour.get('close_time'), "%H:%M:%S"):
+            get = str(opening_hour.get('open_time'))
+            hour_get = str(opening_hour.get('close_time'))
+            if time.strptime(get, "%H:%M:%S") >= \
+                    time.strptime(hour_get, "%H:%M:%S"):
                 raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
 
             for day in opening_hour.get('days'):
@@ -105,6 +106,22 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
                 day_before = day
         return True
+
+    def update(self, instance, validated_data):
+        days_data = validated_data.pop('opening_hours')
+        counter = 0
+        for openingHours in instance.opening_hours.all():
+            openingHours.days = days_data[counter].get('days')
+            openingHours.open_time = days_data[counter].get('open_time')
+            openingHours.close_time = days_data[counter].get('close_time')
+            openingHours.save()
+            counter += 1
+
+        instance.longitude = validated_data.get('longitude')
+        instance.latitude = validated_data.get('latitude')
+        instance.address = validated_data.get('address')
+        instance.save()
+        return instance
 
 
 class AdSerializerCreate(serializers.ModelSerializer):

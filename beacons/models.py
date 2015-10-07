@@ -56,6 +56,8 @@ class Shop(models.Model):
     owner = models.ForeignKey('auth.User', related_name='shops', choices=DAYS_OF_WEEK)
     name = models.CharField(max_length=100, blank=False)
     address = models.CharField(max_length=200, blank=False)
+    latitude = models.FloatField(default=50.044328, blank=True, null=True)
+    longitude = models.FloatField(default=19.952527, blank=True, null=True)
 
 
 class OpeningHours(models.Model):

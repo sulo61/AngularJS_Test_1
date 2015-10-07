@@ -5,3 +5,5 @@ env
 *.pyc
 
 local_settings.py
+beacons/migrations
+images/
