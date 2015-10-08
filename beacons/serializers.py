@@ -58,7 +58,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Shop
-        fields = ('id', 'name', 'opening_hours', 'address', 'latitude', 'longitude')
+        fields = ('id', 'name', 'opening_hours', 'address', 'latitude', 'longitude', 'image')
 
     def create(self, validated_data):
         opening_hours_data = validated_data.pop('opening_hours')
@@ -241,3 +241,9 @@ class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award
         fields = ('id', 'title', 'description', 'image', 'points',)
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shop
+        fields = ('image',)

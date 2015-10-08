@@ -9,14 +9,16 @@ from rest_framework.decorators import detail_route, api_view, authentication_cla
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import BaseRenderer
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from beacons.models import Campaign, Beacon
+from beacons.models import Campaign, Beacon, Shop
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
-    AwardSerializer
+    AwardSerializer, ImageSerializer
 from beacons.serializers import AdSerializerList, \
     UserSerializer, UserProfileView
 
@@ -300,8 +302,8 @@ class PromotionView(PromotionCreateView):
 
     def perform_create(self, serializer):
         serializer.save(campaign=self.get_object())
-        
-        
+
+
 class AwardCreateView(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -330,3 +332,22 @@ class AwardView(AwardCreateView):
 
     def perform_create(self, serializer):
         serializer.save(campaign=self.get_object())
+
+
+class ImageUpdater(ModelViewSet):
+    serializer_class = ImageSerializer
+
+    def get_queryset(self):
+        return self.request.user.shops.all()
+
+    def create(self, request, *args, **kwargs):
+        if 'image' in request.FILES:
+
+            shop = get_object_or_404(Shop, pk=kwargs.get('pk'))
+            upload = request.FILES['image']
+
+            shop.image.delete()
+            shop.image.save(upload.name, upload)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return super(ImageUpdater, self).create(request, *args, **kwargs)

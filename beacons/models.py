@@ -58,6 +58,7 @@ class Shop(models.Model):
     address = models.CharField(max_length=200, blank=False)
     latitude = models.FloatField(default=50.044328, blank=True, null=True)
     longitude = models.FloatField(default=19.952527, blank=True, null=True)
+    image = models.ImageField(upload_to='images/shops', blank=True, null=True)
 
 
 class OpeningHours(models.Model):
