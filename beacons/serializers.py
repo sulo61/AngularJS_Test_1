@@ -77,7 +77,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     def valid_days(self, opening_hours):
         if not opening_hours:
-            return False
+            raise ValidationError(detail={'open_hours': ['This field is required']})
         hours_ = opening_hours[0]
         if hours_.get('days')[0] != 1:
             raise ValidationError(detail={'open_hours': ['Days should starts with 1']})
@@ -118,10 +118,23 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
             counter += 1
 
         instance.longitude = validated_data.get('longitude')
+        instance.name = validated_data.get('name')
         instance.latitude = validated_data.get('latitude')
         instance.address = validated_data.get('address')
         instance.save()
         return instance
+
+
+class ShopSerializerPOST(ShopSerializer):
+    image = serializers.SerializerMethodField(method_name='get_image_url_json')
+
+    def get_image_url_json(self, obj):
+        try:
+            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+            print self.context['request'].get_host()
+            return uri
+        except ValueError:
+            return None
 
 
 class AdSerializerCreate(serializers.ModelSerializer):
@@ -243,7 +256,25 @@ class AwardSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'description', 'image', 'points',)
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ShopImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
+        fields = ('image',)
+
+
+class AdImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = ('image',)
+
+
+class PromotionImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Promotion
+        fields = ('image',)
+
+
+class AwardImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Award
         fields = ('image',)

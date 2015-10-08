@@ -15,10 +15,10 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from beacons.models import Campaign, Beacon, Shop
+from beacons.models import Campaign, Beacon, Shop, Ad
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
-    AwardSerializer, ImageSerializer
+    AwardSerializer, ShopImageSerializer, AwardImageSerializer, ShopSerializerPOST
 from beacons.serializers import AdSerializerList, \
     UserSerializer, UserProfileView
 
@@ -149,7 +149,7 @@ class BeaconCampaignView(ModelViewSet):
 
 
 class ShopView(ModelViewSet):
-    serializer_class = ShopSerializer
+    serializer_class = ShopSerializerPOST
     permission_classes = (IsAuthenticated,)
 
     @detail_route(methods=['post'])
@@ -157,7 +157,7 @@ class ShopView(ModelViewSet):
         serializer = ShopSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
-            return Response({'status': 'Shop created!'})
+            return Response(status=status.HTTP_201_CREATED, data=serializer.data)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -335,7 +335,7 @@ class AwardView(AwardCreateView):
 
 
 class ImageUpdater(ModelViewSet):
-    serializer_class = ImageSerializer
+    serializer_class = ShopImageSerializer
 
     def get_queryset(self):
         return self.request.user.shops.all()
@@ -344,6 +344,25 @@ class ImageUpdater(ModelViewSet):
         if 'image' in request.FILES:
 
             shop = get_object_or_404(Shop, pk=kwargs.get('pk'))
+            upload = request.FILES['image']
+
+            shop.image.delete()
+            shop.image.save(upload.name, upload)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return super(ImageUpdater, self).create(request, *args, **kwargs)
+
+
+class AdImageUpdater(ModelViewSet):
+    serializer_class = AwardImageSerializer
+
+    def get_queryset(self):
+        return get_object_or_404(Campaign, pk=self.kwargs.get('pk')).ads.all()
+
+    def create(self, request, *args, **kwargs):
+        if 'image' in request.FILES:
+
+            shop = get_object_or_404(Ad, pk=kwargs.get('ad_pk'))
             upload = request.FILES['image']
 
             shop.image.delete()
