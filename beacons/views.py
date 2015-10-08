@@ -326,9 +326,12 @@ class AwardView(AwardCreateView):
         else:
             return AwardSerializer
 
-    def get_object(self):
-        query_set = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
-        return query_set
+    def get_queryset(self):
+        if self.request.method == 'POST':
+            query_set = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+            return query_set
+        else:
+            return super(AwardView, self).get_queryset()
 
     def perform_create(self, serializer):
         serializer.save(campaign=self.get_object())

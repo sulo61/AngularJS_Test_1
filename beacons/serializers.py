@@ -247,13 +247,13 @@ class AwardSerializerGet(serializers.ModelSerializer):
 
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'points', 'image_url')
+        fields = ('id', 'title', 'description', 'points', 'image_url', 'type')
 
 
 class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'image', 'points',)
+        fields = ('id', 'title', 'description', 'image', 'points', 'type')
 
 
 class ShopImageSerializer(serializers.ModelSerializer):
