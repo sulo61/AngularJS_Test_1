@@ -157,7 +157,8 @@ try:
 except:
     pass
 
-# try:
-#     from heroku_settings import *
-# except:
-#     pass
+if os.environ['local'] is None:
+    try:
+        from heroku_settings import *
+    except:
+        pass
