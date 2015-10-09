@@ -38,7 +38,7 @@ class Ad(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     campaign = models.ForeignKey('Campaign', related_name='ads')
-    image = models.ImageField(upload_to='images/ads', blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/ads', blank=True, null=True)
 
 
 DAYS_OF_WEEK = (
@@ -58,7 +58,7 @@ class Shop(models.Model):
     address = models.CharField(max_length=200, blank=False)
     latitude = models.FloatField(default=50.044328, blank=True, null=True)
     longitude = models.FloatField(default=19.952527, blank=True, null=True)
-    image = models.ImageField(upload_to='images/shops', blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/shops', blank=True, null=True)
 
 
 class OpeningHours(models.Model):
@@ -72,7 +72,7 @@ class Promotion(models.Model):
     title = models.CharField(max_length=100, blank=False)
     points = models.IntegerField(blank=True)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='images/promotions', blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/promotions', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='promotions')
 
 
@@ -91,7 +91,7 @@ class Award(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     points = models.IntegerField(blank=True)
-    image = models.ImageField(upload_to='images/awards', blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/awards', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='awards')
     type = models.IntegerField(default=0, choices=award_choices)
 
