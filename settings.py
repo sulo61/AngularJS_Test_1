@@ -157,7 +157,7 @@ try:
 except:
     pass
 
-try:
-    from heroku_settings import *
-except:
-    pass
+# try:
+#     from heroku_settings import *
+# except:
+#     pass
