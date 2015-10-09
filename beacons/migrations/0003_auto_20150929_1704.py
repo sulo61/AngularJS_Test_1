@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beacons', '0003_auto_20150925_1609'),
+        ('beacons', '0002_auto_20150929_1420'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.AlterField(
             model_name='beacon',
             name='campaign',
-            field=models.ForeignKey(related_name='beacons', to='beacons.Campaign', null=True),
+            field=models.ForeignKey(related_name='beacons', blank=True, to='beacons.Campaign', null=True),
         ),
     ]

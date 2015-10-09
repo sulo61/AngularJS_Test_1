@@ -54,6 +54,10 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'rest_framework',
+    'psycopg2',
+    'unittest',
+    'imagekit',
+    'gunicorn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,7 +109,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = ''
+
+STATIC_URL = '/images/'
+
+STATICFILES_DIRS = (os.path.join('images'),)
 
 REST_FRAMEWORK = {
     'PAGINATE_BY': 5,
@@ -140,5 +148,10 @@ SWAGGER_SETTINGS = {
 
 try:
     from local_settings import *
+except:
+    pass
+
+try:
+    from heroku_settings import *
 except:
     pass
