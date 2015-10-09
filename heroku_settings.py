@@ -10,8 +10,12 @@ SECRET_KEY = '&upe5i5s@743&(y9*f!4+7=#%hjko0notm8&u_$l*061$c2om%eloelo333!#@'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd3sba0c5rafj0p',
+        'USER': 'kezihectgicapy',
+        'PASSWORD': 'un7Ooxekw4BjUpT4R8GWv4NtMl',
+        'HOST': 'ec2-54-195-252-202.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
