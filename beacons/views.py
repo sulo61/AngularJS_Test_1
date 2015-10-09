@@ -16,11 +16,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign, Beacon, Shop, Ad
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
-    CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, ShopSerializerPOST
-from beacons.serializers import AdSerializerList, \
-    UserSerializer, UserProfileView
+from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
 
 
 class CreateViewUser(ModelViewSet):

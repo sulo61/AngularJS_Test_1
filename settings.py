@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'psycopg2',
     'unittest',
     'imagekit',
+    'gunicorn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -147,5 +148,10 @@ SWAGGER_SETTINGS = {
 
 try:
     from local_settings import *
+except:
+    pass
+
+try:
+    from heroku_settings import *
 except:
     pass

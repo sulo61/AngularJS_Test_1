@@ -131,7 +131,7 @@ class ShopSerializerPOST(ShopSerializer):
     def get_image_url_json(self, obj):
         try:
             uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print self.context['request'].get_host()
+            print(self.context['request'].get_host())
             return uri
         except ValueError:
             return None
@@ -143,7 +143,7 @@ class AdSerializerCreate(serializers.ModelSerializer):
     def get_image_url_json(self, obj):
         try:
             uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print self.context['request'].get_host()
+            print (self.context['request'].get_host())
             return uri
         except ValueError:
             return None
@@ -196,7 +196,7 @@ class PromotionSerializerGet(serializers.ModelSerializer):
     def get_image_url_json(self, obj):
         try:
             uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print self.context['request'].get_host()
+            print(self.context['request'].get_host())
             return uri
         except ValueError:
             return None
@@ -218,7 +218,7 @@ class PromotionSerializerGet(serializers.ModelSerializer):
     def get_image_url_json(self, obj):
         try:
             uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print self.context['request'].get_host()
+            print(self.context['request'].get_host())
             return uri
         except ValueError:
             return None
@@ -240,7 +240,7 @@ class AwardSerializerGet(serializers.ModelSerializer):
     def get_image_url_json(self, obj):
         try:
             uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print self.context['request'].get_host()
+            print(self.context['request'].get_host())
             return uri
         except ValueError:
             return None
