@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
 
-    url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view(retrieve_only),
+    url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view(retrieve),
         name="campaign"),
     url(r'campaigns/(?P<pk>[0-9]+)/actions/(?P<action_pk>[0-9]+)/$', views.ActionView.as_view(retrieve),
         name="campaign-action"),
