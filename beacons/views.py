@@ -204,7 +204,7 @@ class BeaconView(ModelViewSet):
 
 class CampaignAdView(ModelViewSet):
     # TODO: create proper perrmission for create ad
-    permission_classes = (IsAuthenticated, IsAdOwner)
+    permission_classes = (IsAuthenticated, )
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
