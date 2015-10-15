@@ -14,9 +14,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign, Beacon, Shop, Ad
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
-    CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
-    AwardSerializer, ShopImageSerializer, AwardImageSerializer, ShopSerializerPOST, CampaignSerializerPatch
+from beacons.serializers import CampaignSerializerPatch
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
+    AwardSerializer, ShopImageSerializer, AwardImageSerializer, ShopSerializerPOST, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
 
 
@@ -320,9 +320,9 @@ class PromotionView(PromotionCreateView):
 class AwardCreateView(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return PromotionSerializerGet
+            return AwardSerializerGet
         else:
-            return PromotionSerializerGet
+            return AwardSerializerGet
 
     def get_queryset(self):
         promotions_all = get_object_or_404(Campaign, pk=self.kwargs.get('pk')).awards.all()
@@ -339,12 +339,9 @@ class AwardView(AwardCreateView):
         else:
             return AwardSerializer
 
-    def get_queryset(self):
-        if self.request.method == 'POST':
-            query_set = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
-            return query_set
-        else:
-            return super(AwardView, self).get_queryset()
+    def get_object(self):
+        campaign = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        return campaign
 
     def perform_create(self, serializer):
         serializer.save(campaign=self.get_object())
@@ -370,7 +367,7 @@ class ImageUpdater(ModelViewSet):
 
 
 class AdImageUpdater(ModelViewSet):
-    serializer_class = AwardImageSerializer
+    serializer_class = AdImageSerializer
 
     def get_queryset(self):
         return get_object_or_404(Campaign, pk=self.kwargs.get('pk')).ads.all()
@@ -385,4 +382,22 @@ class AdImageUpdater(ModelViewSet):
             shop.image.save(upload.name, upload)
             return Response(status=status.HTTP_200_OK)
         else:
-            return super(ImageUpdater, self).create(request, *args, **kwargs)
+            return super(AdImageUpdater, self).create(request, *args, **kwargs)
+
+class AwardImageUpdater(ModelViewSet):
+    serializer_class = AwardImageSerializer
+
+    def get_queryset(self):
+        return get_object_or_404(Campaign, pk=self.kwargs.get('pk')).ads.all()
+
+    def create(self, request, *args, **kwargs):
+        if 'image' in request.FILES:
+
+            shop = get_object_or_404(Ad, pk=kwargs.get('award_pk'))
+            upload = request.FILES['image']
+
+            shop.image.delete()
+            shop.image.save(upload.name, upload)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return super(AwardImageUpdater, self).create(request, *args, **kwargs)
