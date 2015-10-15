@@ -7,13 +7,24 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beacons', '0002_auto_20150929_1420'),
+        ('beacons', '0006_auto_20151014_1851'),
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='beaconscheme',
+            name='user',
+        ),
+        migrations.RemoveField(
+            model_name='beacon',
+            name='shop',
+        ),
+        migrations.AddField(
             model_name='beacon',
             name='campaign',
             field=models.ForeignKey(related_name='beacons', blank=True, to='beacons.Campaign', null=True),
+        ),
+        migrations.DeleteModel(
+            name='BeaconScheme',
         ),
     ]
