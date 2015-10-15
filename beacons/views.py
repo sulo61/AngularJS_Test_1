@@ -16,7 +16,7 @@ from rest_framework.viewsets import ModelViewSet
 from beacons.models import Campaign, Beacon, Shop, Ad
 from beacons.serializers import CampaignSerializerPatch
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
-    AwardSerializer, ShopImageSerializer, AwardImageSerializer, ShopSerializerPOST, AdImageSerializer
+    AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
 
 
@@ -150,7 +150,7 @@ class BeaconCampaignView(ModelViewSet):
 
 
 class ShopView(ModelViewSet):
-    serializer_class = ShopSerializerPOST
+    serializer_class = ShopSerializer
     permission_classes = (IsAuthenticated,)
 
     @detail_route(methods=['post'])

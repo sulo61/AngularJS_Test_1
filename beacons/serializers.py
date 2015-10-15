@@ -141,32 +141,23 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
-class ShopSerializerPOST(ShopSerializer):
-    image = serializers.SerializerMethodField(method_name='get_image_url_json')
-
-    def get_image_url_json(self, obj):
-        try:
-            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print(self.context['request'].get_host())
-            return uri
-        except ValueError:
-            return None
+# class ShopSerializerPOST(ShopSerializer):
+#     image = serializers.SerializerMethodField(method_name='get_image_url_json')
+    #
+    # def get_image_url_json(self, obj):
+    #     try:
+    #         uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+    #         print(self.context['request'].get_host())
+    #         return uri
+    #     except ValueError:
+    #         return None
 
 
 class AdSerializerCreate(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
-
-    def get_image_url_json(self, obj):
-        try:
-            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print (self.context['request'].get_host())
-            return uri
-        except ValueError:
-            return None
 
     class Meta:
         model = Ad
-        fields = ('id', 'title', 'description', 'image_url', 'type')
+        fields = ('id', 'title', 'description', 'image', 'type')
 
 
 class AdSerializerList(serializers.ModelSerializer):
@@ -207,19 +198,10 @@ class ActionSerializer(ModelSerializer):
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
-
-    def get_image_url_json(self, obj):
-        try:
-            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print(self.context['request'].get_host())
-            return uri
-        except ValueError:
-            return None
 
     class Meta:
         model = Promotion
-        fields = ('id', 'title', 'description', 'points', 'image_url')
+        fields = ('id', 'title', 'description', 'points', 'image')
 
 
 class PromotionsSerializer(serializers.ModelSerializer):
@@ -229,19 +211,10 @@ class PromotionsSerializer(serializers.ModelSerializer):
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
-
-    def get_image_url_json(self, obj):
-        try:
-            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print(self.context['request'].get_host())
-            return uri
-        except ValueError:
-            return None
 
     class Meta:
         model = Promotion
-        fields = ('id', 'title', 'description', 'points', 'image_url')
+        fields = ('id', 'title', 'description', 'points', 'image')
 
 
 class PromotionsSerializer(serializers.ModelSerializer):
@@ -251,19 +224,10 @@ class PromotionsSerializer(serializers.ModelSerializer):
 
 
 class AwardSerializerGet(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField(method_name='get_image_url_json')
-
-    def get_image_url_json(self, obj):
-        try:
-            uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-            print(self.context['request'].get_host())
-            return uri
-        except ValueError:
-            return None
 
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'points', 'image_url', 'type')
+        fields = ('id', 'title', 'description', 'points', 'image', 'type')
 
 
 class AwardSerializer(serializers.ModelSerializer):
