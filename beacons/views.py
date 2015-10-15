@@ -164,7 +164,7 @@ class ShopView(ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
-        return self.request.user.shops.all()
+        return Shop.objects.all()
 
     def update(self, request, *args, **kwargs):
         request._data = request.data
