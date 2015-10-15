@@ -19,11 +19,10 @@ class Campaign(models.Model, TimestampMixin):
 
 class Beacon(models.Model):
     title = models.CharField(max_length=100, blank=False)
-    user = models.ForeignKey('auth.User', related_name='beacons')
     campaign = models.ForeignKey('Campaign', related_name='beacons', blank=True, null=True)
     minor = models.IntegerField(max_length=5, default=1)
     major = models.IntegerField(max_length=5, default=1)
-    UUID = models.CharField(max_length=36, default='f7826da6-4fa2-4e98-8024-bc5b71e0893e')
+    UUID = models.CharField(max_length=36, default='00000000-0000-0000-0000-000000000000')
 
     def __str__(self):
         return self.title

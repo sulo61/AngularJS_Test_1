@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award
 from rest_framework.exceptions import ValidationError
-from rest_framework.serializers import ModelSerializer, ManyRelatedField
+from rest_framework.serializers import ModelSerializer, IntegerField
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,12 +36,11 @@ class UserProfileView(serializers.ModelSerializer):
 
 
 class BeaconSerializer(serializers.ModelSerializer):
-    # campaign_id = IntegerField(source='campaign_id')
+    beacons_count = IntegerField()
 
     class Meta:
         model = Beacon
-        fields = ('id', 'title', 'campaign', 'minor', 'major', 'UUID')
-
+        fields = ('id', 'title', 'beacons_count')
 
 class CampaignSerializer(serializers.ModelSerializer):
     class Meta:

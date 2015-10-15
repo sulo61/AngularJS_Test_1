@@ -157,7 +157,6 @@ try:
 except:
     pass
 
-if os.environ.get('MY_LOCAL_SETTINGS') is None:
     try:
         from heroku_settings import *
     except:

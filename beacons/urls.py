@@ -18,7 +18,7 @@ retrieve = {
 retrieve_only = {'get': 'retrieve', }
 urlpatterns = [
     url(r'^login/', ObtainToken.as_view(), name="login"),
-    url(r'^register/$', CreateViewUser.as_view({'get': 'list'}), name='register'),
+    url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
 

@@ -9,14 +9,13 @@ from rest_framework.decorators import detail_route, api_view, authentication_cla
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.renderers import BaseRenderer
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from beacons.models import Campaign, Beacon, Shop, Ad
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
+    CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, ShopSerializerPOST, CampaignSerializerPatch
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
 
@@ -103,7 +102,6 @@ class CampaignView(ModelViewSet):
 
 
 class CampaignRetrieveView(ModelViewSet):
-
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
             return CampaignSerializerPatch
@@ -172,7 +170,7 @@ class ShopView(ModelViewSet):
         request._data = request.data
         request._full_data = request.data
         return super(ShopView, self).update(request, *args, **kwargs)
-
+import json
 
 class BeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
@@ -184,9 +182,21 @@ class BeaconView(ModelViewSet):
     @detail_route(methods=['post'])
     def create(self, request):
         serializer = BeaconSerializer(data=request.data)
+
         if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data)
+            count = serializer.data.get('beacons_count', 0)
+            beacons = []
+            for x in xrange(count):
+                create = Beacon.objects.create(user=request.user)
+                create.minor = x
+                create.major = request.user.pk
+                create.save()
+                beacons.append({
+                    'id': create.pk,
+                    'minor': create.minor,
+                    'major': create.major,
+                })
+            return Response(json.dumps(list(beacons)))
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
