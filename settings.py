@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'unittest',
     'imagekit',
     'gunicorn',
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
