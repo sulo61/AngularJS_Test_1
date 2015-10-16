@@ -11,3 +11,5 @@ gunicorn==19.1.1
 static==1.1.1
 wsgiref==0.1.2
 whitenoise==2.0.4
+django-storages==1.1.8
+boto==2.38.0
