@@ -10,11 +10,10 @@ from rest_framework.serializers import ModelSerializer, IntegerField
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = BeaconUser.objects.create(
-            username=validated_data['username']
+            email=validated_data['email']
         )
         user.set_password(validated_data['password'])
         user.address = validated_data.get('address', '')
-        user.email = validated_data.get('email', '')
         user.first_name = validated_data.get('first_name', '')
         user.last_name = validated_data.get('last_name', '')
         user.last_name = validated_data.get('last_name', '')
@@ -24,10 +23,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BeaconUser
-        fields = ("id", 'username', 'password', 'email', 'first_name', 'last_name', 'address')
+        fields = ("id", 'password', 'email', 'first_name', 'last_name', 'address')
         extra_kwargs = {
             'password': {'write_only': True},
-            'username': {'write_only': True}
         }
         read_only_fields = ('id',)
 
