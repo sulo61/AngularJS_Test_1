@@ -159,10 +159,10 @@ try:
 except:
     pass
 
-    # try:
-    #     from heroku_settings import *
-    # except:
-    #     pass
+    try:
+        from heroku_settings import *
+    except:
+        pass
 
 AWS_STORAGE_BUCKET_NAME = 'beacons-project'
 AWS_ACCESS_KEY_ID = 'AKIAJEMTKLDCTAFSKB7A'
