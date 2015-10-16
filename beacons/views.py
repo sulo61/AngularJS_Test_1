@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from beacons.models import Campaign, Beacon, Shop, Ad
-from beacons.serializers import CampaignSerializerPatch
+from beacons.serializers import CampaignSerializerPatch, TokenSerializer
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
@@ -66,11 +66,14 @@ class ObtainToken(ObtainAuthToken):
         Obtain user token
     """
 
+    serializer_class = TokenSerializer
+
+
     def post(self, request):
         """
         ---
         parameters:
-            - name: username
+            - name: email
               description: User name
               required: true
               type: string
