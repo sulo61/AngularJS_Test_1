@@ -6,7 +6,6 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
 from rest_framework import status
 from rest_framework.decorators import detail_route, api_view, authentication_classes
-from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -67,7 +66,6 @@ class ObtainToken(ObtainAuthToken):
     """
 
     serializer_class = TokenSerializer
-
 
     def post(self, request):
         """
@@ -160,7 +158,7 @@ def create_beacons(request, format=None):
 
 @api_view(('Post',))
 # @authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
-def create_beacons(request,pk, format=None):
+def create_beacons(request, pk, format=None):
     '''
     ---
      parameters:
@@ -235,6 +233,29 @@ class ShopView(ModelViewSet):
 
     @detail_route(methods=['post'])
     def create(self, request, pk=None):
+        '''
+         {
+          "name": "Zara",
+          "opening_hours": [
+            {
+              "days": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "open_time": "10:00:00",
+              "close_time": "20:00:00"
+            }
+          ],
+          "address": "Krakusa 8",
+          "latitude": 15,
+          "longitude": 15
+         }
+        '''
         serializer = ShopSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
