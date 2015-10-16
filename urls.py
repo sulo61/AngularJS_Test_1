@@ -31,7 +31,6 @@ def api_root(request, format=None):
         'login': reverse('login', request=request, format=format),
         'user': reverse('user', request=request, format=format),
         'register': reverse('register', request=request, format=format),
-        'beacons': reverse('beacons', request=request, format=format),
         'shops': reverse('shops', request=request, format=format),
         'campaigns': reverse('campaigns', request=request, format=format),
         'docs': reverse('django.swagger.base.view', request=request, format=format),

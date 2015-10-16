@@ -1,5 +1,69 @@
 from django.contrib.postgres.fields import ArrayField
+
+from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+
+
+class BeaconUserUserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=BeaconUserUserManager.normalize_email(email),
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password):
+        user = self.create_user(email,
+                                password=password
+                                )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+class BeaconUser(AbstractBaseUser):
+    email = models.EmailField(max_length=254, unique=True, db_index=True)
+    address = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = BeaconUserUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['password']
+
+    def get_full_name(self):
+        # For this case we return email. Could also be User.first_name User.last_name if you have these fields
+        return self.email
+
+    def get_short_name(self):
+        # For this case we return email. Could also be User.first_name if you have this field
+        return self.email
+
+    def __unicode__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        # Handle whether the user has a specific permission?"
+        return True
+
+    def has_module_perms(self, app_label):
+        # Handle whether the user has permissions to view the app `app_label`?"
+        return True
+
+    @property
+    def is_staff(self):
+        # Handle whether the user is a member of staff?"
+        return self.is_admin
 
 
 class TimestampMixin(object):
@@ -9,7 +73,7 @@ class TimestampMixin(object):
 
 class Campaign(models.Model, TimestampMixin):
     name = models.CharField(max_length=100, blank=False)
-    owner = models.ForeignKey('auth.User', related_name='campaigns')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='campaigns')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
@@ -40,7 +104,7 @@ class Ad(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     campaign = models.ForeignKey('Campaign', related_name='ads')
-    image = models.ImageField(upload_to='static/images/ads', blank=True, null=True)
+    image = models.ImageField(upload_to='images/ads', blank=True, null=True)
 
 
 DAYS_OF_WEEK = (
@@ -55,12 +119,12 @@ DAYS_OF_WEEK = (
 
 
 class Shop(models.Model):
-    owner = models.ForeignKey('auth.User', related_name='shops', choices=DAYS_OF_WEEK)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='shops', choices=DAYS_OF_WEEK)
     name = models.CharField(max_length=100, blank=False)
     address = models.CharField(max_length=200, blank=False)
     latitude = models.FloatField(default=50.044328, blank=True, null=True)
     longitude = models.FloatField(default=19.952527, blank=True, null=True)
-    image = models.ImageField(upload_to='static/images/shops', blank=True, null=True)
+    image = models.ImageField(upload_to='images/shops', blank=True, null=True)
 
 
 class OpeningHours(models.Model):
@@ -74,7 +138,7 @@ class Promotion(models.Model):
     title = models.CharField(max_length=100, blank=False)
     points = models.IntegerField(blank=True)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='static/images/promotions', blank=True, null=True)
+    image = models.ImageField(upload_to='images/promotions', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='promotions')
 
 
@@ -93,7 +157,7 @@ class Award(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
     points = models.IntegerField(blank=True)
-    image = models.ImageField(upload_to='static/images/awards', blank=True, null=True)
+    image = models.ImageField(upload_to='images/awards', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='awards')
     type = models.IntegerField(default=0, choices=award_choices)
 

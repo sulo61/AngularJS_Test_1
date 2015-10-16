@@ -28,6 +28,7 @@ SECRET_KEY = '****'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'beacons.BeaconUser'
 
 
 # Database
@@ -158,10 +159,10 @@ try:
 except:
     pass
 
-    try:
-        from heroku_settings import *
-    except:
-        pass
+    # try:
+    #     from heroku_settings import *
+    # except:
+    #     pass
 
 AWS_STORAGE_BUCKET_NAME = 'beacons-project'
 AWS_ACCESS_KEY_ID = 'AKIAJEMTKLDCTAFSKB7A'
@@ -189,4 +190,11 @@ AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
 STATICFILES_LOCATION = 'static'
 STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+# MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+
+
+# media
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://{0}/{1}/".format(
+    AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'

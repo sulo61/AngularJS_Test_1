@@ -6,8 +6,10 @@ __author__ = 'Mateusz'
 
 class IsCampaignOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.owner == request.user
-
+        if isinstance(obj, Campaign):
+            return obj.owner == request.user
+        else:
+            return obj.campaign.owner == request.user
 
 class IsBeaconOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):

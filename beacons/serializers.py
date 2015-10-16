@@ -1,26 +1,30 @@
 import time
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer, IntegerField
 
 
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
-        user = User.objects.create(
+        user = BeaconUser.objects.create(
             username=validated_data['username']
         )
         user.set_password(validated_data['password'])
+        user.address = validated_data.get('address', '')
+        user.email = validated_data.get('email', '')
+        user.first_name = validated_data.get('first_name', '')
+        user.last_name = validated_data.get('last_name', '')
+        user.last_name = validated_data.get('last_name', '')
         user.save()
 
         return user
 
     class Meta:
-        model = User
-        fields = ("id", 'username', 'password', 'email', 'first_name', 'last_name')
+        model = BeaconUser
+        fields = ("id", 'username', 'password', 'email', 'first_name', 'last_name', 'address')
         extra_kwargs = {
             'password': {'write_only': True},
             'username': {'write_only': True}
@@ -30,17 +34,24 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileView(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('email', 'first_name', 'last_name')
+        model = BeaconUser
+        fields = ('email', 'first_name', 'last_name', 'address')
         read_only_fields = ('id',)
 
 
+class CountSerializer(serializers.Serializer):
+    count = IntegerField()
+
+    class Meta:
+        fields = ('count',)
+
+
 class BeaconSerializer(serializers.ModelSerializer):
-    beacons_count = IntegerField()
 
     class Meta:
         model = Beacon
-        fields = ('id', 'title', 'beacons_count')
+        fields = ('id', 'title', 'minor', 'major')
+
 
 class CampaignSerializer(serializers.ModelSerializer):
     class Meta:
@@ -140,21 +151,19 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
         instance.save()
         return instance
 
-
-# class ShopSerializerPOST(ShopSerializer):
-#     image = serializers.SerializerMethodField(method_name='get_image_url_json')
-    #
-    # def get_image_url_json(self, obj):
-    #     try:
-    #         uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-    #         print(self.context['request'].get_host())
-    #         return uri
-    #     except ValueError:
-    #         return None
+        # class ShopSerializerPOST(ShopSerializer):
+        #     image = serializers.SerializerMethodField(method_name='get_image_url_json')
+        #
+        # def get_image_url_json(self, obj):
+        #     try:
+        #         uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
+        #         print(self.context['request'].get_host())
+        #         return uri
+        #     except ValueError:
+        #         return None
 
 
 class AdSerializerCreate(serializers.ModelSerializer):
-
     class Meta:
         model = Ad
         fields = ('id', 'title', 'description', 'image', 'type')
@@ -198,7 +207,6 @@ class ActionSerializer(ModelSerializer):
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):
-
     class Meta:
         model = Promotion
         fields = ('id', 'title', 'description', 'points', 'image')
@@ -211,7 +219,6 @@ class PromotionsSerializer(serializers.ModelSerializer):
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):
-
     class Meta:
         model = Promotion
         fields = ('id', 'title', 'description', 'points', 'image')
@@ -224,7 +231,6 @@ class PromotionsSerializer(serializers.ModelSerializer):
 
 
 class AwardSerializerGet(serializers.ModelSerializer):
-
     class Meta:
         model = Award
         fields = ('id', 'title', 'description', 'points', 'image', 'type')

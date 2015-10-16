@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
+import json
+
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-
 from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
 from rest_framework import status
 from rest_framework.decorators import detail_route, api_view, authentication_classes
@@ -12,12 +12,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-
 from beacons.models import Campaign, Beacon, Shop, Ad
 from beacons.serializers import CampaignSerializerPatch
-from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
+from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
+    CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class CreateViewUser(ModelViewSet):
@@ -38,6 +41,7 @@ def get_user(request, format=None):
         'last_name': user.last_name,
         'first_name': user.first_name,
         'email': user.email,
+        'address': user.address,
     }
     return Response(map)
 
@@ -116,12 +120,14 @@ class CampaignBeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
     permission_classes = (IsAuthenticated, IsCampaignOwner)
 
-    def get_object(self):
-        obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
-        self.check_object_permissions(self.request, obj)
-        return obj
+    def get_campaign(self):
+        campaign = get_object_or_404(Campaign, pk=self.kwargs['pk'])
+        self.check_object_permissions(self.request, campaign)
+        return campaign
 
-    @detail_route(methods=['post'])
+    def get_object(self):
+        return get_object_or_404(self.queryset, pk=self.kwargs['beacon_id'])
+
     def create(self, request, pk=None):
         serializer = BeaconSerializer(data=request.data)
         if serializer.is_valid():
@@ -132,21 +138,92 @@ class CampaignBeaconView(ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
-        return self.get_object().beacons.all()
+        return self.get_campaign().beacons.all()
+
+
+@api_view(('Post',))
+@authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
+def create_beacons(request, format=None):
+    user = request.user
+    map = {
+        'id': user.pk,
+        'last_name': user.last_name,
+        'first_name': user.first_name,
+        'email': user.email,
+        'address': user.address,
+    }
+    return Response(map)
+
+
+@api_view(('Post',))
+# @authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
+def create_beacons(request,pk, format=None):
+    '''
+    ---
+     parameters:
+        - name: count
+          description: How many beacons should be created
+          required: true
+          type: int
+          paramType: form
+        # - name: other_foo
+        #   paramType: query
+        # - name: other_bar
+        #   paramType: query
+        # - name: avatar
+        #   type: file
+    '''
+    campaign = get_object_or_404(Campaign, pk=pk)
+    count = request.data.get('count', 0)
+    beacons = []
+    for x in xrange(int(count)):
+        create = Beacon.objects.create(campaign=campaign)
+        create.minor = x
+        create.major = request.user.pk
+        create.save()
+        beacons.append({
+            'id': create.pk,
+            'minor': create.minor,
+            'major': create.major,
+        })
+    return Response(json.dumps(list(beacons)))
 
 
 class BeaconCampaignView(ModelViewSet):
     serializer_class = BeaconSerializer
+    # TODO: perrmission is operator and owner of campaign
     permission_classes = (IsAuthenticated,)
 
-    def get_object(self):
+    def get_campaign(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
-        beacons_all = obj.beacons.all()
-        all__filter = beacons_all.filter(campaign=obj, pk=self.kwargs.get('beacon_id'))
-        if not all__filter:
-            raise NotFound
+        return obj
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs.get('beacon_id'))
+        return obj
+
+    def create(self, request, *args, **kwargs):
+        serializer = BeaconSerializer(data=request.data)
+        if serializer.is_valid():
+            count = serializer.data.get('beacons_count', 0)
+            beacons = []
+            for x in xrange(count):
+                create = Beacon.objects.create(campaign=self.get_object())
+                create.minor = x
+                create.major = request.user.pk
+                create.save()
+                beacons.append({
+                    'id': create.pk,
+                    'minor': create.minor,
+                    'major': create.major,
+                })
+            return Response(json.dumps(list(beacons)))
         else:
-            return all__filter[0]
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def get_queryset(self):
+        return self.get_campaign().beacons.all()
 
 
 class ShopView(ModelViewSet):
@@ -170,41 +247,11 @@ class ShopView(ModelViewSet):
         request._data = request.data
         request._full_data = request.data
         return super(ShopView, self).update(request, *args, **kwargs)
-import json
-
-class BeaconView(ModelViewSet):
-    serializer_class = BeaconSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        return self.request.user.beacons.all()
-
-    @detail_route(methods=['post'])
-    def create(self, request):
-        serializer = BeaconSerializer(data=request.data)
-
-        if serializer.is_valid():
-            count = serializer.data.get('beacons_count', 0)
-            beacons = []
-            for x in xrange(count):
-                create = Beacon.objects.create(user=request.user)
-                create.minor = x
-                create.major = request.user.pk
-                create.save()
-                beacons.append({
-                    'id': create.pk,
-                    'minor': create.minor,
-                    'major': create.major,
-                })
-            return Response(json.dumps(list(beacons)))
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class CampaignAdView(ModelViewSet):
     # TODO: create proper perrmission for create ad
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -246,24 +293,6 @@ class CampaignAddAction(ModelViewSet):
 
     def get_queryset(self):
         return self.get_object().actions.all()
-
-
-class BeaconRetrieve(ModelViewSet):
-    serializer_class = AdSerializerList
-    permission_classes = (IsAdOwner,)
-
-    def get_queryset(self):
-        return self.request.user.beacons
-
-    def get_object(self):
-        beacon = get_object_or_404(Beacon, pk=self.kwargs.get('pk'))
-        return beacon.action.ad
-
-    def get_serializer_class(self):
-        return super(BeaconRetrieve, self).get_serializer_class()
-
-    def create(self, request, *args, **kwargs):
-        return super(BeaconRetrieve, self).create(request, *args, **kwargs)
 
 
 class ActionView(ModelViewSet):
@@ -383,6 +412,7 @@ class AdImageUpdater(ModelViewSet):
             return Response(status=status.HTTP_200_OK)
         else:
             return super(AdImageUpdater, self).create(request, *args, **kwargs)
+
 
 class AwardImageUpdater(ModelViewSet):
     serializer_class = AwardImageSerializer
