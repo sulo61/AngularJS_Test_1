@@ -29,7 +29,7 @@ class BeaconUserUserManager(BaseUserManager):
 
 class BeaconUser(AbstractBaseUser):
     email = models.EmailField(max_length=254, unique=True, db_index=True)
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
 
