@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'imagekit',
     'gunicorn',
     'storages',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -71,6 +72,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -198,3 +201,5 @@ MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://{0}/{1}/".format(
     AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+CORS_ORIGIN_ALLOW_ALL = True
