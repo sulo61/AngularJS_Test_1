@@ -1,4 +1,5 @@
 import json
+from django.shortcuts import render
 
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
 from rest_framework.authtoken.models import Token
@@ -20,7 +21,6 @@ from beacons.serializers import AdSerializerList, UserSerializer, UserProfileVie
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-
 
 class CreateViewUser(ModelViewSet):
     queryset = User.objects.all()
@@ -85,7 +85,11 @@ class ObtainToken(ObtainAuthToken):
                 description: User token
                 type: string
         """
-        return super(ObtainToken, self).post(request)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
 
 
 class CampaignView(ModelViewSet):

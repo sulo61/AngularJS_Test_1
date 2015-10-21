@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -37,8 +38,14 @@ def api_root(request, format=None):
     })
 
 
+@api_view(('GET',))
+def index(request):
+    return render(request, 'Auth/auth.html', {})
+
+
 urlpatterns += [
     url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
-    url(r'^$', api_root),
+    url(r'^$', index),
+    url(r'^rest_framework/$', api_root),
 
 ]
