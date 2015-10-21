@@ -29,7 +29,7 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
-			url: '/web/login/',
+			url: '/login/',
 			data: $scope.login
 		}).then(function successCallback(response){
 			$scope.showWarning = false;

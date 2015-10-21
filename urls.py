@@ -13,9 +13,9 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from beacons.views import index, dashboard
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -36,20 +36,6 @@ def api_root(request, format=None):
         'campaigns': reverse('campaigns', request=request, format=format),
         'docs': reverse('django.swagger.base.view', request=request, format=format),
     })
-
-
-@api_view(('GET',))
-def index(request):
-    if request.user.is_authenticated():
-        return redirect('/dashboard/')
-    else:
-        return render(request, 'Auth/auth.html', {})
-
-
-@api_view(('GET',))
-def dashboard(request):
-    return render(request, 'Panel/Dashboard/dashboard.html')
-
 
 urlpatterns += [
     url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
