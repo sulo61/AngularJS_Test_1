@@ -22,6 +22,19 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+@api_view(('GET',))
+def index(request):
+    if request.user.is_authenticated():
+        return redirect('/dashboard/')
+    else:
+        return render(request, 'Auth/auth.html', {})
+
+
+@api_view(('GET',))
+def dashboard(request):
+    return render(request, 'Panel/Dashboard/dashboard.html')
+
+
 class CreateViewUser(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -90,37 +103,6 @@ class ObtainToken(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
-
-class ObtainTokenWeb(ObtainAuthToken):
-    """
-        Obtain user token
-    """
-
-    serializer_class = TokenSerializer
-
-    def post(self, request):
-        """
-        ---
-        parameters:
-            - name: email
-              description: User name
-              required: true
-              type: string
-
-            - name: password
-              description: User password
-              required: true
-              type: string
-        type:
-            token:
-                description: User token
-                type: string
-        """
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return redirect('/dashboard/')
 
 
 class CampaignView(ModelViewSet):
