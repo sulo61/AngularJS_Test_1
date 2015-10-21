@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+
 <html>
 
 <head>
@@ -13,6 +14,7 @@
 </head>
 
 <body ng-app="app-auth" ng-controller="app-controller">
+{%verbatim%}
 <div class="container">
 
 	<!-- WELCOME -->
@@ -39,14 +41,14 @@
 				<br>
 				<br>
 				<div style="text-align:right">
-					<button type="button" class="btn btn-primary" ng-click="signin()" action="/web/login/?next=/dashboard">SIGN IN</button>
+					<button type="button" class="btn btn-primary" ng-click="signin()">SIGN IN</button>
 				</div>
 				<br ng-show="showWarning">
 				<br ng-show="showWarning">
-				<div class="alert alert-danger" role="alert" ng-show="showWarning">
+				<div class="alert alert-danger" role="alert" ng-show="showLoginWarning">
 				  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 				  	<span class="sr-only">Error:</span>
-				  	{{warning}}
+				  	{{loginWarning}}
 				</div>
 			</div>			
 		</div>
@@ -82,10 +84,10 @@
 				</div>
 				<br ng-show="showWarning">
 				<br ng-show="showWarning">
-				<div class="alert alert-danger" role="alert" ng-show="showWarning">
+				<div class="alert alert-danger" role="alert" ng-show="showRegisterWarning">
 				  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 				  	<span class="sr-only">Error:</span>
-				  	{{warning}}
+				  	{{registerWarning}}
 				</div>
 			</div>
 		</div>
@@ -96,5 +98,6 @@
 
 
 </div>
+{%endverbatim%}
 </body>
 </html>
