@@ -21,8 +21,8 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 	$scope.showWelcome();
 	// login
 	$scope.login = {};
-	$scope.login.email = "";
-	$scope.login.password = "";
+	$scope.login.email = "sulo612@gmail.com";
+	$scope.login.password = "123";
 	$scope.showWarning = false;
 	$scope.warning = "";
 	$scope.signin = function(){
@@ -34,8 +34,6 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		}).then(function successCallback(response){
 			$scope.showWarning = false;
 			$scope.warning = "";
-			alert("S");
-
 		}, function errorCallback(response){
 			$scope.showWarning = true;
 			$scope.warning = response;
@@ -58,7 +56,6 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		}).then(function successCallback(response){
 			$scope.showWarning = false;
 			$scope.warning = "";
-			alert("Register success, now try login");
 		}, function errorCallback(response){
 			$scope.showWarning = true;
 			$scope.warning = response;
