@@ -1,4 +1,4 @@
-angular.module('app-auth', []).controller('app-controller', function($scope, $http) {
+angular.module('app-auth', []).controller('app-controller', function($scope, $http, $window) {
 	// nav
 	$scope.welcomeVisible = true;
 	$scope.loginVisible = false;
@@ -23,20 +23,23 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 	$scope.login = {};
 	$scope.login.email = "sulo612@gmail.com";
 	$scope.login.password = "123";
-	$scope.showWarning = false;
-	$scope.warning = "";
+	$scope.showLoginWarning = false;
+	$scope.loginWarning = "";
 	$scope.signin = function(){
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
 			url: '/login/',
 			data: $scope.login
-		}).then(function successCallback(response){
-			$scope.showWarning = false;
-			$scope.warning = "";
+		}).then(function success5Callback(response){
+			$scope.showLoginWarning = false;
+			$scope.loginWarning = "";
+			if(response.status==200){
+				$window.location.href = "/dashboard";
+			}
 		}, function errorCallback(response){
-			$scope.showWarning = true;
-			$scope.warning = response;
+			$scope.showLoginWarning = true;
+			$scope.loginWarning = response;
 		});	
 	};
 	// register
@@ -45,8 +48,8 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 	$scope.register.last_name = "";
 	$scope.register.email = "";
 	$scope.register.password = "";
-	$scope.showWarning = false;
-	$scope.warning = "";
+	$scope.showRegisterWarning = false;
+	$scope.registerWarning = "";
 	$scope.signup = function(){
 		$scope.showWarning = false
 		$http({
@@ -54,11 +57,11 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 			url: '/register/',
 			data: $scope.register
 		}).then(function successCallback(response){
-			$scope.showWarning = false;
-			$scope.warning = "";
+			$scope.showRegisterWarning = false;
+			$scope.registerWarning = "";
 		}, function errorCallback(response){
-			$scope.showWarning = true;
-			$scope.warning = response;
+			$scope.showRegisterWarning = true;
+			$scope.registerWarning = response;
 		});	
 	};	
 });
