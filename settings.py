@@ -155,16 +155,14 @@ SWAGGER_SETTINGS = {
     "is_authenticated": False,  # Set to True to enforce user authentication,
     "is_superuser": False,  # Set to True to enforce admin only access
 }
-
+MY_LOCAL_SETTINGS = False
 try:
     from local_settings import *
 except:
     pass
 
-if os.environ.get('MY_LOCAL_SETTINGS') is None:
+if not MY_LOCAL_SETTINGS:
     try:
         from heroku_settings import *
     except:
         pass
-
-
