@@ -1,7 +1,9 @@
 import json
+
 from django.shortcuts import render, redirect
 
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
+from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
@@ -18,9 +20,22 @@ from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerial
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 
 User = get_user_model()
+
+from django.contrib.auth import logout
+
+from rest_framework import permissions
+
+
+class LogoutView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        logout(request)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+    
 
 @api_view(('GET',))
 def index(request):
@@ -101,6 +116,7 @@ class ObtainToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
 
