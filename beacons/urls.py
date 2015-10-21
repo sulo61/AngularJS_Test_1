@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from beacons import views
-from beacons.views import CreateViewUser, ObtainToken, UserProfile, UserProfileCRUD
+from beacons.views import CreateViewUser, ObtainToken, UserProfile, UserProfileCRUD, ObtainTokenWeb
 
 __author__ = 'Mateusz'
 
@@ -16,6 +16,7 @@ retrieve = {
 }
 
 urlpatterns = [
+    url(r'^web/login/', ObtainTokenWeb.as_view(), name="login"),
     url(r'^login/', ObtainToken.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
     url(r'^user/$', views.get_user, name='user'),

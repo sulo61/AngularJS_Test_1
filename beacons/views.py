@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
 from rest_framework.authtoken.models import Token
@@ -90,6 +90,37 @@ class ObtainToken(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
+
+class ObtainTokenWeb(ObtainAuthToken):
+    """
+        Obtain user token
+    """
+
+    serializer_class = TokenSerializer
+
+    def post(self, request):
+        """
+        ---
+        parameters:
+            - name: email
+              description: User name
+              required: true
+              type: string
+
+            - name: password
+              description: User password
+              required: true
+              type: string
+        type:
+            token:
+                description: User token
+                type: string
+        """
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return redirect('/dashboard/')
 
 
 class CampaignView(ModelViewSet):

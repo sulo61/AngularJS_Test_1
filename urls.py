@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -40,12 +40,21 @@ def api_root(request, format=None):
 
 @api_view(('GET',))
 def index(request):
-    return render(request, 'Auth/auth.html', {})
+    if request.user.is_authenticated():
+        return redirect('/dashboard/')
+    else:
+        return render(request, 'Auth/auth.html', {})
+
+
+@api_view(('GET',))
+def dashboard(request):
+    return render(request, 'Panel/Dashboard/dashboard.html')
 
 
 urlpatterns += [
     url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
     url(r'^$', index),
+    url(r'^dashboard/$', dashboard),
     url(r'^rest_framework/$', api_root),
 
 ]
