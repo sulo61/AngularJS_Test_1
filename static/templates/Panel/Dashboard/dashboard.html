@@ -26,18 +26,18 @@
 </ul>
 <br><br>
 <div class="alert alert-success" role="alert" ng-show="apiSuccess">
-  <a href="#" class="alert-link">OK</a>
+	<a href="#" class="alert-link">OK</a>
 </div>
 <div class="alert alert-danger" role="alert" ng-show="apiFail">
-  <a href="#" class="alert-link">ERROR: {{apiFailMsg}}</a>
+	<a href="#" class="alert-link">ERROR: {{apiFailMsg}}</a>
 </div>
 <br><br>
+{%endverbatim%}
 <div ng-show="beaconsVisible" ng-include='"beacons"'></div>
 <div ng-show="campaignsVisible" ng-include='"campaigns"'></div>
 <div ng-show="profileVisible" ng-include='"profile"'></div>
 <div ng-show="placesVisible" ng-include='"places"'></div>
-
-
+{%verbatim%}
 
 </div>
 {%endverbatim%}
