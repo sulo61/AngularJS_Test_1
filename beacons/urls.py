@@ -16,6 +16,7 @@ retrieve = {
 }
 
 urlpatterns = [
+    url(r'^dashboard/profile/', views.profile, name="profile"),
     url(r'^login/', ObtainToken.as_view(), name="login"),
     url(r'^logout/', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),

@@ -38,6 +38,11 @@ class LogoutView(views.APIView):
     
 
 @api_view(('GET',))
+def profile(request):
+    return render(request, 'Panel/Dashboard/profile.html', {})
+
+
+@api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
         return redirect('/dashboard/')

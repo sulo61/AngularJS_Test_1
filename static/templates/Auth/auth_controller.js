@@ -13,6 +13,13 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		$scope.loginVisible = true;
 		$scope.registerVisible = false;
 	}
+	$scope.showLoginWithEmail = function(email){
+		$scope.welcomeVisible = false;
+		$scope.loginVisible = true;
+		$scope.registerVisible = false;
+		$scope.login.email = email;
+		$scope.login.password = "";
+	}
 	$scope.showRegister = function(){
 		$scope.welcomeVisible = false;
 		$scope.loginVisible = false;
@@ -59,6 +66,7 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		}).then(function successCallback(response){
 			$scope.showRegisterWarning = false;
 			$scope.registerWarning = "";
+			$scope.showLoginWithEmail(response.data.email);
 		}, function errorCallback(response){
 			$scope.showRegisterWarning = true;
 			$scope.registerWarning = response;

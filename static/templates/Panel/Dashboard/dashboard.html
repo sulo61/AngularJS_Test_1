@@ -9,12 +9,13 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-	<script src="dashboard_controller.js"></script>
+	<script src={% static "templates/Panel/Dashboard/dashboard_controller.js" %}></script>
 </head>
 
 <body ng-app="app-auth" ng-controller="app-controller">
+{%verbatim%}
 <div class="container">
-
+<button class="btn btn-link" style="float: right;" ng-click="logout()">LOGOUT</button>
 <h1>Dashboard</h1>
 <br><br>
 <ul class="nav nav-tabs">
@@ -24,7 +25,10 @@
   <li role="presentation" id="nav4" ng-click="changeTab(4)"><a href="#">Places</a></li>
 </ul>
 
+<div ng-include='"profile"'>aaaaaaaaaaaaaaaaaaaaaaa</div>
+
 
 </div>
+{%endverbatim%}
 </body>
 </html>
