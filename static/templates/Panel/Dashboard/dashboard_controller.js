@@ -1,17 +1,12 @@
 angular.module('app-auth', []).
     config(['$httpProvider', function($httpProvider){
-        // django and angular both support csrf tokens. This tells
-        // angular which cookie to add to what header.
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }]).
     factory('api', function($resource){
         function add_auth_header(data, headersGetter){
-            // as per HTTP authentication spec [1], credentials must be
-            // encoded in base64. Lets use window.btoa [2]
             var headers = headersGetter();
-            headers['Authorization'] = ('Basic ' + btoa(data.username +
-                                        ':' + data.password));
+            headers['Authorization'] = ('Basic ' + btoa(data.username + ':' + data.password));
         }
     }).controller('app-controller', function($scope, $http, $window) {
 	// models
