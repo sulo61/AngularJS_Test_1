@@ -35,20 +35,28 @@ class LogoutView(views.APIView):
     def post(self, request, format=None):
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
-    
+
+
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def beacons(request):
     return render(request, 'Panel/Dashboard/beacons.html', {})
 
+
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaigns(request):
     return render(request, 'Panel/Dashboard/campaigns.html', {})
 
+
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def profile(request):
     return render(request, 'Panel/Dashboard/profile.html', {})
 
+
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def places(request):
     return render(request, 'Panel/Dashboard/places.html', {})
 
@@ -62,6 +70,7 @@ def index(request):
 
 
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashboard(request):
     return render(request, 'Panel/Dashboard/dashboard.html')
 
@@ -90,11 +99,14 @@ def get_user(request, format=None):
 
 
 class UserProfileCRUD(ModelViewSet):
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = User.objects.all()
     serializer_class = UserProfileView
 
 
 class UserProfile(APIView):
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+
     def get(self, request, format=None):
         map = {}
         user = request.user
