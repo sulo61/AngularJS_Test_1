@@ -129,8 +129,8 @@ class Shop(models.Model):
 
 class OpeningHours(models.Model):
     days = ArrayField(models.IntegerField(), size=7)
-    open_time = models.TimeField(blank=True)
-    close_time = models.TimeField(blank=True)
+    open_time = models.TimeField(blank=True, null=True)
+    close_time = models.TimeField(blank=True, null=True)
     shop = models.ForeignKey('Shop', related_name='opening_hours')
 
 

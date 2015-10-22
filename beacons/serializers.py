@@ -145,10 +145,12 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
                 raise ValidationError(detail={'open_hours': ['This field is required']})
 
             get = str(opening_hour.get('open_time'))
-            hour_get = str(opening_hour.get('close_time'))
-            if time.strptime(get, "%H:%M:%S") >= \
-                    time.strptime(hour_get, "%H:%M:%S"):
-                raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
+            if not(get == 'None' or get == ''):
+                hour_get = str(opening_hour.get('close_time'))
+                if not(hour_get == 'None' or hour_get == ''):
+                    if time.strptime(get, "%H:%M:%S") >= \
+                            time.strptime(hour_get, "%H:%M:%S"):
+                        raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
 
             for day in opening_hour.get('days'):
                 if day_before is None:
