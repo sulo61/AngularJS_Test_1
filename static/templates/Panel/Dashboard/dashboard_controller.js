@@ -1,8 +1,10 @@
 angular.module('app-auth', []).controller('app-controller', function($scope, $http, $window) {
-	$scope.beaconsVisible = true;
-	$scope.campaignsVisible = false;
-	$scope.profileVisible = false;
-	$scope.placesVisible = false;
+	// models
+	$scope.user = {};
+	$scope.first_name = "";
+	$scope.last_name = "";
+	$scope.email = "";
+	$scope.password = ""
 	// nav
 	$scope.changeTab = function(which){
 		document.getElementById("nav1").className = "";
@@ -14,16 +16,16 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 
 		switch(which){
 			case 1:
-				$scope.getBeacons();
+				$scope.openBeacons();
 				break;
 			case 2:
-				$scope.getCampaigns();
+				$scope.openCampaigns();
 				break;
 			case 3:
-				$scope.getProfile();
+				$scope.openProfile();
 				break;
 			case 4:
-				$scope.getPlaces();
+				$scope.openPlaces();
 				break;
 		}
 	};
@@ -42,39 +44,47 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		});	
 	};
 	// tabs
+	$scope.beaconsVisible = true;
+	$scope.campaignsVisible = false;
+	$scope.profileVisible = false;
+	$scope.placesVisible = false;
 
-	$scope.getBeacons = function(){
+	$scope.openBeacons = function(){
 		$scope.beaconsVisible = true;
 		$scope.campaignsVisible = false;
 		$scope.profileVisible = false;
 		$scope.placesVisible = false;
-	}
-	$scope.getCampaigns = function(){
+	};
+	$scope.openCampaigns = function(){
 		$scope.beaconsVisible = false;
 		$scope.campaignsVisible = true;
 		$scope.profileVisible = false;
 		$scope.placesVisible = false;
-	}
-	$scope.getProfile = function(){
+	};
+	$scope.openProfile = function(){
 		$scope.beaconsVisible = false;
 		$scope.campaignsVisible = false;
 		$scope.profileVisible = true;
-		$scope.placesVisible = false;	
-		$http({
-			method: 'GET',
-			url: '/user/'
-		}).then(function successCallback(response){
-			alert("S");
-		}, function errorCallback(response){
-			alert("E");
-		});	
-	}
-	$scope.getPlaces = function(){
+		$scope.placesVisible = false;			
+		$scope.getUser();
+	};
+	$scope.openPlaces = function(){
 		$scope.beaconsVisible = false;
 		$scope.campaignsVisible = false;
 		$scope.profileVisible = false;
 		$scope.placesVisible = true;
-	}
+	};
+	// api get
+	$scope.getUser = function(){
+		$http({
+			method: 'GET',
+			url: '/user/'
+		}).then(function successCallback(response){
+			$scope.user = response.data;
+		}, function errorCallback(response){
+			alert("E");
+		});	
+	};
 });
 
 
