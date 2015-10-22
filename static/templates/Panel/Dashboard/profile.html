@@ -6,13 +6,13 @@
 		<label>Last name:</label>
 		<input type="text" class="form-control" placeholder="Last name" ng-model="user.last_name">
 		<br>
-		<label>Email name:</label>
-		<input type="text" class="form-control" placeholder="Email" ng-model="user.email">
+		<label>Email:</label>
+		<input type="email" class="form-control" placeholder="Email" ng-model="user.email">
 		<br>
 		<label>Password:</label>
 		<input type="password" class="form-control" placeholder="Password" ng-model="user.password">
 		<br>
 		<br>
-		<button style="float:right;" class="btn btn-warning">SAVE</button>
+		<button style="float:right;" class="btn btn-warning" ng-click="postUser()">SAVE</button>
 	</form>
 </div>

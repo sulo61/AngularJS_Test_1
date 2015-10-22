@@ -5,6 +5,7 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 	$scope.last_name = "";
 	$scope.email = "";
 	$scope.password = ""
+	$scope.id = -1;
 	// nav
 	$scope.changeTab = function(which){
 		document.getElementById("nav1").className = "";
@@ -81,6 +82,18 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 			url: '/user/'
 		}).then(function successCallback(response){
 			$scope.user = response.data;
+		}, function errorCallback(response){
+			alert("E");
+		});	
+	};
+	// api post
+	$scope.postUser = function(){
+		$http({
+			method: 'PATCH',
+			url: '/user/'+$scope.user.id,
+			data: $scope.user
+		}).then(function successCallback(response){
+			alert("S");
 		}, function errorCallback(response){
 			alert("E");
 		});	
