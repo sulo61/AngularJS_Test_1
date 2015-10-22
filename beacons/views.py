@@ -36,10 +36,21 @@ class LogoutView(views.APIView):
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
     
+@api_view(('GET',))
+def beacons(request):
+    return render(request, 'Panel/Dashboard/beacons.html', {})
+
+@api_view(('GET',))
+def campaigns(request):
+    return render(request, 'Panel/Dashboard/campaigns.html', {})
 
 @api_view(('GET',))
 def profile(request):
     return render(request, 'Panel/Dashboard/profile.html', {})
+
+@api_view(('GET',))
+def places(request):
+    return render(request, 'Panel/Dashboard/places.html', {})
 
 
 @api_view(('GET',))
