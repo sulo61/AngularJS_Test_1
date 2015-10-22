@@ -36,7 +36,11 @@ angular.module('app-auth', []).
 		$scope.email = "";
 		$scope.password = ""
 		$scope.id = -1;
-		// nav
+
+		$scope.places = [];
+		$scope.placesPages = [];
+		$scope.placesCurrentPage = 1;
+		// dashboard nav
 		$scope.changeTab = function(which){
 			$scope.hideApiMsg();
 
@@ -62,6 +66,14 @@ angular.module('app-auth', []).
 					break;
 			}
 		};
+		// places nav
+		$scope.placesNavActive = function(page){
+			if (page==$scope.placesCurrentPage){
+				return "active"
+			} else {
+				return "";
+			}
+		}
 		// tabs
 		$scope.beaconsVisible = true;
 		$scope.campaignsVisible = false;
@@ -92,6 +104,7 @@ angular.module('app-auth', []).
 			$scope.campaignsVisible = false;
 			$scope.profileVisible = false;
 			$scope.placesVisible = true;
+			$scope.getPlaces(1);
 		};
 		// api get
 		$scope.getUser = function(){
@@ -103,6 +116,23 @@ angular.module('app-auth', []).
 			}, function errorCallback(response){
 				$scope.showFail(response);
 			});
+		};
+		$scope.getPlaces = function(page){
+			$http({
+				method: 'GET',
+				url: '/shops/'
+			}).then(function successCallback(response){
+				$scope.places = [];
+				$scope.placesPages = [];
+
+				$scope.places = response.data.results;
+				for (var i=0; i<parseInt((response.data.count/5)+1); i++) {
+			    	$scope.placesPages.push(i+1);
+			    }
+			    $scope.placesCurrentPage = page;
+			}, function errorCallback(response){
+				$scope.showFail(response);
+			});	
 		};
 		// api post
 		$scope.logout = function(){
@@ -125,7 +155,9 @@ angular.module('app-auth', []).
 			}, function errorCallback(response){
 				$scope.showFail(response);
 			});
-		};
+		};	
+		
+
 });
 
 
