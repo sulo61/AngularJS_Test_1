@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^dashboard/beacons/', views.beacons, name="beacons"),
     url(r'^dashboard/campaigns/', views.campaigns, name="campaigns"),
     url(r'^dashboard/profile/', views.profile, name="profile"),
-    url(r'^dashboard/places/', views.places, name="places"),
+    url(r'^dashboard/shops/', views.shops, name="shops"),
 
     url(r'^login/', ObtainToken.as_view(), name="login"),
     url(r'^logout/', LogoutView.as_view(), name="login"),

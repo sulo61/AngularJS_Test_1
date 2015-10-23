@@ -57,8 +57,8 @@ def profile(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def places(request):
-    return render(request, 'Panel/Dashboard/places.html', {})
+def shops(request):
+    return render(request, 'Panel/Dashboard/shops.html', {})
 
 
 @api_view(('GET',))

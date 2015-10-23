@@ -28,16 +28,16 @@
 	  <li role="presentation" id="nav1" class="active" ng-click="dc.changeTab(1)"><a href="#">Beacons</a></li>
 	  <li role="presentation" id="nav2" ng-click="dc.changeTab(2)"><a href="#">Campaigns</a></li>
 	  <li role="presentation" id="nav3" ng-click="dc.changeTab(3)"><a href="#">Profile</a></li>
-	  <li role="presentation" id="nav4" ng-click="dc.changeTab(4)"><a href="#">Places</a></li>
+	  <li role="presentation" id="nav4" ng-click="dc.changeTab(4)"><a href="#">Shops</a></li>
 	</ul>
 	<br><br>
 
 	<!-- INFO -->
-	<div class="alert alert-success" role="alert" ng-show="dc.apiSuccess">
+	<div class="alert alert-success" role="alert" ng-show="dc.apiInfo.apiSuccess">
 		<a href="#" class="alert-link">OK</a>
 	</div>
-	<div class="alert alert-danger" role="alert" ng-show="dc.apiFail">
-		<a href="#" class="alert-link">ERROR: {{dc.apiFailMsg}}</a>
+	<div class="alert alert-danger" role="alert" ng-show="dc.apiInfo.apiFail">
+		<a href="#" class="alert-link">ERROR: {{dc.apiInfo.apiFailMsg}}</a>
 	</div>
 	<br><br>
 
@@ -46,7 +46,7 @@
 	<div ng-show="dc.beaconsVisible" ng-include='"beacons"'></div>
 	<div ng-show="dc.campaignsVisible" ng-include='"campaigns"'></div>
 	<div ng-show="dc.profileVisible" ng-include='"profile"'></div>
-	<div ng-show="dc.placesVisible" ng-include='"places"'></div>
+	<div ng-show="dc.shopsVisible" ng-include='"shops"'></div>
 	{%verbatim%}
 
 	</div>
