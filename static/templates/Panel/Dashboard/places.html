@@ -1,10 +1,15 @@
 {%verbatim%}
+<div ng-controller="dashboardShopsController as vm">
+
+<button ng-click="vm.loool()">lol</button>
+
 <table class="table table-hover">
 	<thead>
 		<tr>
 			<th>#</th>
 			<th>Name</th>
 			<th>Location</th>
+			<th>Options<th>
 		</tr>
 	</thead>
 	<tbody>
@@ -12,6 +17,7 @@
 			<th scope="row">{{place.id}}</th>
 			<td>{{place.name }}</td>
 			<td>{{place.address}}</td>
+			<td><button type="button" class="btn btn-info" ng-click>EDIT</button></td>
 		</tr>		
 	</tbody>
 </table>

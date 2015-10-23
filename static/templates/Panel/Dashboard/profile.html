@@ -1,20 +1,24 @@
 {%verbatim%}
-<div>
+<div ng-controller="dashboardProfileController as dpc">
+
+	<button ng-click="dpc.loool2()">LOL</button>
+	
 	<form style="width:400px; margin-left:auto; margin-right:auto;">
 		<label>First name:</label>
-		<input type="text" class="form-control" placeholder="First name" ng-model="user.first_name">
+		<input type="text" class="form-control" placeholder="First name" ng-model="dc.user.first_name">
 		<br>
 		<label>Last name:</label>
-		<input type="text" class="form-control" placeholder="Last name" ng-model="user.last_name">
+		<input type="text" class="form-control" placeholder="Last name" ng-model="dc.user.last_name">
 		<br>
 		<label>Email:</label>
-		<input type="email" class="form-control" placeholder="Email" ng-model="user.email">
+		<input type="email" class="form-control" placeholder="Email" ng-model="dc.user.email">
 		<br>
 		<label>Password:</label>
-		<input type="password" class="form-control" placeholder="Password" ng-model="user.password">
+		<input type="password" class="form-control" placeholder="Password" ng-model="dc.user.password">
 		<br>
 		<br>
-		<button style="float:right;" class="btn btn-warning" ng-click="postUser()">SAVE</button>
+		<button style="float:right;" class="btn btn-warning" ng-click="dc.postUser()">SAVE</button>
 	</form>
+
 </div>
 {%endverbatim%}
