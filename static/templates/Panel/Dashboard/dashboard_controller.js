@@ -130,7 +130,8 @@ angular.module('app-auth', []).
 		$scope.getPlaces = function(page){
 			$http({
 				method: 'GET',
-				url: '/shops/'
+				url: '/shops/',
+				params: {"page" : page}
 			}).then(function successCallback(response){
 				$scope.places = [];
 				$scope.placesPages = [];
