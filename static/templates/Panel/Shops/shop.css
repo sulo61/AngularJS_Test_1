@@ -1,0 +1,16 @@
+.content {
+   height: auto;
+   overflow: hidden;
+}
+
+.right {
+    width: 50%;
+    float: right;
+    background: #aafed6;
+}
+
+.left {
+    float: none;
+    width: 50%;
+    overflow: hidden;
+}​​

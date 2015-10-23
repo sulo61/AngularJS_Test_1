@@ -36,6 +36,10 @@ class LogoutView(views.APIView):
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def shop(request):
+    return render(request, 'Panel/Shops/shop.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))

@@ -1,4 +1,4 @@
-angular.module('appDashboard').controller('dashboardProfileController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
+angular.module('dashboardApp').controller('dashboardProfileController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
 	// model user
 	this.user = {};
 	this.first_name = "";

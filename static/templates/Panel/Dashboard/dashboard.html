@@ -9,12 +9,13 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.3.14/angular-route.js"></script>
 	<script src={% static "templates/Panel/Dashboard/dashboardController.js" %}></script>
 	<script src={% static "templates/Panel/Dashboard/shopsController.js" %}></script>
 	<script src={% static "templates/Panel/Dashboard/profileController.js" %}></script>
 </head>
 
-<body ng-app="appDashboard" ng-controller="dashboardController as dc">
+<body ng-app="dashboardApp" ng-controller="dashboardController as dc">
 	
 	<!-- HEADER -->
 	{%verbatim%}

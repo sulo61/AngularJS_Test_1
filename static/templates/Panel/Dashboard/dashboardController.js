@@ -1,10 +1,12 @@
-angular.module('appDashboard', []).
+angular.module('dashboardApp', ['ngRoute'])
 	// django auth
-    config(['$httpProvider', function($httpProvider){
+    .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-    }]).
-    factory('api', function($resource){
+    }])
+    .config(['$routeProvider', function($routeProvider){
+    }])
+    .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
             var headers = headersGetter();
             headers['Authorization'] = ('Basic ' + btoa(data.username + ':' + data.password));
