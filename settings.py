@@ -153,7 +153,7 @@ SWAGGER_SETTINGS = {
     "is_authenticated": False,  # Set to True to enforce user authentication,
     "is_superuser": False,  # Set to True to enforce admin only access
 }
-MY_LOCAL_SETTINGS = True
+MY_LOCAL_SETTINGS = False
 try:
     from local_settings import *
 except:
