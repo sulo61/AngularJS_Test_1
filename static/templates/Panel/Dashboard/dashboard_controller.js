@@ -74,6 +74,16 @@ angular.module('app-auth', []).
 				return "";
 			}
 		}
+		$scope.placesNavNext = function(){
+			if ($scope.placesCurrentPage<$scope.placesPages.length){
+				$scope.getPlaces($scope.placesCurrentPage+1);
+			}
+		}
+		$scope.placesNavPrev = function(){
+			if ($scope.placesCurrentPage>1){
+				$scope.getPlaces($scope.placesCurrentPage-1);	
+			}
+		}
 		// tabs
 		$scope.beaconsVisible = true;
 		$scope.campaignsVisible = false;
@@ -155,9 +165,7 @@ angular.module('app-auth', []).
 			}, function errorCallback(response){
 				$scope.showFail(response);
 			});
-		};	
-		
-
+		};
 });
 
 
