@@ -1,25 +1,14 @@
 import json
-from django.test import TestCase
-
-# Create your tests here.
-from beacons.serializers import ShopSerializer
-from rest_framework import status
-from rest_auth.tests import APIClient
 from django.core.wsgi import get_wsgi_application
 
-application = get_wsgi_application()
-
-test_json = {
-    "name": "Hello",
-    "opening_hours": [{"days": [1, 2, 3], "open_time": "09:00:00.000000", "close_time": "20:00:00.000000"},
-                      {"days": [4, 5, 6, 7], "open_time": "09:00:00.000000", "close_time": "20:00:00.000000"}]
-}
+from django.test import TestCase
 
 
-class ValidationTest(TestCase):
-    def test3_validation(self):
-        serializer = ShopSerializer()
-        self.assertTrue(serializer.valid_days(test_json.pop('opening_hours')), "Should be true")
+# Create your tests here.
+from rest_framework import status
+from rest_framework.test import APIClient
+
+get_wsgi_application()
 
 
 class UserRegisterCase(TestCase):
@@ -44,11 +33,13 @@ class UserRegisterCase(TestCase):
         })
 
 
+register_data = {
+    'email': 'mcol@gmail.com',
+    'password': 'mcol',
+}
+
+
 def register(client):
-    register_data = {
-        'email': 'mcol@gmail.com',
-        'password': 'mcol',
-    }
     response = client.post('/register/', register_data, format='json')
     return register_data, response
 
@@ -67,17 +58,40 @@ class UserLoginCase(TestCase):
         self.assertTrue('token' in loads)
 
 
-
-
 class UserPermissionsCase(TestCase):
     def setUp(self):
         self.client = APIClient()
+        register(self.client)
 
     def test_register(self):
         response = self.client.get('/campaigns/', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_user(self):
+    def test_user_not_login_in(self):
         register_data, response = register(self.client)
-        response = self.client.get('/user/27/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response = self.client.get('/user/1/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class UserCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        data, response = register(self.client)
+        data = json.loads(response.content)
+        self.user_id = data.get('id')
+        self.assertTrue(self.client.login(email=register_data.get('email'),
+                                          password=register_data.get('password')), 'Didnt login in')
+
+    def test_user_not_login_in(self):
+        response = self.client.get('/user/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_user_update(self):
+        data = {
+            "first_name": "Xxxx",
+            "last_name": "Zzzz",
+            "address": "Ssss"
+        }
+        response = self.client.patch('/user/{0}/'.format(self.user_id), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), data)

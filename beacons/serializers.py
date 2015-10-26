@@ -61,8 +61,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileView(serializers.ModelSerializer):
     class Meta:
         model = BeaconUser
-        fields = ('email', 'first_name', 'last_name', 'address')
-        read_only_fields = ('id',)
+        fields = ('first_name', 'last_name', 'address')
+        read_only_fields = ('id', 'email')
 
 
 class CountSerializer(serializers.Serializer):
@@ -73,7 +73,6 @@ class CountSerializer(serializers.Serializer):
 
 
 class BeaconSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Beacon
         fields = ('id', 'title', 'minor', 'major')
@@ -145,9 +144,9 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
                 raise ValidationError(detail={'open_hours': ['This field is required']})
 
             get = str(opening_hour.get('open_time'))
-            if not(get == 'None' or get == ''):
+            if not (get == 'None' or get == ''):
                 hour_get = str(opening_hour.get('close_time'))
-                if not(hour_get == 'None' or hour_get == ''):
+                if not (hour_get == 'None' or hour_get == ''):
                     if time.strptime(get, "%H:%M:%S") >= \
                             time.strptime(hour_get, "%H:%M:%S"):
                         raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
