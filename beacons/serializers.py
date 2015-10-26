@@ -129,19 +129,19 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     def valid_days(self, opening_hours):
         if not opening_hours:
-            raise ValidationError(detail={'open_hours': ['This field is required']})
+            raise ValidationError(detail={'opening_hours': ['This field is required']})
         hours_ = opening_hours[0]
         if hours_.get('days')[0] != 1:
-            raise ValidationError(detail={'open_hours': ['Days should starts with 1']})
+            raise ValidationError(detail={'opening_hours': ['Days should starts with 1']})
 
         hours_last = opening_hours[-1]
         if hours_last.get('days')[-1] != 7:
-            raise ValidationError(detail={'open_hours': ['Days should ends with 7']})
+            raise ValidationError(detail={'opening_hours': ['Days should ends with 7']})
 
         day_before = None
         for opening_hour in opening_hours:
             if not opening_hour:
-                raise ValidationError(detail={'open_hours': ['This field is required']})
+                raise ValidationError(detail={'opening_hours': ['This field shouldn\'t be empty']})
 
             get = str(opening_hour.get('open_time'))
             if not (get == 'None' or get == ''):

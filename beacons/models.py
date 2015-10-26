@@ -35,6 +35,7 @@ class BeaconUser(AbstractBaseUser):
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    is_operator = models.BooleanField(default=False)
 
     objects = BeaconUserUserManager()
 

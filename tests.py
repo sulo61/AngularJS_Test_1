@@ -1,5 +1,4 @@
 import json
-from django.core.wsgi import get_wsgi_application
 
 from django.test import TestCase
 
@@ -7,8 +6,6 @@ from django.test import TestCase
 # Create your tests here.
 from rest_framework import status
 from rest_framework.test import APIClient
-
-get_wsgi_application()
 
 
 class UserRegisterCase(TestCase):
@@ -41,7 +38,9 @@ register_data = {
 
 def register(client):
     response = client.post('/register/', register_data, format='json')
-    return register_data, response
+    data = json.loads(response.content)
+    user_id = data.get('id')
+    return response, user_id
 
 
 class UserLoginCase(TestCase):
@@ -49,7 +48,7 @@ class UserLoginCase(TestCase):
         self.client = APIClient()
 
     def test_register(self):
-        register_data, response = register(self.client)
+        response, id = register(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post('/login/', register_data, format='json')
@@ -68,7 +67,7 @@ class UserPermissionsCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_not_login_in(self):
-        register_data, response = register(self.client)
+        response, id = register(self.client)
         response = self.client.get('/user/1/', format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -76,7 +75,7 @@ class UserPermissionsCase(TestCase):
 class UserCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        data, response = register(self.client)
+        response, id = register(self.client)
         data = json.loads(response.content)
         self.user_id = data.get('id')
         self.assertTrue(self.client.login(email=register_data.get('email'),
@@ -95,3 +94,96 @@ class UserCase(TestCase):
         response = self.client.patch('/user/{0}/'.format(self.user_id), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), data)
+
+
+class TestCampaign(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        response, self.id = register(client=self.client)
+        self.client.login(email=register_data.get('email'), password=register_data.get('password'))
+
+    def test_campaign(self):
+        response = self.client.get('/campaigns/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), {"count": 0, "next": None, "previous": None, "results": []})
+
+    def test_create_campaign(self):
+        data = {
+            'name': 'Name',
+            "start_date": "2015-10-23T08:00:00Z",
+            "end_date": "2015-10-31T09:00:00Z"
+        }
+
+        response = self.client.post('/campaigns/', data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        campaign = json.loads(response.content)
+        id = campaign.get('id')
+        data['id'] = id
+        self.assertEqual(campaign, data)
+
+        response = self.client.get('/campaigns/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), {
+            "count": 1, "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "id": id,
+                    "name": "Name",
+                    'start_date': "2015-10-23T08:00:00Z",
+                    "end_date": "2015-10-31T09:00:00Z"
+                }]})
+
+    def test_create_campaign_unauthenticated(self):
+        client = APIClient()
+        data = {
+            'name': 'Name',
+            "start_date": "2015-10-23T08:00:00Z",
+            "end_date": "2015-10-31T09:00:00Z"
+        }
+
+        response = client.post('/campaigns/', data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class ShopTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        response, self.id = register(client=self.client)
+        loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
+        self.assertTrue(loged_in, 'Didn\'t logged in')
+
+    def test_get_shops(self):
+        response = self.client.get('/shops/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), {"count": 0, "next": None, "previous": None, "results": []})
+
+    def test_create_shop(self):
+        data = {
+            "name": "Shop Name",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7
+                    ],
+                    "open_time": "10:00:00",
+                    "close_time": "20:00:00"
+                }
+            ],
+            "address": "Some Street",
+            "latitude": 15.0,
+            "longitude": 15.0
+        }
+
+        response = self.client.post('/shops/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        shop = json.loads(response.content)
+        data['id'] = shop.get('id')
+        data['image'] = None
+        self.assertEqual(shop, data)
