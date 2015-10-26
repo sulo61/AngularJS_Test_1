@@ -187,3 +187,13 @@ class ShopTest(TestCase):
         data['id'] = shop.get('id')
         data['image'] = None
         self.assertEqual(shop, data)
+
+
+class Awards(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        response, self.id = register(client=self.client)
+
+    def test_awards(self):
+        response = self.client.get('/awards/', format=json)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
