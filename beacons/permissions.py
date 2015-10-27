@@ -11,6 +11,7 @@ class IsCampaignOwner(permissions.BasePermission):
         else:
             return obj.campaign.owner == request.user
 
+
 class IsBeaconOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
@@ -28,3 +29,7 @@ class IsActionOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.campaign.owner
 
+
+class IsOperator(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('beacons.is_operator')

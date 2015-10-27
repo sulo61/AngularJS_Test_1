@@ -14,11 +14,39 @@ class UserRegisterCase(TestCase):
 
     def test_register(self):
         register_data = {
-            'email': 'mcol@gmail.com',
+            'email': 'user_normal@gmail.com',
             'password': 'mcol',
         }
 
         response = self.client.post('/register/', register_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        loads = json.loads(response.content)
+        self.assertEqual(loads, {
+            u"id": loads.get('id'),
+            u"email": u"user_normal@gmail.com",
+            u"first_name": u'',
+            u"last_name": u'',
+            u"address": u''
+        })
+
+
+register_data = {
+    'email': 'mcol@gmail.com',
+    'password': 'mcol',
+}
+
+
+class OperatorRegisterCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_register(self):
+        register_data = {
+            'email': 'mcol@gmail.com',
+            'password': 'mcol',
+        }
+
+        response = self.client.post('/operator/register/', register_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         loads = json.loads(response.content)
         self.assertEqual(loads, {
@@ -36,8 +64,8 @@ register_data = {
 }
 
 
-def register(client):
-    response = client.post('/register/', register_data, format='json')
+def register_operator(client):
+    response = client.post('/operator/register/', register_data, format='json')
     data = json.loads(response.content)
     user_id = data.get('id')
     return response, user_id
@@ -48,7 +76,7 @@ class UserLoginCase(TestCase):
         self.client = APIClient()
 
     def test_register(self):
-        response, id = register(self.client)
+        response, id = register_operator(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post('/login/', register_data, format='json')
@@ -60,14 +88,14 @@ class UserLoginCase(TestCase):
 class UserPermissionsCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        register(self.client)
+        register_operator(self.client)
 
     def test_register(self):
         response = self.client.get('/campaigns/', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_not_login_in(self):
-        response, id = register(self.client)
+        response, id = register_operator(self.client)
         response = self.client.get('/user/1/', format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -75,7 +103,7 @@ class UserPermissionsCase(TestCase):
 class UserCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, id = register(self.client)
+        response, id = register_operator(self.client)
         data = json.loads(response.content)
         self.user_id = data.get('id')
         self.assertTrue(self.client.login(email=register_data.get('email'),
@@ -99,7 +127,7 @@ class UserCase(TestCase):
 class TestCampaign(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, self.id = register(client=self.client)
+        response, self.id = register_operator(client=self.client)
         self.client.login(email=register_data.get('email'), password=register_data.get('password'))
 
     def test_campaign(self):
@@ -152,7 +180,7 @@ def create_campaign(self, client):
 class ShopTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, self.id = register(client=self.client)
+        response, self.id = register_operator(client=self.client)
         loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
         self.assertTrue(loged_in, 'Didn\'t logged in')
 
@@ -195,7 +223,7 @@ class ShopTest(TestCase):
 class Awards(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, self.id = register(client=self.client)
+        response, self.id = register_operator(client=self.client)
         loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
         self.assertTrue(loged_in, 'Didn\'t logged in')
         self.campaign_id = create_campaign(self, client=self.client)
@@ -208,7 +236,7 @@ class Awards(TestCase):
 class Promotions(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, self.id = register(client=self.client)
+        response, self.id = register_operator(client=self.client)
         loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
         self.assertTrue(loged_in, 'Didn\'t logged in')
         self.campaign_id = create_campaign(self, client=self.client)
@@ -221,7 +249,7 @@ class Promotions(TestCase):
 class Beacons(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, self.id = register(client=self.client)
+        response, self.id = register_operator(client=self.client)
         loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
         self.assertTrue(loged_in, 'Didn\'t logged in')
         self.campaign_id = create_campaign(self, client=self.client)
@@ -234,7 +262,7 @@ class Beacons(TestCase):
 class Ads(TestCase):
     def setUp(self):
         self.client = APIClient()
-        response, self.id = register(client=self.client)
+        response, self.id = register_operator(client=self.client)
         loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
         self.assertTrue(loged_in, 'Didn\'t logged in')
         self.campaign_id = create_campaign(self, client=self.client)

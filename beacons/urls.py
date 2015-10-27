@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from beacons import views
-from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView
+from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView, CreateViewOperator
 
 __author__ = 'Mateusz'
 
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^login/', ObtainToken.as_view(), name="login"),
     url(r'^logout/', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
+    url(r'^operator/register/$', CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
 

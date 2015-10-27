@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 
 class BeaconUserUserManager(BaseUserManager):
@@ -27,7 +27,7 @@ class BeaconUserUserManager(BaseUserManager):
         return user
 
 
-class BeaconUser(AbstractBaseUser):
+class BeaconUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True, db_index=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -52,14 +52,6 @@ class BeaconUser(AbstractBaseUser):
 
     def __unicode__(self):
         return self.email
-
-    def has_perm(self, perm, obj=None):
-        # Handle whether the user has a specific permission?"
-        return True
-
-    def has_module_perms(self, app_label):
-        # Handle whether the user has permissions to view the app `app_label`?"
-        return True
 
     @property
     def is_staff(self):

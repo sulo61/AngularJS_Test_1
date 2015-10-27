@@ -1,4 +1,6 @@
 import json
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 from django.shortcuts import render, redirect
 
@@ -6,7 +8,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
+from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner, IsOperator
 from rest_framework import status
 from rest_framework.decorators import detail_route, api_view, authentication_classes
 from rest_framework.generics import get_object_or_404
@@ -21,6 +23,7 @@ from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerial
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
 from django.contrib.auth import get_user_model, login
+import settings
 
 User = get_user_model()
 
@@ -36,10 +39,12 @@ class LogoutView(views.APIView):
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def shop(request):
     return render(request, 'Panel/Shops/shop.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
@@ -86,6 +91,23 @@ class CreateViewUser(ModelViewSet):
     def post_save(self, obj, created=False):
         token = Token.objects.create(user=obj)
         obj.key = token
+
+
+class CreateViewOperator(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        token = Token.objects.create(user=user)
+        user.key = token
+        user.is_operator = True
+        content_type = ContentType.objects.get_for_model(User)
+        permission, created = Permission.objects.get_or_create(name='operator',
+                                                               content_type=content_type,
+                                                               codename='is_operator')
+        user.user_permissions.add(permission)
+        user.save()
 
 
 @api_view(('GET',))
@@ -155,7 +177,7 @@ class ObtainToken(ObtainAuthToken):
 
 class CampaignView(ModelViewSet):
     serializer_class = CampaignSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOperator)
 
     @detail_route(methods=['post'])
     def create(self, request, pk=None):
