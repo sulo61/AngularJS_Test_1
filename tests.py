@@ -108,31 +108,7 @@ class TestCampaign(TestCase):
         self.assertEqual(json.loads(response.content), {"count": 0, "next": None, "previous": None, "results": []})
 
     def test_create_campaign(self):
-        data = {
-            'name': 'Name',
-            "start_date": "2015-10-23T08:00:00Z",
-            "end_date": "2015-10-31T09:00:00Z"
-        }
-
-        response = self.client.post('/campaigns/', data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        campaign = json.loads(response.content)
-        id = campaign.get('id')
-        data['id'] = id
-        self.assertEqual(campaign, data)
-
-        response = self.client.get('/campaigns/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content), {
-            "count": 1, "next": None,
-            "previous": None,
-            "results": [
-                {
-                    "id": id,
-                    "name": "Name",
-                    'start_date': "2015-10-23T08:00:00Z",
-                    "end_date": "2015-10-31T09:00:00Z"
-                }]})
+        create_campaign(self, self.client)
 
     def test_create_campaign_unauthenticated(self):
         client = APIClient()
@@ -144,6 +120,33 @@ class TestCampaign(TestCase):
 
         response = client.post('/campaigns/', data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+def create_campaign(self, client):
+    data = {
+        'name': 'Name',
+        "start_date": "2015-10-23T08:00:00Z",
+        "end_date": "2015-10-31T09:00:00Z"
+    }
+    response = client.post('/campaigns/', data)
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    campaign = json.loads(response.content)
+    id = campaign.get('id')
+    data['id'] = id
+    self.assertEqual(campaign, data)
+    response = client.get('/campaigns/')
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(json.loads(response.content), {
+        "count": 1, "next": None,
+        "previous": None,
+        "results": [
+            {
+                "id": id,
+                "name": "Name",
+                'start_date': "2015-10-23T08:00:00Z",
+                "end_date": "2015-10-31T09:00:00Z"
+            }]})
+    return id
 
 
 class ShopTest(TestCase):
@@ -193,7 +196,49 @@ class Awards(TestCase):
     def setUp(self):
         self.client = APIClient()
         response, self.id = register(client=self.client)
+        loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
+        self.assertTrue(loged_in, 'Didn\'t logged in')
+        self.campaign_id = create_campaign(self, client=self.client)
 
-    def test_awards(self):
-        response = self.client.get('/awards/', format=json)
+    def test_awards_list (self):
+        response = self.client.get('/campaigns/{0}/awards/'.format(self.campaign_id), format=json)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class Promotions(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        response, self.id = register(client=self.client)
+        loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
+        self.assertTrue(loged_in, 'Didn\'t logged in')
+        self.campaign_id = create_campaign(self, client=self.client)
+
+    def test_promotions_list(self):
+        response = self.client.get('/campaigns/{0}/promotions/'.format(self.campaign_id), format=json)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class Beacons(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        response, self.id = register(client=self.client)
+        loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
+        self.assertTrue(loged_in, 'Didn\'t logged in')
+        self.campaign_id = create_campaign(self, client=self.client)
+
+    def test_beacons_list(self):
+        response = self.client.get('/campaigns/{0}/beacons/'.format(self.campaign_id), format=json)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class Ads(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        response, self.id = register(client=self.client)
+        loged_in = self.client.login(email=register_data.get('email'), password=register_data.get('password'))
+        self.assertTrue(loged_in, 'Didn\'t logged in')
+        self.campaign_id = create_campaign(self, client=self.client)
+
+    def test_beacons_list(self):
+        response = self.client.get('/campaigns/{0}/ads/'.format(self.campaign_id), format=json)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
