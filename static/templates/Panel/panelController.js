@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ngRoute', 'ui.bootstrap'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 	// django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -41,4 +41,19 @@ angular.module('panelApp', ['ngRoute', 'ui.bootstrap'])
 	    	};
     	}
     	return new ApiInfo();
+    }).controller("panelController", function($scope, $window){
+    	this.tabs = [
+		    { title:'Dynamic Title 1', content:'Dynamic content 1' },
+		    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
+	  	];
+
+		this.alertMe = function() {
+		    setTimeout(function() {
+		      $window.alert('You\'ve selected the alert tab!');
+		    });
+		};
+
+		alert("alertuje");
+
+		
     })

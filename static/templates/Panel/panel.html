@@ -8,15 +8,16 @@
 	<link rel="stylesheet" type="text/css" href="{% static "global.css" %}">
 	<!-- SCRIPTS -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.3.14/angular-route.js"></script>
 	<script type="text/javascript" src="{% static "ui-bootstrap-tpls-0.14.3.js" %}"></script>
 	<!-- CONTROLLERS -->
 	<script src={% static "templates/Panel/panelController.js" %}></script>
 </head>
 
-<body ng-app="panelApp" >
+<body ng-app="panelApp" ng-controller="panelController" >
 
 	<uib-tabset justified="true">
-		<uib-tab heading="Justified">Justified content</uib-tab>
+		<uib-tab heading="Justified" select="alertMe()">Justified content</uib-tab>
 		<uib-tab heading="SJ">Short Labeled Justified content</uib-tab>
 		<uib-tab heading="Long Justified">Long Labeled Justified content</uib-tab>
 	</uib-tabset>
