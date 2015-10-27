@@ -5,12 +5,12 @@ angular.module('panelApp', ['ngRoute', 'ui.bootstrap'])
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }])
     .config(['$routeProvider', function($routeProvider){
-    	// $routeProvider.when("/",
-    	// 	{
-    	// 		templateUrl: "/dashboard/",
-			  //   controller: "dashboardController",
-			  //   controllerAs: 'dc'
-    	// 	});
+    	$routeProvider.when("/",
+    		{
+    			templateUrl: "/dashboard/",
+			    controller: "dashboardController",
+			    controllerAs: 'dc'
+    		});
     }])
     .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
