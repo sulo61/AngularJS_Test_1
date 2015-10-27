@@ -24,11 +24,10 @@
 	<br><br>
 
 	<uib-tabset justified="true">
-	<!-- select="pc.alertMe()" -->
-		<uib-tab heading="Beacons"></uib-tab>
-		<uib-tab heading="Campaigns"></uib-tab>
-		<uib-tab heading="Profile"></uib-tab>
-		<uib-tab heading="Shops"></uib-tab>
+		<uib-tab heading="Beacons" select="pc.showBeacons()"></uib-tab>
+		<uib-tab heading="Campaigns" select="pc.showCampaigns()"></uib-tab>
+		<uib-tab heading="Profile" select="pc.showProfile()"></uib-tab>
+		<uib-tab heading="Shops" select="pc.showShops()"></uib-tab>
 	</uib-tabset>
 
 	<div class="container" ng-view></div>

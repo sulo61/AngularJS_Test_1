@@ -5,12 +5,27 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }])
     .config(['$routeProvider', function($routeProvider){
-    	// $routeProvider.when("/",
-    	// 	{
-    	// 		templateUrl: "/dashboard/",
-			  //   controller: "dashboardController",
-			  //   controllerAs: 'dc'
-    	// 	});
+    	$routeProvider
+    		.when("/dashBeacons", {
+					templateUrl: "/dash/beacons",
+				    controller: "panelController",
+				    controllerAs: 'pc'
+    		})
+    		.when("/dashProfile", {
+    				templateUrl: "/dash/profile",
+				    controller: "panelController",
+				    controllerAs: 'pc'
+    		})
+    		.when("/dashCampaigns", {
+    				templateUrl: "/dash/campaigns",
+				    controller: "panelController",
+				    controllerAs: 'pc'
+    		})
+    		.when("/dashShops", {
+    				templateUrl: "/dash/shops",
+				    controller: "panelController",
+				    controllerAs: 'pc'
+    		})
     }])
     .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
@@ -41,7 +56,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 	    	};
     	}
     	return new ApiInfo();
-    }).controller("panelController", function($scope, $window, $http){
+    }).controller("panelController", function($scope, $window, $http, $location){
 		this.currentPath = "Dashboard";
 		this.logout = function(){
 			$http({
@@ -53,4 +68,20 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 				apiInfo.showFail(response);
 			}.bind(this));	
 		};
+		this.showBeacons = function(){
+			this.currentPath = "Dashboard/Beacons"
+			$location.path('/dashBeacons');
+		}
+		this.showProfile = function(){
+			this.currentPath = "Dashboard/Profile"
+			$location.path('/dashProfile');
+		}
+		this.showCampaigns = function(){
+			this.currentPath = "Dashboard/Campaigns"
+			$location.path('/dashCampaigns');	
+		}
+		this.showShops = function(){
+			this.currentPath = "Dashboard/Shops"
+			$location.path('/dashShops');	
+		}
     })

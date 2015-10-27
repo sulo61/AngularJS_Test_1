@@ -5,4 +5,11 @@ body {
 
 .container {
 	background-color: #ffffff;	
+	width: 100%;
+
+	border-color: #e0e0e0;
+	border-style: solid;
+    border-width: 1px;
+
+    padding: 30px;
 }
