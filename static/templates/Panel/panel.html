@@ -18,15 +18,16 @@
 		<!-- PANEL -->
 	<script src={% static "templates/Panel/panelController.js" %}></script>
 		<!-- DASHBOARD -->
-	<script src={% static "templates/Panel/Dashboard/dashboardController.js" %}></script>
-	<script src={% static "templates/Panel/Dashboard/shopsController.js" %}></script>
-	<script src={% static "templates/Panel/Dashboard/profileController.js" %}></script>
+	<!--script src={% static "templates/Panel/Dashboard/dashboardController.js" %}></script-->
+	<!--script src={% static "templates/Panel/Dashboard/shopsController.js" %}></script-->
+	<!--script src={% static "templates/Panel/Dashboard/profileController.js" %}></script-->
 		<!-- SHOP -->
-	<script src={% static "templates/Panel/Shops/shopController.js" %}></script>
+	<!--script src={% static "templates/Panel/Shops/shopController.js" %}></script-->
 </head>
 
-<body ng-app="panelApp" ng-controller="panelController">
+<body ng-app="panelApp" >
 
-
+<div ng-view></div>
+	
 </body>
 </html>

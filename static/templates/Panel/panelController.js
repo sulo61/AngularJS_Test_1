@@ -7,9 +7,8 @@ angular.module('panelApp', ['ngRoute'])
     .config(['$routeProvider', function($routeProvider){
     	$routeProvider.when("/dashboard",
     		{
-    			templateUrl: "Dashboard/dashboard.html",
-			    controller: "dashboardController",
-			    controllerAs: "dc"
+    			templateUrl: "/dashboard/",
+			    controller: "dc"
     		});
     }])
     .factory('api', function($resource){
@@ -42,6 +41,3 @@ angular.module('panelApp', ['ngRoute'])
     	}
     	return new ApiInfo();
     })
-    .controller('panelController', function($scope, $location) {
-    	
-    });

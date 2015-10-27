@@ -75,7 +75,7 @@ def index(request):
     if request.user.is_authenticated():
         return redirect('/panel/')
     else:
-        return render(request, 'Panel/panel.html', {})
+        return render(request, 'Auth/auth.html', {})
 
 
 @api_view(('GET',))
