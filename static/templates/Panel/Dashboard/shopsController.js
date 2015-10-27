@@ -1,4 +1,4 @@
-angular.module('dashboardApp').controller('dashboardShopsController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
+angular.module('panelApp').controller('dashboardShopsController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
 	
 	this.shopsList = [];
 	this.shopsPages = [];	// numbers

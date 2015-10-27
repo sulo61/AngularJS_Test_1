@@ -16,6 +16,8 @@ retrieve = {
 }
 
 urlpatterns = [
+    url(r'^panel/', views.panel, name="panel"),
+
     url(r'^shop/', views.shop, name="shop"),
 
     url(r'^dashboard/beacons/', views.beacons, name="beacons"),

@@ -38,6 +38,11 @@ class LogoutView(views.APIView):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
+def panel(request):
+    return render(request, 'Panel/panel.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def shop(request):
     return render(request, 'Panel/Shops/shop.html', {})
 
@@ -68,9 +73,9 @@ def shops(request):
 @api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/dashboard/')
+        return redirect('/panel/')
     else:
-        return render(request, 'Auth/auth.html', {})
+        return render(request, 'Panel/panel.html', {})
 
 
 @api_view(('GET',))

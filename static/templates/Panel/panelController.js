@@ -4,7 +4,13 @@ angular.module('panelApp', ['ngRoute'])
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }])
-	.config(['$routeProvider', function($routeProvider){
+    .config(['$routeProvider', function($routeProvider){
+    	$routeProvider.when("/dashboard",
+    		{
+    			templateUrl: "Dashboard/dashboard.html",
+			    controller: "dashboardController",
+			    controllerAs: "dc"
+    		});
     }])
     .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
@@ -36,14 +42,6 @@ angular.module('panelApp', ['ngRoute'])
     	}
     	return new ApiInfo();
     })
-    .controller('shopController', function($scope, $http, $window, apiInfo) {
-    	this.shopTitle = "";
-
-    	this.showLol = function(){
-    		alert("lolllll");
-    	}
-   
-		
-});
-
-
+    .controller('panelController', function($scope, $location) {
+    	
+    });
