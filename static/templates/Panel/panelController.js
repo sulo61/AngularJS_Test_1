@@ -41,19 +41,16 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 	    	};
     	}
     	return new ApiInfo();
-    }).controller("panelController", function($scope, $window){
-    	this.tabs = [
-		    { title:'Dynamic Title 1', content:'Dynamic content 1' },
-		    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
-	  	];
-
-		this.alertMe = function() {
-		    setTimeout(function() {
-		      $window.alert('You\'ve selected the alert tab!');
-		    });
+    }).controller("panelController", function($scope, $window, $http){
+		this.currentPath = "Dashboard";
+		this.logout = function(){
+			$http({
+				method: 'POST',
+				url: '/logout/'
+			}).then(function successCallback(response){
+				$window.location.href = "/";
+			}, function errorCallback(response){
+				apiInfo.showFail(response);
+			}.bind(this));	
 		};
-
-		alert("alertuje");
-
-		
     })
