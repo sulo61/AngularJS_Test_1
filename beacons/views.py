@@ -64,7 +64,7 @@ def panel(request):
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def shop(request):
-    return render(request, 'Panel/Shops/shop.html', {})
+    return render(request, 'Panel/Shop/shop.html', {})
 
 @api_view(('GET',))
 def index(request):

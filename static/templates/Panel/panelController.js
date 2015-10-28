@@ -25,7 +25,12 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
     				templateUrl: "/dash/shops",
 				    controller: "dashShopsController",
 				    controllerAs: 'dsc'
-    		});
+    		})
+    		.when("/shop/:id?", {
+    				templateUrl: "/shop",
+				    controller: "shopController",
+				    controllerAs: 'sc'	
+    		})
     }])
     .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
@@ -90,5 +95,10 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 			apiInfo.hideApiMsg();
 			this.currentPath = "Dashboard/Shops"
 			$location.path('/dashShops');	
+		}
+		this.showShop = function(name, id){
+			apiInfo.hideApiMsg();
+			this.currentPath = "Dashboard/Shop/"+name;
+			$location.path('/shop/'+id);		
 		}
     })

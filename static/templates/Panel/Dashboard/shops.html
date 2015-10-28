@@ -12,9 +12,9 @@
 		<tbody>
 			<tr ng-repeat="shop in dsc.shopsList">
 				<th scope="row">{{shop.id}}</th>
-				<td>{{shop.name }}</td>
+				<td>{{shop.name}}</td>
 				<td>{{shop.address}}</td>
-				<td><button type="button" class="btn btn-info" ng-click="">EDIT</button></td>
+				<td><button type="button" class="btn btn-info" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button></td>
 			</tr>		
 		</tbody>
 	</table>
