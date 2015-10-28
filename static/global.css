@@ -20,3 +20,26 @@ body {
 
     padding: 30px;
 }
+
+.sideMenu {
+    float: left;
+}
+
+.rightColumn {
+    display: inline-block;
+}
+
+.leftColumn {
+    float: left;    
+}​​
+
+.shit { }
+
+.openHours {
+	margin-left:20px;
+	margin-top:20px;
+	padding: 20px;
+	border-color: #e0e0e0;
+	border-style: solid;
+    border-width: 1px;	
+}
