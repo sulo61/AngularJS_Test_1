@@ -18,14 +18,14 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
     		})
     		.when("/dashCampaigns", {
     				templateUrl: "/dash/campaigns",
-				    controller: "panelController",
-				    controllerAs: 'pc'
+				    controller: "dashCampaignsController",
+				    controllerAs: 'dcc'
     		})
     		.when("/dashShops", {
     				templateUrl: "/dash/shops",
 				    controller: "dashShopsController",
 				    controllerAs: 'dsc'
-    		})
+    		});
     }])
     .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
