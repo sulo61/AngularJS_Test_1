@@ -72,18 +72,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 			}.bind(this));	
 		};
 		this.showBeacons = function(){
+			apiInfo.hideApiMsg();
 			this.currentPath = "Dashboard/Beacons"
 			$location.path('/dashBeacons');
 		}
 		this.showProfile = function(){
+			apiInfo.hideApiMsg();
 			this.currentPath = "Dashboard/Profile"
 			$location.path('/dashProfile');
 		}
 		this.showCampaigns = function(){
+			apiInfo.hideApiMsg();
 			this.currentPath = "Dashboard/Campaigns"
 			$location.path('/dashCampaigns');	
 		}
 		this.showShops = function(){
+			apiInfo.hideApiMsg();
 			this.currentPath = "Dashboard/Shops"
 			$location.path('/dashShops');	
 		}
