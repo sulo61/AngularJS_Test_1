@@ -1,1 +1,38 @@
-shops
+{%verbatim%}
+<div>
+aaaaaaaaaaa
+{{dsc.shopsList}}
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="10%">#</th>
+				<th width="40%">Name</th>
+				<th width="40%">Location</th>
+				<th width="10%">Options<th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="shop in dsc.shopsList">
+				<th scope="row">{{shop.id}}</th>
+				<td>{{shop.name }}</td>
+				<td>{{shop.address}}</td>
+				<td><button type="button" class="btn btn-info" ng-click="">EDIT</button></td>
+			</tr>		
+		</tbody>
+	</table>
+
+	<br><br>
+
+	<nav>
+	  <ul class="pagination" ng-show="dsc.shopsPages.length>0">
+	  	<li ng-click="dsc.shopsNavPrev()"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+	  	<li ng-repeat="number in dsc.shopsPages" class="{{dsc.shopsNavActive(number)}}" id="dsc.shopsNav{{number}}" ng-click="dsc.getShops(number)">
+	  		<a href="#">{{number}}</a>
+	  	</li>
+	  	<li ng-click="dsc.shopsNavNext()"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+	    
+	  </ul>
+	</nav>
+
+</div>
+{%endverbatim%}

@@ -23,8 +23,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
     		})
     		.when("/dashShops", {
     				templateUrl: "/dash/shops",
-				    controller: "panelController",
-				    controllerAs: 'pc'
+				    controller: "dashShopsController",
+				    controllerAs: 'dsc'
     		})
     }])
     .factory('api', function($resource){
