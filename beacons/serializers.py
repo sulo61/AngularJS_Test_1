@@ -1,7 +1,8 @@
 import time
 
 from django.shortcuts import get_object_or_404
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
+    UserAwards
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer, IntegerField
 from django.contrib.auth import authenticate
@@ -257,10 +258,16 @@ class PromotionsSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'description', 'image', 'points',)
 
 
+class UserAwardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAwards
+        fields = ('favourite', 'bought')
+
+
 class AwardSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'points', 'image', 'type')
+        fields = ('id', 'title', 'description', 'points', 'image', 'type',)
 
 
 class AwardSerializer(serializers.ModelSerializer):

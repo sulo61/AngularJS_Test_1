@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^dashboard/profile/', views.profile, name="profile"),
     url(r'^dashboard/shops/', views.shops, name="shops"),
 
-    url(r'^login/', ObtainToken.as_view(), name="login"),
+    url(r'^login/token/', ObtainToken.as_view(), name="login"),
+    url(r'^login/', views.login_view, name="login"),
     url(r'^logout/', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
     url(r'^operator/register/$', CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
@@ -65,6 +66,9 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/awards/$', views.AwardView.as_view(methods), name='promotions'),
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/$', views.AwardCreateView.as_view(retrieve),
         name='promotions_crud'),
+
+    url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/favourite/$', views.award_favourite),
+
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/image/$',
         views.AwardImageUpdater.as_view({'post': 'create'}),
         name='promotions_crud'),

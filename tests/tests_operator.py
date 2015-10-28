@@ -69,7 +69,7 @@ class UserLoginCase(TestCase):
         response, id = register_operator(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post('/login/', register_operator_data, format='json')
+        response = self.client.post('/login/token/', register_operator_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         loads = json.loads(response.content)
         self.assertTrue('token' in loads)

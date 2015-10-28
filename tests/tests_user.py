@@ -49,7 +49,7 @@ def create_campaign(self):
                 'start_date': "2015-10-23T08:00:00Z",
                 "end_date": "2015-10-31T09:00:00Z"
             }]})
-    return id
+    return id, client
 
 
 class UserRegisterCase(TestCase):
@@ -81,7 +81,7 @@ class UserLoginCase(TestCase):
 
 class UserGETMethods(TestCase):
     def setUp(self):
-        self.campaign_id = create_campaign(self)
+        self.campaign_id, client = create_campaign(self)
         self.client = APIClient()
         register(self.client)
         self.client.login(email=register_data.get('email'), password=register_data.get('password'))
@@ -114,7 +114,7 @@ class UserGETMethods(TestCase):
 class UserCreateCampaign(TestCase):
     def setUp(self):
         register_login_user(self)
-        self.id = create_campaign(self)
+        self.id, client = create_campaign(self)
 
     def test_create_campaign(self):
         data = {
@@ -135,3 +135,31 @@ class UserCreateCampaign(TestCase):
 
         response = self.client.post('/campaigns/{0}/ads/'.format(self.id), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+def create_award(self, campaign_id, client):
+    response = client.post('/campaigns/{0}/awards/'.format(campaign_id), data={
+        "title": "Test",
+        "description": "test desc",
+        "points": 10,
+        "type": "1"
+    }, format='json')
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    return json.loads(response.content).get('id')
+
+
+class UserAwardsDetails(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        register_login_user(self)
+        self.campaign_id, operator_client = create_campaign(self)
+        self.award_id = create_award(self, self.campaign_id, operator_client)
+
+    def test_award(self):
+        response = self.client.post('/campaigns/{0}/awards/{1}/favourite/'.format(self.campaign_id, self.award_id),
+                                    data={
+                                        'favourite': True
+                                    }, json='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print response.content

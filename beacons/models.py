@@ -58,6 +58,9 @@ class BeaconUser(AbstractBaseUser, PermissionsMixin):
         # Handle whether the user is a member of staff?"
         return self.is_admin
 
+    def is_authenticated(self):
+        return True
+
 
 class TimestampMixin(object):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -77,8 +80,8 @@ class Campaign(models.Model, TimestampMixin):
 class Beacon(models.Model):
     title = models.CharField(max_length=100, blank=False)
     campaign = models.ForeignKey('Campaign', related_name='beacons', blank=True, null=True)
-    minor = models.IntegerField(max_length=5, default=1)
-    major = models.IntegerField(max_length=5, default=1)
+    minor = models.IntegerField(default=1)
+    major = models.IntegerField(default=1)
     UUID = models.CharField(max_length=36, default='00000000-0000-0000-0000-000000000000')
 
     def __str__(self):
@@ -153,6 +156,13 @@ class Award(models.Model):
     image = models.ImageField(upload_to='images/awards', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='awards')
     type = models.IntegerField(default=0, choices=award_choices)
+
+
+class UserAwards(models.Model):
+    award = models.OneToOneField(Award, primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_awards')
+    favorite = models.BooleanField(default=False)
+    bought = models.BooleanField(default=False)
 
 
 class ActionBeacon(models.Model):

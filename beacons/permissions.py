@@ -32,4 +32,4 @@ class IsActionOwner(permissions.BasePermission):
 
 class IsOperator(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.has_perm('beacons.is_operator')
+        return request.user is not None and request.user.has_perm('beacons.is_operator')

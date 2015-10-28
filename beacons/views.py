@@ -1,4 +1,5 @@
 import json
+from boto.cognito.identity.exceptions import NotAuthorizedException
 from django.contrib.auth.decorators import permission_required
 
 from django.contrib.auth.models import Permission
@@ -16,13 +17,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from beacons.models import Campaign, Beacon, Shop, Ad
+from beacons.models import Campaign, Beacon, Shop, Ad, Award, UserAwards
 from beacons.serializers import CampaignSerializerPatch, TokenSerializer
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, authenticate
 
 User = get_user_model()
 
@@ -141,6 +142,18 @@ class UserProfile(APIView):
         return Response(map)
 
 
+@api_view(('POST',))
+def login_view(request):
+    username = request.data['email']
+    password = request.data['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'non_field_error': 'Bad credentials'})
+
+
 class ObtainToken(ObtainAuthToken):
     """
         Obtain user token
@@ -169,6 +182,7 @@ class ObtainToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        authenticate(email=user.email, password=user.password)
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
@@ -279,6 +293,33 @@ def create_beacons(request, pk, format=None):
     return Response(json.dumps(list(beacons)))
 
 
+@api_view(('Post',))
+@authentication_classes((SessionAuthentication, TokenAuthentication,))
+def award_favourite(request, pk, award_pk, format=None):
+    if not request.user.is_authenticated():
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    award = get_object_or_404(Award, pk=award_pk, campaign=pk)
+    award_favourite, created = UserAwards.objects.get_or_create(award=award, user=request.user)
+    if 'favourite' in request.data:
+        award_favourite.favorite = request.data.get('favourite')
+
+    if 'bought' in request.data:
+        award_favourite.bought = request.data.get('bought')
+
+    award_favourite.save()
+
+    return Response(status=status.HTTP_200_OK, data={
+        'title': award.title,
+        'description': award.description,
+        'image': None,
+        'points': award.points,
+        'type': award.type,
+        'favourite': award_favourite.favorite,
+        'bought': award_favourite.bought,
+    })
+
+
 class BeaconCampaignView(ModelViewSet):
     serializer_class = BeaconSerializer
     # TODO: perrmission is operator and owner of campaign
@@ -371,7 +412,6 @@ class CampaignAdView(ModelViewSet):
 
         return super(CampaignAdView, self).get_permissions()
 
-
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return AdSerializerList
@@ -440,7 +480,7 @@ class PromotionCreateView(ModelViewSet):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            self.parser_classes = (IsAuthenticated, IsOperator)
+            self.permission_classes = (IsAuthenticated, IsOperator)
 
         return super(PromotionCreateView, self).get_permissions()
 
@@ -463,7 +503,7 @@ class PromotionView(PromotionCreateView):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            self.parser_classes = (IsAuthenticated, IsOperator)
+            self.permission_classes = (IsAuthenticated, IsOperator)
 
         return super(PromotionView, self).get_permissions()
 
@@ -486,7 +526,7 @@ class AwardCreateView(ModelViewSet):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            self.parser_classes = (IsAuthenticated, IsOperator)
+            self.permission_classes = (IsAuthenticated, IsOperator)
 
         return super(AwardCreateView, self).get_permissions()
 
@@ -509,7 +549,7 @@ class AwardView(AwardCreateView):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            self.parser_classes = (IsAuthenticated, IsOperator)
+            self.permission_classes = (IsAuthenticated, IsOperator)
 
         return super(AwardView, self).get_permissions()
 
