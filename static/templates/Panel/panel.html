@@ -39,10 +39,7 @@
 
 	<!-- API INFO -->
 	{%verbatim%}
-	{{apiInfo}}
-	<div ng-show="pc.apiInfo.apiInfoShow">SHOW</div>
-	<div ng-hide="pc.apiInfo.apiInfoShow">HIDE</div>
-	<uib-alert ng-show="pc.apiInfo.apiInfoShow" type="{{pc.apiInfo.apiInfoMsg.type}}" close="pc.apiInfo.hideApiMsg()">{{pc.alert.msg}}</uib-alert>
+	<uib-alert ng-show="pc.apiInfo.apiInfoShow" type="{{pc.apiInfo.apiInfoMsg.type}}" close="pc.apiInfo.hideApiMsg()">{{pc.apiInfo.apiInfoMsg.msg}}</uib-alert>
 	{%endverbatim%}
 
 </body>

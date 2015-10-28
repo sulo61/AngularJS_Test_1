@@ -57,8 +57,9 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 	    	};
     	}
     	return new ApiInfo();
-    }).controller("panelController", function($scope, $window, $http, $location){
+    }).controller("panelController", function($scope, $window, $http, $location, apiInfo){
 		this.currentPath = "Dashboard";
+		this.apiInfo = apiInfo;
 	
 		this.logout = function(){
 			$http({
