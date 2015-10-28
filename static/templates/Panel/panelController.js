@@ -13,8 +13,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
     		})
     		.when("/dashProfile", {
     				templateUrl: "/dash/profile",
-				    controller: "panelController",
-				    controllerAs: 'pc'
+				    controller: "dashProfileController",
+				    controllerAs: 'dpc'
     		})
     		.when("/dashCampaigns", {
     				templateUrl: "/dash/campaigns",
@@ -35,29 +35,31 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
     })
     .factory('apiInfo', function() {
     	ApiInfo = function () {
-	    	this.apiSuccess = false;
-	    	this.apiFail = false;
-	    	this.apiFailMsg = "";
+	    	this.apiInfoShow = false;
+	    	this.apiInfoSuccess = true;
+	    	//this.apiInfoMsg = { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' };
+	    	this.apiInfoMsg = {};
 
 	    	this.showSuccess = function(){
-	    		this.apiSuccess = true;
-		    	this.apiFail = false;
-		    	this.apiFailMsg = "";
+	    		this.apiInfoShow = true;
+		    	this.apiInfoSuccess = true;
+		    	this.apiInfoMsg = { type: 'success', msg: 'OK!' };
 	    	};
-	    	this.showFail = function(msg){
-	    		this.apiSuccess = false;
-		    	this.apiFail = true;
-		    	this.apiFailMsg = msg;	
+	    	this.showFail = function(errorMsg){
+	    		this.apiInfoShow = true;
+		    	this.apiInfoSuccess = false;
+		    	this.apiInfoMsg = { type: 'danger', msg: errorMsg };
 	    	};
 	    	this.hideApiMsg = function(){
-	    		this.apiSuccess = false;
-		    	this.apiFail = false;
-		    	this.apiFailMsg = "";
+	    		this.apiInfoShow = false;
+		    	this.apiInfoSuccess = true;
+		    	this.apiInfoMsg = {};
 	    	};
     	}
     	return new ApiInfo();
     }).controller("panelController", function($scope, $window, $http, $location){
 		this.currentPath = "Dashboard";
+	
 		this.logout = function(){
 			$http({
 				method: 'POST',
