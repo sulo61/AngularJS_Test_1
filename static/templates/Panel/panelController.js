@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 	// django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -31,6 +31,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute'])
 				    controller: "shopController",
 				    controllerAs: 'sc'	
     		})
+    }])
+    .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
+        GoogleMapApiProviders.configure({
+            china: false
+        });
     }])
     .factory('api', function($resource){
         function add_auth_header(data, headersGetter){
