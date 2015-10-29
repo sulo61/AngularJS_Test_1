@@ -1,3 +1,6 @@
+import os
+from settings import BASE_DIR
+
 __author__ = 'Mateusz'
 
 
@@ -76,3 +79,20 @@ MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://{0}/{1}/".format(
     AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'app/static/templates')]
+        ,
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
