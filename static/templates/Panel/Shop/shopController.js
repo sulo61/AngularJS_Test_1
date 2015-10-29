@@ -4,7 +4,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	// shop id
 	this.id = $routeParams.id;
 	// model
-	this.shop = {};
+	this.shop = { "name": "", "opening_hours": [], "address": "", "latitude": 0, "longitude": 0 };
 	this.newOpenHour = "";
 	this.newCloseHour = "";
 	this.newDays = [];
@@ -103,7 +103,12 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 				this.shop.latitude = response.data.results[0].geometry.location.lat;
 				this.shop.longitude = response.data.results[0].geometry.location.lng;
 			}
-			this.patchShop();
+			if (this.id<0){
+				this.patchShop();
+			} else {
+				this.postShop();
+			}
+			
 		}.bind(this), function errorCallback(response){
 			apiInfo.showFail(response);
 		}.bind(this));	

@@ -5,7 +5,6 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 	this.shopsList = [];
 	this.shopsPages = [];	// numbers
 	this.shopsCurrentPage = 1;
-
 	// nav
 	this.shopsNavActive = function(page){
 		if (page==this.shopsCurrentPage){
@@ -24,7 +23,6 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.getShops(this.shopsCurrentPage-1);	
 		}
 	};
-	
 	// api
 	this.getShops = function(page){
 		$http({
