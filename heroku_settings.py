@@ -54,12 +54,12 @@ MEDIA_URL = "https://{0}/{1}/".format(
     AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
+MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 AWS_STORAGE_BUCKET_NAME = 'beacons-project'
 
 # STATICFILES_LOCATION = 'static'
 # STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 # STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-# # MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 
 TEMPLATES = [
