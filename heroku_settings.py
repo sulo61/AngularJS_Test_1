@@ -83,7 +83,7 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'app/static/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'static/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
