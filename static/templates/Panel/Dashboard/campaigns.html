@@ -1,1 +1,39 @@
-campaigns
+{%verbatim%}
+<div>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="10%">#</th>
+				<th width="40%">Name</th>
+				<th width="40%">From - To</th>
+				<th width="10%">Options<th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="campaign in dcc.campaignsList">
+				<th scope="row">{{campaign.id}}</th>
+				<td>{{campaign.name}}</td>
+				<td>{{campaign.start_date}} - {{campaign.end_date}} </td>
+				<td>
+					<button type="button" class="btn btn-info  btn-sm" ng-click="">EDIT</button>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="">REMOVE</button>
+				</td>
+			</tr>		
+		</tbody>
+	</table>
+
+	<br><br>
+
+	<nav>
+	  <ul class="pagination" ng-show="dcc.campaignsPages.length>0">
+	  	<li ng-click="dcc.campaignsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+	  	<li ng-repeat="number in dcc.campaignsPages" class="{{dcc.campaignsNavActive(number)}}" id="dcc.campaignsNav{{number}}" ng-click="dcc.getCampaigns(number)">
+	  		<a>{{number}}</a>
+	  	</li>
+	  	<li ng-click="dcc.campaignsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+	    
+	  </ul>
+	</nav>
+
+</div>
+{%endverbatim%}

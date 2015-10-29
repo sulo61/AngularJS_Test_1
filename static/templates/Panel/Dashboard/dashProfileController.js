@@ -1,4 +1,6 @@
-angular.module('dashboardApp').controller('dashboardProfileController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
+angular.module('panelApp').controller('dashProfileController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
+	// api info
+	this.appInfo = appInfo;
 	// model user
 	this.user = {};
 	this.first_name = "";
@@ -18,7 +20,7 @@ angular.module('dashboardApp').controller('dashboardProfileController', ['$scope
 			this.user = response.data;
 			this.userBackup = angular.copy(this.user);
 		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
+			appInfo.showFail(response);
 		});
 	};
 	
@@ -29,10 +31,10 @@ angular.module('dashboardApp').controller('dashboardProfileController', ['$scope
 			url: '/user/'+this.user.id+'/',
 			data: this.user
 		}).then(function successCallback(response){
-			apiInfo.showSuccess();
+			appInfo.showSuccess();
 			this.userBackup = angular.copy(this.user);
 		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
+			appInfo.showFail(response);
 			this.user = angular.copy(this.userBackup);
 		}.bind(this));
 	};

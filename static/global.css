@@ -1,3 +1,49 @@
 body {
 	background-color: #fafafa;
+	padding: 100px;
+}
+
+.container {
+	background-color: #ffffff;	
+	width: 100%;
+	border-color: #e0e0e0;
+	border-style: solid;
+	border-width: 1px;
+	padding: 30px;
+}
+
+.containerAuth {
+	background-color: #ffffff;	
+	width: 100%;
+
+    padding: 30px;
+}
+
+.sideMenu {
+    float: left;
+    padding: 20px;
+}
+
+.rightColumn {
+    display: inline-block;
+    padding: 20px;
+}
+
+.leftColumn {
+    float: left;
+    padding: 20px;
+}
+
+.openHours {
+	margin-left:20px;
+	margin-top:20px;
+	padding: 20px;
+	border-color: #e0e0e0;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.angular-google-map-container { 
+	margin-top: 50px;
+	height: 400px; 
 }

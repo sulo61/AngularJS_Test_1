@@ -42,46 +42,43 @@ class LogoutView(views.APIView):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def shop(request):
-    return render(request, 'Panel/Shops/shop.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def beacons(request):
-    return render(request, 'Panel/Dashboard/beacons.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaigns(request):
+def dashCampaigns(request):
     return render(request, 'Panel/Dashboard/campaigns.html', {})
 
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def profile(request):
-    return render(request, 'Panel/Dashboard/profile.html', {})
-
+def dashShops(request):
+    return render(request, 'Panel/Dashboard/shops.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def shops(request):
-    return render(request, 'Panel/Dashboard/shops.html', {})
+def dashProfile(request):
+    return render(request, 'Panel/Dashboard/profile.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashBeacons(request):
+    return render(request, 'Panel/Dashboard/beacons.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def panel(request):
+    return render(request, 'Panel/panel.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def shop(request):
+    return render(request, 'Panel/Shop/shop.html', {})
 
 @api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/dashboard/')
+        return redirect('/panel/')
     else:
         return render(request, 'Auth/auth.html', {})
 
 
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def dashboard(request):
-    return render(request, 'Panel/Dashboard/dashboard.html')
 
 
 class CreateViewUser(ModelViewSet):

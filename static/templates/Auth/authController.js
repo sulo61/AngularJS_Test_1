@@ -42,7 +42,7 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 			$scope.showLoginWarning = false;
 			$scope.loginWarning = "";
 			if(response.status==200){
-				$window.location.href = "/dashboard";
+				$window.location.href = "/panel";
 			}
 		}, function errorCallback(response){
 			$scope.showLoginWarning = true;
