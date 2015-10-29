@@ -26,10 +26,12 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		this.newOpenHour = "";
 		this.newCloseHour = "";
 		this.newDays = [];
-	}
-	
+	}	
 	this.dismiss = function(){
 		this.shop = angular.copy(this.copy);
+	}
+	this.save = function(){
+		this.getCoords();
 	}
 	// get shop
 	this.getShop = function(){
@@ -53,11 +55,28 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			url: '/shops/'+this.id+"/",
 			data: this.shop
 		}).then(function successCallback(response){
+			this.map = { center: { latitude: this.shop.latitude, longitude: this.shop.longitude }, zoom: 8 };
 			apiInfo.showSuccess();
 		}.bind(this), function errorCallback(response){
 			apiInfo.showFail(response);
 		}.bind(this));			
 				
+	}
+	// get lat long
+	this.getCoords = function(){
+		$http({
+			method: 'GET',
+			url: 'http://maps.google.com/maps/api/geocode/json',
+			params: {"address" : this.shop.address, "sensor": false}
+		}).then(function successCallback(response){
+			if (response.data.results.length>0){
+				this.shop.latitude = response.data.results[0].geometry.location.lat;
+				this.shop.longitude = response.data.results[0].geometry.location.lng;
+			}
+			this.patchShop();
+		}.bind(this), function errorCallback(response){
+			apiInfo.showFail(response);
+		}.bind(this));	
 	}
 	// post shop
 	this.postShop = function(){
