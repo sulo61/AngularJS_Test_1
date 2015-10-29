@@ -16,7 +16,7 @@
 				<td>{{shop.address}}</td>
 				<td>
 					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button>
-					<button type="button" class="btn btn-danger btn-sm" ng-click="dsc.deleteShop(shop.id)">REMOVE</button>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="dsc.deleteShop(shop.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
 		</tbody>

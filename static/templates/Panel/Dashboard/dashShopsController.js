@@ -41,8 +41,16 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			appInfo.showFail(response);
 		});	
 	};
-	this.deleteShop = function(id){
-
+	this.deleteShop = function(id, index){
+		$http({
+			method: 'DELETE',
+			url: '/shops/'+id
+		}).then(function successCallback(response){
+			appInfo.showSuccess();
+			this.getShops(this.shopsCurrentPage);
+		}.bind(this), function errorCallback(response){
+			appInfo.showFail(response);
+		});	
 	}
 
 	this.getShops(1);
