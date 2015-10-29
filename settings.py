@@ -121,7 +121,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-MEDIA_ROOT = 'static'
+MEDIA_ROOT = 'media'
 MEDIAFILES_LOCATION = ''
 MEDIA_URL = "http://{0}/{1}/".format(
     '10.9.201.176:8000', MEDIA_ROOT)
