@@ -285,16 +285,10 @@ class AwardSerializerGet(serializers.ModelSerializer):
             return False
 
     def to_representation(self, value):
-        return {
-            'id': value.pk,
-            'title': value.title,
-            'description': value.description,
-            'points': value.points,
-            'type': value.type,
-            'favorite': self.favourite_method(value),
-            'bought': self.bought_method(value),
-            # 'image': value.image.url,
-        }
+        representation = super(AwardSerializerGet, self).to_representation(value)
+        representation['favorite'] = self.favourite_method(value)
+        representation['bought'] = self.bought_method(value)
+        return representation
 
     def update(self, instance, validated_data):
         instance = super(AwardSerializerGet, self).update(instance, validated_data)
