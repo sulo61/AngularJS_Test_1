@@ -67,8 +67,6 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/$', views.AwardCreateView.as_view(retrieve),
         name='promotions_crud'),
 
-    url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/favourite/$', views.award_favourite),
-
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/image/$',
         views.AwardImageUpdater.as_view({'post': 'create'}),
         name='promotions_crud'),

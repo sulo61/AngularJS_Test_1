@@ -1,9 +1,10 @@
 import time
+from django.http import Http404
 
 from django.shortcuts import get_object_or_404
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
     UserAwards
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.serializers import ModelSerializer, IntegerField
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
@@ -269,11 +270,49 @@ class AwardSerializerGet(serializers.ModelSerializer):
         model = Award
         fields = ('id', 'title', 'description', 'points', 'image', 'type',)
 
+    def favourite_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.favorite
+        except Http404:
+            return False
+
+    def bought_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.bought
+        except Http404:
+            return False
+
+    def to_representation(self, value):
+        return {
+            'id': value.pk,
+            'title': value.title,
+            'description': value.description,
+            'points': value.points,
+            'type': value.type,
+            'favourite': self.favourite_method(value),
+            'bought': self.bought_method(value),
+            # 'image': value.image.url,
+        }
+
+    def update(self, instance, validated_data):
+        instance = super(AwardSerializerGet, self).update(instance, validated_data)
+        award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+        if 'favourite' in self.initial_data:
+            award_favourite.favorite = self.initial_data.get('favourite')
+
+        if 'bought' in self.initial_data:
+            award_favourite.bought = self.initial_data.get('bought')
+
+        award_favourite.save()
+        return instance
+
 
 class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'image', 'points', 'type')
+        fields = ('id', 'title', 'description', 'image', 'points', 'type',)
 
 
 class ShopImageSerializer(serializers.ModelSerializer):

@@ -293,33 +293,6 @@ def create_beacons(request, pk, format=None):
     return Response(json.dumps(list(beacons)))
 
 
-@api_view(('Post',))
-@authentication_classes((SessionAuthentication, TokenAuthentication,))
-def award_favourite(request, pk, award_pk, format=None):
-    if not request.user.is_authenticated():
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-    award = get_object_or_404(Award, pk=award_pk, campaign=pk)
-    award_favourite, created = UserAwards.objects.get_or_create(award=award, user=request.user)
-    if 'favourite' in request.data:
-        award_favourite.favorite = request.data.get('favourite')
-
-    if 'bought' in request.data:
-        award_favourite.bought = request.data.get('bought')
-
-    award_favourite.save()
-
-    return Response(status=status.HTTP_200_OK, data={
-        'title': award.title,
-        'description': award.description,
-        'image': None,
-        'points': award.points,
-        'type': award.type,
-        'favourite': award_favourite.favorite,
-        'bought': award_favourite.bought,
-    })
-
-
 class BeaconCampaignView(ModelViewSet):
     serializer_class = BeaconSerializer
     # TODO: perrmission is operator and owner of campaign
