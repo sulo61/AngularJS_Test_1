@@ -8,8 +8,8 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.newOpenHour = "";
 	this.newCloseHour = "";
 	this.newDays = [];
-	// tmp copy of shop
-	this.tmpCopy = {};
+	// model copy
+	this.copy = {};
 	// hours
 	this.addNewHourVisible = true;
 	this.sendNewHourVisible = false;
@@ -27,6 +27,10 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		this.newCloseHour = "";
 		this.newDays = [];
 	}
+	
+	this.dismiss = function(){
+		this.shop = angular.copy(this.copy);
+	}
 	// get shop
 	this.getShop = function(){
 		if (this.id>0){
@@ -36,7 +40,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			}).then(function successCallback(response){
 				this.shop = response.data;
 				this.map = { center: { latitude: this.shop.latitude, longitude: this.shop.longitude }, zoom: 8 };
-				this.tmpCopy = angular.copy(this.shop) ;
+				this.copy = angular.copy(this.shop);
 			}.bind(this), function errorCallback(response){
 				apiInfo.showFail(response);
 			}.bind(this));	
@@ -51,7 +55,6 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		}).then(function successCallback(response){
 			apiInfo.showSuccess();
 		}.bind(this), function errorCallback(response){
-			this.shop = angular.copy(this.tmpCopy);
 			apiInfo.showFail(response);
 		}.bind(this));			
 				
@@ -65,7 +68,6 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		}).then(function successCallback(response){
 			apiInfo.showSuccess();
 		}.bind(this), function errorCallback(response){
-			this.shop = angular.copy(this.tmpCopy);
 			apiInfo.showFail(response);
 		}.bind(this));			
 	}
