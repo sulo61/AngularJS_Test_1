@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from beacons import views
-from beacons.views import CreateViewUser, ObtainToken, UserProfile, UserProfileCRUD
+from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView, CreateViewOperator
 
 __author__ = 'Mateusz'
 
@@ -16,8 +16,19 @@ retrieve = {
 }
 
 urlpatterns = [
-    url(r'^login/', ObtainToken.as_view(), name="login"),
+    url(r'^dash/beacons', views.dashBeacons, name="dashBeacons"),
+    url(r'^dash/profile', views.dashProfile, name="dashProfile"),
+    url(r'^dash/shops', views.dashShops, name="dashShops"),
+    url(r'^dash/campaigns', views.dashCampaigns, name="dashCampaigns"),
+    url(r'^panel/', views.panel, name="panel"),
+
+    url(r'^shop/', views.shop, name="shop"),
+
+    url(r'^login/token/', ObtainToken.as_view(), name="login"),
+    url(r'^login/', views.login_view, name="login"),
+    url(r'^logout/', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
+    url(r'^operator/register/$', CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
 
@@ -56,6 +67,7 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/awards/$', views.AwardView.as_view(methods), name='promotions'),
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/$', views.AwardCreateView.as_view(retrieve),
         name='promotions_crud'),
+
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/image/$',
         views.AwardImageUpdater.as_view({'post': 'create'}),
         name='promotions_crud'),

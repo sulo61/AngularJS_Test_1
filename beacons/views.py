@@ -1,10 +1,15 @@
 import json
-from django.shortcuts import render
+from boto.cognito.identity.exceptions import NotAuthorizedException
+from django.contrib.auth.decorators import permission_required
 
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import render, redirect
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
+from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner
+from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner, IsOperator
 from rest_framework import status
 from rest_framework.decorators import detail_route, api_view, authentication_classes
 from rest_framework.generics import get_object_or_404
@@ -12,15 +17,69 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from beacons.models import Campaign, Beacon, Shop, Ad
+from beacons.models import Campaign, Beacon, Shop, Ad, Award, UserAwards
 from beacons.serializers import CampaignSerializerPatch, TokenSerializer
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, authenticate
 
 User = get_user_model()
+
+from django.contrib.auth import logout
+
+from rest_framework import permissions
+
+
+class LogoutView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        logout(request)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashCampaigns(request):
+    return render(request, 'Panel/Dashboard/campaigns.html', {})
+
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashShops(request):
+    return render(request, 'Panel/Dashboard/shops.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashProfile(request):
+    return render(request, 'Panel/Dashboard/profile.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashBeacons(request):
+    return render(request, 'Panel/Dashboard/beacons.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def panel(request):
+    return render(request, 'Panel/panel.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def shop(request):
+    return render(request, 'Panel/Shop/shop.html', {})
+
+@api_view(('GET',))
+def index(request):
+    if request.user.is_authenticated():
+        return redirect('/panel/')
+    else:
+        return render(request, 'Auth/auth.html', {})
+
+
+
 
 class CreateViewUser(ModelViewSet):
     queryset = User.objects.all()
@@ -29,6 +88,23 @@ class CreateViewUser(ModelViewSet):
     def post_save(self, obj, created=False):
         token = Token.objects.create(user=obj)
         obj.key = token
+
+
+class CreateViewOperator(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        token = Token.objects.create(user=user)
+        user.key = token
+        user.is_operator = True
+        content_type = ContentType.objects.get_for_model(User)
+        permission, created = Permission.objects.get_or_create(name='operator',
+                                                               content_type=content_type,
+                                                               codename='is_operator')
+        user.user_permissions.add(permission)
+        user.save()
 
 
 @api_view(('GET',))
@@ -46,11 +122,14 @@ def get_user(request, format=None):
 
 
 class UserProfileCRUD(ModelViewSet):
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = User.objects.all()
     serializer_class = UserProfileView
 
 
 class UserProfile(APIView):
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+
     def get(self, request, format=None):
         map = {}
         user = request.user
@@ -58,6 +137,18 @@ class UserProfile(APIView):
         map['first_name'] = user.first_name
         map['email'] = user.email
         return Response(map)
+
+
+@api_view(('POST',))
+def login_view(request):
+    username = request.data['email']
+    password = request.data['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'non_field_error': 'Bad credentials'})
 
 
 class ObtainToken(ObtainAuthToken):
@@ -88,13 +179,15 @@ class ObtainToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        authenticate(email=user.email, password=user.password)
+        login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
 
 
 class CampaignView(ModelViewSet):
     serializer_class = CampaignSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOperator)
 
     @detail_route(methods=['post'])
     def create(self, request, pk=None):
@@ -111,6 +204,8 @@ class CampaignView(ModelViewSet):
 
 
 class CampaignRetrieveView(ModelViewSet):
+    permission_classes = (IsAuthenticated, IsOperator)
+
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
             return CampaignSerializerPatch
@@ -123,7 +218,7 @@ class CampaignRetrieveView(ModelViewSet):
 
 class CampaignBeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
-    permission_classes = (IsAuthenticated, IsCampaignOwner)
+    permission_classes = (IsAuthenticated, IsCampaignOwner, IsOperator)
 
     def get_campaign(self):
         campaign = get_object_or_404(Campaign, pk=self.kwargs['pk'])
@@ -161,7 +256,8 @@ def create_beacons(request, format=None):
 
 
 @api_view(('Post',))
-# @authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication, BaseAuthentication))
+@permission_required('beacons.is_operator')
 def create_beacons(request, pk, format=None):
     '''
     ---
@@ -197,7 +293,7 @@ def create_beacons(request, pk, format=None):
 class BeaconCampaignView(ModelViewSet):
     serializer_class = BeaconSerializer
     # TODO: perrmission is operator and owner of campaign
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOperator)
 
     def get_campaign(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -278,8 +374,13 @@ class ShopView(ModelViewSet):
 
 
 class CampaignAdView(ModelViewSet):
-    # TODO: create proper perrmission for create ad
     permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = (IsAuthenticated, IsOperator)
+
+        return super(CampaignAdView, self).get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -309,7 +410,7 @@ class CampaignAdView(ModelViewSet):
 
 class CampaignAddAction(ModelViewSet):
     serializer_class = CampaignAddActionSerializer
-    permission_classes = (IsAdOwner,)
+    permission_classes = (IsAdOwner, IsOperator)
 
     def get_object(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -345,6 +446,14 @@ class AdViewRetrieve(ModelViewSet):
 
 
 class PromotionCreateView(ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = (IsAuthenticated, IsOperator)
+
+        return super(PromotionCreateView, self).get_permissions()
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return PromotionSerializerGet
@@ -360,6 +469,14 @@ class PromotionCreateView(ModelViewSet):
 
 
 class PromotionView(PromotionCreateView):
+    permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = (IsAuthenticated, IsOperator)
+
+        return super(PromotionView, self).get_permissions()
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return PromotionSerializerGet
@@ -375,6 +492,14 @@ class PromotionView(PromotionCreateView):
 
 
 class AwardCreateView(ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = (IsAuthenticated, IsOperator)
+
+        return super(AwardCreateView, self).get_permissions()
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return AwardSerializerGet
@@ -390,6 +515,14 @@ class AwardCreateView(ModelViewSet):
 
 
 class AwardView(AwardCreateView):
+    permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = (IsAuthenticated, IsOperator)
+
+        return super(AwardView, self).get_permissions()
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return AwardSerializerGet
@@ -405,6 +538,7 @@ class AwardView(AwardCreateView):
 
 
 class ImageUpdater(ModelViewSet):
+    permission_classes = (IsAuthenticated, IsOperator,)
     serializer_class = ShopImageSerializer
 
     def get_queryset(self):
@@ -424,6 +558,7 @@ class ImageUpdater(ModelViewSet):
 
 
 class AdImageUpdater(ModelViewSet):
+    permission_classes = (IsAuthenticated, IsOperator,)
     serializer_class = AdImageSerializer
 
     def get_queryset(self):
@@ -443,6 +578,7 @@ class AdImageUpdater(ModelViewSet):
 
 
 class AwardImageUpdater(ModelViewSet):
+    permission_classes = (IsAuthenticated, IsOperator,)
     serializer_class = AwardImageSerializer
 
     def get_queryset(self):

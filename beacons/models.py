@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 
 class BeaconUserUserManager(BaseUserManager):
@@ -23,11 +23,12 @@ class BeaconUserUserManager(BaseUserManager):
                                 password=password
                                 )
         user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
 
-class BeaconUser(AbstractBaseUser):
+class BeaconUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True, db_index=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -35,6 +36,7 @@ class BeaconUser(AbstractBaseUser):
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    is_operator = models.BooleanField(default=False)
 
     objects = BeaconUserUserManager()
 
@@ -52,18 +54,13 @@ class BeaconUser(AbstractBaseUser):
     def __unicode__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
-        # Handle whether the user has a specific permission?"
-        return True
-
-    def has_module_perms(self, app_label):
-        # Handle whether the user has permissions to view the app `app_label`?"
-        return True
-
     @property
     def is_staff(self):
         # Handle whether the user is a member of staff?"
         return self.is_admin
+
+    def is_authenticated(self):
+        return True
 
 
 class TimestampMixin(object):
@@ -84,8 +81,8 @@ class Campaign(models.Model, TimestampMixin):
 class Beacon(models.Model):
     title = models.CharField(max_length=100, blank=False)
     campaign = models.ForeignKey('Campaign', related_name='beacons', blank=True, null=True)
-    minor = models.IntegerField(max_length=5, default=1)
-    major = models.IntegerField(max_length=5, default=1)
+    minor = models.IntegerField(default=1)
+    major = models.IntegerField(default=1)
     UUID = models.CharField(max_length=36, default='00000000-0000-0000-0000-000000000000')
 
     def __str__(self):
@@ -129,8 +126,8 @@ class Shop(models.Model):
 
 class OpeningHours(models.Model):
     days = ArrayField(models.IntegerField(), size=7)
-    open_time = models.TimeField(blank=True)
-    close_time = models.TimeField(blank=True)
+    open_time = models.TimeField(blank=True, null=True)
+    close_time = models.TimeField(blank=True, null=True)
     shop = models.ForeignKey('Shop', related_name='opening_hours')
 
 
@@ -160,6 +157,13 @@ class Award(models.Model):
     image = models.ImageField(upload_to='images/awards', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='awards')
     type = models.IntegerField(default=0, choices=award_choices)
+
+
+class UserAwards(models.Model):
+    award = models.ForeignKey(Award, related_name='details')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_awards')
+    favorite = models.BooleanField(default=False)
+    bought = models.BooleanField(default=False)
 
 
 class ActionBeacon(models.Model):

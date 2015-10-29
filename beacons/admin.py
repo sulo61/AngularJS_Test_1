@@ -7,6 +7,7 @@ from django.contrib import admin
 class Campaign(admin.ModelAdmin):
     pass
 
+
 @admin.register(BeaconUser)
 class User(admin.ModelAdmin):
     pass

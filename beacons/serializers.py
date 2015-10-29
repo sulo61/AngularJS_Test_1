@@ -1,8 +1,10 @@
 import time
+from django.http import Http404
 
 from django.shortcuts import get_object_or_404
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser
-from rest_framework.exceptions import ValidationError
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
+    UserAwards
+from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.serializers import ModelSerializer, IntegerField
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
@@ -61,8 +63,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileView(serializers.ModelSerializer):
     class Meta:
         model = BeaconUser
-        fields = ('email', 'first_name', 'last_name', 'address')
-        read_only_fields = ('id',)
+        fields = ('first_name', 'last_name', 'address')
+        read_only_fields = ('id', 'email')
 
 
 class CountSerializer(serializers.Serializer):
@@ -73,7 +75,6 @@ class CountSerializer(serializers.Serializer):
 
 
 class BeaconSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Beacon
         fields = ('id', 'title', 'minor', 'major')
@@ -130,25 +131,27 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     def valid_days(self, opening_hours):
         if not opening_hours:
-            raise ValidationError(detail={'open_hours': ['This field is required']})
+            raise ValidationError(detail={'opening_hours': ['This field is required']})
         hours_ = opening_hours[0]
         if hours_.get('days')[0] != 1:
-            raise ValidationError(detail={'open_hours': ['Days should starts with 1']})
+            raise ValidationError(detail={'opening_hours': ['Days should starts with 1']})
 
         hours_last = opening_hours[-1]
         if hours_last.get('days')[-1] != 7:
-            raise ValidationError(detail={'open_hours': ['Days should ends with 7']})
+            raise ValidationError(detail={'opening_hours': ['Days should ends with 7']})
 
         day_before = None
         for opening_hour in opening_hours:
             if not opening_hour:
-                raise ValidationError(detail={'open_hours': ['This field is required']})
+                raise ValidationError(detail={'opening_hours': ['This field shouldn\'t be empty']})
 
             get = str(opening_hour.get('open_time'))
-            hour_get = str(opening_hour.get('close_time'))
-            if time.strptime(get, "%H:%M:%S") >= \
-                    time.strptime(hour_get, "%H:%M:%S"):
-                raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
+            if not (get == 'None' or get == ''):
+                hour_get = str(opening_hour.get('close_time'))
+                if not (hour_get == 'None' or hour_get == ''):
+                    if time.strptime(get, "%H:%M:%S") >= \
+                            time.strptime(hour_get, "%H:%M:%S"):
+                        raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
 
             for day in opening_hour.get('days'):
                 if day_before is None:
@@ -256,16 +259,60 @@ class PromotionsSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'description', 'image', 'points',)
 
 
+class UserAwardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAwards
+        fields = ('favourite', 'bought')
+
+
 class AwardSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'points', 'image', 'type')
+        fields = ('id', 'title', 'description', 'points', 'image', 'type',)
+
+    def favourite_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.favorite
+        except Http404:
+            return False
+
+    def bought_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.bought
+        except Http404:
+            return False
+
+    def to_representation(self, value):
+        return {
+            'id': value.pk,
+            'title': value.title,
+            'description': value.description,
+            'points': value.points,
+            'type': value.type,
+            'favorite': self.favourite_method(value),
+            'bought': self.bought_method(value),
+            # 'image': value.image.url,
+        }
+
+    def update(self, instance, validated_data):
+        instance = super(AwardSerializerGet, self).update(instance, validated_data)
+        award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+        if 'favorite' in self.initial_data:
+            award_favourite.favorite = self.initial_data.get('favorite')
+
+        if 'bought' in self.initial_data:
+            award_favourite.bought = self.initial_data.get('bought')
+
+        award_favourite.save()
+        return instance
 
 
 class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award
-        fields = ('id', 'title', 'description', 'image', 'points', 'type')
+        fields = ('id', 'title', 'description', 'image', 'points', 'type',)
 
 
 class ShopImageSerializer(serializers.ModelSerializer):

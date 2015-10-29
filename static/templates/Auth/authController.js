@@ -1,4 +1,4 @@
-angular.module('app-auth', []).controller('app-controller', function($scope, $http) {
+angular.module('authApp', []).controller('authController', function($scope, $http, $window) {
 	// nav
 	$scope.welcomeVisible = true;
 	$scope.loginVisible = false;
@@ -13,6 +13,13 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 		$scope.loginVisible = true;
 		$scope.registerVisible = false;
 	}
+	$scope.showLoginWithEmail = function(email){
+		$scope.welcomeVisible = false;
+		$scope.loginVisible = true;
+		$scope.registerVisible = false;
+		$scope.login.email = email;
+		$scope.login.password = "";
+	}
 	$scope.showRegister = function(){
 		$scope.welcomeVisible = false;
 		$scope.loginVisible = false;
@@ -21,23 +28,25 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 	$scope.showWelcome();
 	// login
 	$scope.login = {};
-	$scope.login.email = "";
-	$scope.login.password = "";
-	$scope.showWarning = false;
-	$scope.warning = "";
+	$scope.login.email = "sulo612@gmail.com";
+	$scope.login.password = "123";
+	$scope.showLoginWarning = false;
+	$scope.loginWarning = "";
 	$scope.signin = function(){
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
 			url: '/login/',
 			data: $scope.login
-		}).then(function successCallback(response){
-			$scope.showWarning = false;
-			$scope.warning = "";
-			alert("S");
+		}).then(function success5Callback(response){
+			$scope.showLoginWarning = false;
+			$scope.loginWarning = "";
+			if(response.status==200){
+				$window.location.href = "/panel";
+			}
 		}, function errorCallback(response){
-			$scope.showWarning = true;
-			$scope.warning = response;
+			$scope.showLoginWarning = true;
+			$scope.loginWarning = response;
 		});	
 	};
 	// register
@@ -46,21 +55,21 @@ angular.module('app-auth', []).controller('app-controller', function($scope, $ht
 	$scope.register.last_name = "";
 	$scope.register.email = "";
 	$scope.register.password = "";
-	$scope.showWarning = false;
-	$scope.warning = "";
+	$scope.showRegisterWarning = false;
+	$scope.registerWarning = "";
 	$scope.signup = function(){
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
-			url: 'https://beacons-project.herokuapp.com:443/register/',
+			url: '/operator/register/',
 			data: $scope.register
 		}).then(function successCallback(response){
-			$scope.showWarning = false;
-			$scope.warning = "";
-			alert("Register success, now try login");
+			$scope.showRegisterWarning = false;
+			$scope.registerWarning = "";
+			$scope.showLoginWithEmail(response.data.email);
 		}, function errorCallback(response){
-			$scope.showWarning = true;
-			$scope.warning = response;
+			$scope.showRegisterWarning = true;
+			$scope.registerWarning = response;
 		});	
 	};	
 });

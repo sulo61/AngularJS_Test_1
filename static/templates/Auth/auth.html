@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+
 <html>
 
 <head>
@@ -9,11 +10,12 @@
 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-	<script src="{% static "templates/Auth/auth_controller.js" %}"></script>
+	<script src="{% static "templates/Auth/authController.js" %}"></script>
 </head>
 
-<body ng-app="app-auth" ng-controller="app-controller">
-<div class="container">
+<body ng-app="authApp" ng-controller="authController">
+{%verbatim%}
+<div class="containerAuth">
 
 	<!-- WELCOME -->
 	<div ng-show="welcomeVisible" class="content"  style="height: 200px;">
@@ -31,7 +33,7 @@
 			<div class="panel-body">
 				<form>
 				<label>Email:</label>
-				<input type="text" class="form-control" placeholder="Email" ng-model="login.email">
+				<input type="email" class="form-control" placeholder="Email" ng-model="login.email">
 				<br>
 				<label>Password:</label>
 				<input type="password" class="form-control" placeholder="Password" ng-model="login.password">
@@ -41,12 +43,12 @@
 				<div style="text-align:right">
 					<button type="button" class="btn btn-primary" ng-click="signin()">SIGN IN</button>
 				</div>
-				<br ng-show="showWarning">
-				<br ng-show="showWarning">
-				<div class="alert alert-danger" role="alert" ng-show="showWarning">
+				<br ng-show="showLoginWarning">
+				<br ng-show="showLoginWarning">
+				<div class="alert alert-danger" role="alert" ng-show="showLoginWarning">
 				  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 				  	<span class="sr-only">Error:</span>
-				  	{{warning}}
+				  	{{loginWarning}}
 				</div>
 			</div>			
 		</div>
@@ -70,7 +72,7 @@
 				<input type="text" class="form-control" placeholder="Last name" ng-model="register.last_name">
 				<br>
 				<label>Email:</label>
-				<input type="text" class="form-control" placeholder="Email" ng-model="register.email">
+				<input type="email" class="form-control" placeholder="Email" ng-model="register.email">
 				<br>
 				<label>Password:</label>
 				<input type="password" class="form-control" placeholder="Password" ng-model="register.password">
@@ -80,12 +82,12 @@
 				<div style="text-align:right">
 					<button type="button" class="btn btn-primary" ng-click="signup()">REGISTER</button>
 				</div>
-				<br ng-show="showWarning">
-				<br ng-show="showWarning">
-				<div class="alert alert-danger" role="alert" ng-show="showWarning">
+				<br ng-show="showRegisterWarning">
+				<br ng-show="showRegisterWarning">
+				<div class="alert alert-danger" role="alert" ng-show="showRegisterWarning">
 				  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 				  	<span class="sr-only">Error:</span>
-				  	{{warning}}
+				  	{{registerWarning}}
 				</div>
 			</div>
 		</div>
@@ -96,5 +98,6 @@
 
 
 </div>
+{%endverbatim%}
 </body>
 </html>

@@ -1,0 +1,70 @@
+{%verbatim%} 
+<!-- TOP -->
+<div style="text-align:right;">
+	<button class="btn btn-primary" ng-click="pc.showShops()">CLOSE EDIT</button>
+	<button class="btn btn-danger" ng-click="sc.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="sc.save()">SAVE</button>
+	<hr><br><br>
+</div>
+
+
+<!-- LEFT -->
+<div class="leftColumn"  style="width:50%">
+
+	<label>Name: </label>
+    <input type="text" class="form-control" placeholder="Name" ng-model="sc.shop.name">
+    <br>
+	
+	<label>Address: </label>
+    <input type="text" class="form-control" placeholder="Street, Post code, City" ng-model="sc.shop.address">
+    <br>
+    
+    <label>Hours: </label>
+    <div ng-repeat="oh in sc.shop.opening_hours">
+    	<div class="openHours">
+    		<label>Open: </label>
+	    	<input type="text" class="form-control" ng-model="oh.open_time">
+	    	<br>
+	    	<label>Close: </label>
+			<input type="text" class="form-control" ng-model="oh.close_time">
+			<br>
+			<label>Days: </label>
+			<input type="text" class="form-control" ng-model="oh.days">
+			<br>
+			<button style="float:right;" class="btn btn-danger" ng-click="sc.removeHours($index)">REMOVE</button>
+			<br><br>
+		</div>
+    </div>
+    <br>
+
+	<div ng-show="sc.sendNewHourVisible" class="openHours">
+    	<label>Open: </label>
+    	<input type="text" class="form-control" placeholder="HH:MM:SS" ng-model="sc.newOpenHour">
+    	<br>
+    	<label>Close: </label>
+		<input type="text" class="form-control" placeholder="HH:MM:SS" ng-model="sc.newCloseHour">
+		<br>
+		<label>Days: </label>
+		<input type="text" class="form-control" placeholder="1,2,3,4,5,6,7" ng-model="sc.newDays">
+		<br>
+		<button ng-show="sc.sendNewHourVisible" class="btn btn-success" style="float:right;" ng-click="sc.postNewHours()">SAVE NEW HOURS</button>
+		<br><br>
+	</div>
+    <button ng-show="sc.addNewHourVisible" class="btn btn-primary" style="float:right;" ng-click="sc.showAddNewHours()">ADD NEW HOURS</button>
+    
+    
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:50%">
+	<div style="text-align:center;">
+		<img src="/static/templates/Panel/Shop/imageholder.jpg" alt="Imageholder"/>
+	</div>
+    <br>
+	<ui-gmap-google-map center='sc.map.center' zoom='sc.map.zoom'>
+		<ui-gmap-marker coords="sc.marker.coords" options="sc.marker.options" events="sc.marker.events" idkey="sc.marker.id"></ui-gmap-marker>
+	</ui-gmap-google-map>
+</div>
+
+
+{%endverbatim%}

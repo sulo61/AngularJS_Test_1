@@ -51,7 +51,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'beacons',
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'rest_framework',
@@ -60,7 +59,7 @@ INSTALLED_APPS = (
     'imagekit',
     'gunicorn',
     'storages',
-    'corsheaders',
+    'beacons',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -72,8 +71,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -124,13 +121,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+MEDIA_ROOT = 'static'
+MEDIAFILES_LOCATION = ''
+MEDIA_URL = "http://{0}/{1}/".format(
+    '10.9.201.176:8000', MEDIA_ROOT)
 
 REST_FRAMEWORK = {
     'PAGINATE_BY': 5,
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
 
@@ -155,16 +156,14 @@ SWAGGER_SETTINGS = {
     "is_authenticated": False,  # Set to True to enforce user authentication,
     "is_superuser": False,  # Set to True to enforce admin only access
 }
-
+MY_LOCAL_SETTINGS = False
 try:
     from local_settings import *
 except:
     pass
 
-if os.environ.get('MY_LOCAL_SETTINGS') is None:
+if not MY_LOCAL_SETTINGS:
     try:
         from heroku_settings import *
     except:
         pass
-
-
