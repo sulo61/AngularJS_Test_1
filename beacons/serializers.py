@@ -291,7 +291,7 @@ class AwardSerializerGet(serializers.ModelSerializer):
             'description': value.description,
             'points': value.points,
             'type': value.type,
-            'favourite': self.favourite_method(value),
+            'favorite': self.favourite_method(value),
             'bought': self.bought_method(value),
             # 'image': value.image.url,
         }
@@ -299,8 +299,8 @@ class AwardSerializerGet(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance = super(AwardSerializerGet, self).update(instance, validated_data)
         award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
-        if 'favourite' in self.initial_data:
-            award_favourite.favorite = self.initial_data.get('favourite')
+        if 'favorite' in self.initial_data:
+            award_favourite.favorite = self.initial_data.get('favorite')
 
         if 'bought' in self.initial_data:
             award_favourite.bought = self.initial_data.get('bought')

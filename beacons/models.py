@@ -23,6 +23,7 @@ class BeaconUserUserManager(BaseUserManager):
                                 password=password
                                 )
         user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
@@ -159,7 +160,7 @@ class Award(models.Model):
 
 
 class UserAwards(models.Model):
-    award = models.OneToOneField(Award, primary_key=True)
+    award = models.ForeignKey(Award, related_name='details')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_awards')
     favorite = models.BooleanField(default=False)
     bought = models.BooleanField(default=False)
