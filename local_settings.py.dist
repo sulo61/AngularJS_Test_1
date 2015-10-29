@@ -1,13 +1,16 @@
 __author__ = 'Mateusz'
 
+SECRET_KEY = '**************************'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '*****',                      
+        'NAME': '*****',
         'USER': '*****',
         'PASSWORD': '*****',
         'HOST': '*****',
         'PORT': '*****',
     }
 }
+
+MY_LOCAL_SETTINGS = True
