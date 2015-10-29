@@ -14,7 +14,10 @@
 				<th scope="row">{{shop.id}}</th>
 				<td>{{shop.name}}</td>
 				<td>{{shop.address}}</td>
-				<td><button type="button" class="btn btn-info" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button></td>
+				<td>
+					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="dsc.deleteShop(shop.id)">REMOVE</button>
+				</td>
 			</tr>		
 		</tbody>
 	</table>

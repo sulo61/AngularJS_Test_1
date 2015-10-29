@@ -41,6 +41,9 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			appInfo.showFail(response);
 		});	
 	};
+	this.deleteShop = function(id){
+
+	}
 
 	this.getShops(1);
 }]);
