@@ -8,6 +8,31 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.newOpenHour = "";
 	this.newCloseHour = "";
 	this.newDays = [];
+	// marker
+	this.marker = {
+      id: 0,
+      coords: {
+        latitude: 0,
+        longitude: 0
+      },
+      options: { draggable: true },
+      events: {
+        dragend: function (marker, eventName, args) {
+          $log.log('marker dragend');
+          var lat = marker.getPosition().lat();
+          var lon = marker.getPosition().lng();
+          $log.log(lat);
+          $log.log(lon);
+
+          $scope.marker.options = {
+            draggable: true,
+            labelContent: "lat: " + $scope.marker.coords.latitude + ' ' + 'lon: ' + $scope.marker.coords.longitude,
+            labelAnchor: "100 0",
+            labelClass: "marker-labels"
+          };
+        }
+      }
+    };
 	// model copy
 	this.copy = {};
 	// hours
@@ -33,6 +58,11 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.save = function(){
 		this.getCoords();
 	}
+	this.updateMap = function(){
+		this.map = { center: { latitude: this.shop.latitude, longitude: this.shop.longitude }, zoom: 16 };
+		this.marker.coords.latitude = this.shop.latitude;
+		this.marker.coords.longitude = this.shop.longitude;
+	}
 	// get shop
 	this.getShop = function(){
 		if (this.id>0){
@@ -41,7 +71,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 				url: '/shops/'+this.id+"/"
 			}).then(function successCallback(response){
 				this.shop = response.data;
-				this.map = { center: { latitude: this.shop.latitude, longitude: this.shop.longitude }, zoom: 8 };
+				this.updateMap();
 				this.copy = angular.copy(this.shop);
 			}.bind(this), function errorCallback(response){
 				apiInfo.showFail(response);
@@ -55,7 +85,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			url: '/shops/'+this.id+"/",
 			data: this.shop
 		}).then(function successCallback(response){
-			this.map = { center: { latitude: this.shop.latitude, longitude: this.shop.longitude }, zoom: 8 };
+			this.updateMap();
 			apiInfo.showSuccess();
 		}.bind(this), function errorCallback(response){
 			apiInfo.showFail(response);

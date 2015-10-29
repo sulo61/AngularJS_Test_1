@@ -53,7 +53,9 @@
 		<img src="/static/templates/Panel/Shop/imageholder.jpg" alt="Imageholder"/>
 	</div>
     <br>
-	<ui-gmap-google-map center='sc.map.center' zoom='sc.map.zoom'></ui-gmap-google-map>
+	<ui-gmap-google-map center='sc.map.center' zoom='sc.map.zoom'>
+		<ui-gmap-marker coords="sc.marker.coords" options="sc.marker.options" events="sc.marker.events" idkey="sc.marker.id"></ui-gmap-marker>
+	</ui-gmap-google-map>
 </div>
 
 
