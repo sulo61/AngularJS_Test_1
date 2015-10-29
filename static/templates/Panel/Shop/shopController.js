@@ -88,10 +88,10 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			url: '/shops/'+this.id+"/",
 			data: this.shop
 		}).then(function successCallback(response){
-			this.updateMap();
 			appInfo.showSuccess();
 			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
 			this.makeCopy();
+			this.updateMap();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 		}.bind(this));			
@@ -107,6 +107,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			appInfo.showSuccess();
 			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
 			this.makeCopy();
+			this.updateMap();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 		}.bind(this));			

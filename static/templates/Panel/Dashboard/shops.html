@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="shop in dsc.shopsList">
-				<th scope="row">{{shop.id}}</th>
+				<th scope="row">{{  $index + (dsc.shopsCurrentPage * 5) - 4 }}</th>
 				<td>{{shop.name}}</td>
 				<td>{{shop.address}}</td>
 				<td>
