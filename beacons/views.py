@@ -582,12 +582,12 @@ class AwardImageUpdater(ModelViewSet):
     serializer_class = AwardImageSerializer
 
     def get_queryset(self):
-        return get_object_or_404(Campaign, pk=self.kwargs.get('pk')).ads.all()
+        return get_object_or_404(Campaign, pk=self.kwargs.get('pk')).awards.all()
 
     def create(self, request, *args, **kwargs):
         if 'image' in request.FILES:
 
-            shop = get_object_or_404(Ad, pk=kwargs.get('award_pk'))
+            shop = get_object_or_404(Award, pk=kwargs.get('award_pk'))
             upload = request.FILES['image']
 
             shop.image.delete()
