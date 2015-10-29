@@ -25,6 +25,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 	};
 	// api
 	this.getShops = function(page){
+
 		$http({
 			method: 'GET',
 			url: '/shops/',
@@ -33,7 +34,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.shopsList = [];
 			this.shopsPages = [];
 			this.shopsList = response.data.results;
-			for (var i=0; i<parseInt((response.data.count/5)+1); i++) {
+			for (var i=0; i<Math.ceil((response.data.count/5)); i++) {
 		    	this.shopsPages.push(i+1);
 		    }
 		    this.shopsCurrentPage = page;

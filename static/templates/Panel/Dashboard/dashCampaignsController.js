@@ -35,7 +35,7 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			this.campaignsList = [];
 			this.campaignsPages = [];
 			this.campaignsList = response.data.results;
-			for (var i=0; i<parseInt((response.data.count/5)+1); i++) {
+			for (var i=0; i<Math.ceil((response.data.count/5)); i++) {
 		    	this.campaignsPages.push(i+1);
 		    }
 		    this.campaignsCurrentPage = page;

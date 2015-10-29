@@ -22,7 +22,7 @@
     <label>Hours: </label>
     <div ng-repeat="oh in sc.shop.opening_hours">
     	<div class="openHours">
-	    	<label>Open: </label>
+    		<label>Open: </label>
 	    	<input type="text" class="form-control" ng-model="oh.open_time">
 	    	<br>
 	    	<label>Close: </label>
@@ -30,6 +30,9 @@
 			<br>
 			<label>Days: </label>
 			<input type="text" class="form-control" ng-model="oh.days">
+			<br>
+			<button style="float:right;" class="btn btn-danger" ng-click="sc.removeHours($index)">REMOVE</button>
+			<br><br>
 		</div>
     </div>
     <br>

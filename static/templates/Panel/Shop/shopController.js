@@ -52,6 +52,9 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		this.newCloseHour = "";
 		this.newDays = [];
 	}	
+	this.removeHours = function(index){
+		this.shop.opening_hours.splice(index, 1);
+	}
 	this.dismiss = function(){
 		this.shop = angular.copy(this.copy);
 	}
