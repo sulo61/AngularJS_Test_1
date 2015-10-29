@@ -14,3 +14,10 @@ DATABASES = {
 }
 
 MY_LOCAL_SETTINGS = True
+
+MEDIA_ROOT = 'static/media'
+MEDIAFILES_LOCATION = ''
+# server host with post
+HOST = '127.0.0.1:8000'
+MEDIA_URL = "http://{0}/{1}/".format(HOST, MEDIA_ROOT)
+Y_LOCAL_SETTINGS = True
