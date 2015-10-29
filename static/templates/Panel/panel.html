@@ -28,7 +28,7 @@
 	<!-- HEADER -->
 	<button class="btn btn-warning" style="float: right;" ng-click="pc.logout()">LOGOUT</button>
 	{%verbatim%}
-	<h1>{{pc.currentPath}}</h1>
+	<h1>{{pc.appInfo.currentPath}}</h1>
 	{%endverbatim%}
 	<br><br>
 
@@ -46,7 +46,7 @@
 
 	<!-- API INFO -->
 	{%verbatim%}
-	<uib-alert ng-show="pc.apiInfo.apiInfoShow" type="{{pc.apiInfo.apiInfoMsg.type}}" close="pc.apiInfo.hideApiMsg()">{{pc.apiInfo.apiInfoMsg.msg}}</uib-alert>
+	<uib-alert ng-show="pc.appInfo.appInfoShow" type="{{pc.appInfo.appInfoMsg.type}}" close="pc.appInfo.hideApiMsg()">{{pc.appInfo.appInfoMsg.msg}}</uib-alert>
 	{%endverbatim%}
 
 </body>

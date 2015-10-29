@@ -1,6 +1,6 @@
-angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', 'apiInfo', function($scope, $http, $routeParams, apiInfo){
+angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
 	// api info
-	this.apiInfo = apiInfo;
+	this.appInfo = appInfo;
 	// shop id
 	this.id = $routeParams.id;
 	// model
@@ -63,6 +63,9 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		this.marker.coords.latitude = this.shop.latitude;
 		this.marker.coords.longitude = this.shop.longitude;
 	}
+	this.makeCopy = function(){
+		this.copy = angular.copy(this.shop);
+	}
 	// get shop
 	this.getShop = function(){
 		if (this.id>0){
@@ -72,9 +75,9 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			}).then(function successCallback(response){
 				this.shop = response.data;
 				this.updateMap();
-				this.copy = angular.copy(this.shop);
+				this.makeCopy();
 			}.bind(this), function errorCallback(response){
-				apiInfo.showFail(response);
+				appInfo.showFail(response);
 			}.bind(this));	
 		}
 	}
@@ -86,11 +89,27 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			data: this.shop
 		}).then(function successCallback(response){
 			this.updateMap();
-			apiInfo.showSuccess();
+			appInfo.showSuccess();
+			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
+			this.makeCopy();
 		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
+			appInfo.showFail(response);
 		}.bind(this));			
 				
+	}
+	// post shop
+	this.postShop = function(){
+		$http({
+			method: 'POST',
+			url: '/shops/',
+			data: this.shop
+		}).then(function successCallback(response){
+			appInfo.showSuccess();
+			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
+			this.makeCopy();
+		}.bind(this), function errorCallback(response){
+			appInfo.showFail(response);
+		}.bind(this));			
 	}
 	// get lat long
 	this.getCoords = function(){
@@ -110,21 +129,11 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			}
 			
 		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
+			appInfo.showFail(response);
 		}.bind(this));	
 	}
-	// post shop
-	this.postShop = function(){
-		$http({
-			method: 'POST',
-			url: '/shops/',
-			data: this.shop
-		}).then(function successCallback(response){
-			apiInfo.showSuccess();
-		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
-		}.bind(this));			
-	}
+
+
 
 	this.getShop(this.id);
 }]);

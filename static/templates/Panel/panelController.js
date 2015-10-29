@@ -43,33 +43,36 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
             headers['Authorization'] = ('Basic ' + btoa(data.username + ':' + data.password));
         }
     })
-    .factory('apiInfo', function() {
-    	ApiInfo = function () {
-	    	this.apiInfoShow = false;
-	    	this.apiInfoSuccess = true;
-	    	//this.apiInfoMsg = { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' };
-	    	this.apiInfoMsg = {};
+    .factory('appInfo', function() {
+    	appInfo = function () {
+	    	this.appInfoShow = false;
+	    	this.appInfoSuccess = true;
+	    	//this.appInfoMsg = { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' };
+	    	this.appInfoMsg = {};
+	    	this.currentPath = "Dashboard";
 
 	    	this.showSuccess = function(){
-	    		this.apiInfoShow = true;
-		    	this.apiInfoSuccess = true;
-		    	this.apiInfoMsg = { type: 'success', msg: 'OK!' };
+	    		this.appInfoShow = true;
+		    	this.appInfoSuccess = true;
+		    	this.appInfoMsg = { type: 'success', msg: 'OK!' };
 	    	};
 	    	this.showFail = function(errorMsg){
-	    		this.apiInfoShow = true;
-		    	this.apiInfoSuccess = false;
-		    	this.apiInfoMsg = { type: 'danger', msg: errorMsg };
+	    		this.appInfoShow = true;
+		    	this.appInfoSuccess = false;
+		    	this.appInfoMsg = { type: 'danger', msg: errorMsg };
 	    	};
 	    	this.hideApiMsg = function(){
-	    		this.apiInfoShow = false;
-		    	this.apiInfoSuccess = true;
-		    	this.apiInfoMsg = {};
+	    		this.appInfoShow = false;
+		    	this.appInfoSuccess = true;
+		    	this.appInfoMsg = {};
 	    	};
+	    	this.setCurrentPath = function(path){
+	    		this.currentPath = path;
+	    	}
     	}
-    	return new ApiInfo();
-    }).controller("panelController", function($scope, $window, $http, $location, apiInfo){
-		this.currentPath = "Dashboard";
-		this.apiInfo = apiInfo;
+    	return new appInfo();
+    }).controller("panelController", function($scope, $window, $http, $location, appInfo){
+		this.appInfo = appInfo;
 	
 		this.logout = function(){
 			$http({
@@ -78,32 +81,32 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			}).then(function successCallback(response){
 				$window.location.href = "/";
 			}, function errorCallback(response){
-				apiInfo.showFail(response);
+				appInfo.showFail(response);
 			}.bind(this));	
 		};
 		this.showBeacons = function(){
-			apiInfo.hideApiMsg();
-			this.currentPath = "Dashboard/Beacons"
+			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Beacons");
 			$location.path('/dashBeacons');
 		}
 		this.showProfile = function(){
-			apiInfo.hideApiMsg();
-			this.currentPath = "Dashboard/Profile"
+			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Profile");
 			$location.path('/dashProfile');
 		}
 		this.showCampaigns = function(){
-			apiInfo.hideApiMsg();
-			this.currentPath = "Dashboard/Campaigns"
+			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Campaigns");
 			$location.path('/dashCampaigns');	
 		}
 		this.showShops = function(){
-			apiInfo.hideApiMsg();
-			this.currentPath = "Dashboard/Shops"
+			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Shops");
 			$location.path('/dashShops');	
 		}
 		this.showShop = function(name, id){
-			apiInfo.hideApiMsg();
-			this.currentPath = "Dashboard/Shop/"+name;
+			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Shop/"+name);
 			$location.path('/shop/'+id);		
 		}
     })

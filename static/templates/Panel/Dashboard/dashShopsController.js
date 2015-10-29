@@ -1,6 +1,6 @@
-angular.module('panelApp').controller('dashShopsController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
+angular.module('panelApp').controller('dashShopsController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
 	// api info
-	this.apiInfo = apiInfo;
+	this.appInfo = appInfo;
 	// models
 	this.shopsList = [];
 	this.shopsPages = [];	// numbers
@@ -38,7 +38,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 		    }
 		    this.shopsCurrentPage = page;
 		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
+			appInfo.showFail(response);
 		});	
 	};
 

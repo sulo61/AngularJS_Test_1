@@ -1,6 +1,6 @@
-angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'apiInfo', function($scope, $http, apiInfo){
+angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
 	// api info
-	this.apiInfo = apiInfo;
+	this.appInfo = appInfo;
 	// models
 	this.campaignsList = [];
 	this.campaignsPages = [];	// numbers
@@ -40,7 +40,7 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 		    }
 		    this.campaignsCurrentPage = page;
 		}.bind(this), function errorCallback(response){
-			apiInfo.showFail(response);
+			appInfo.showFail(response);
 		});	
 	};
 
