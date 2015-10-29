@@ -78,7 +78,7 @@ ROOT_URLCONF = 'urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'beacons/static/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'app/beacons/static/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
