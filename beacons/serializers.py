@@ -269,6 +269,7 @@ class AwardSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = Award
         fields = ('id', 'title', 'description', 'points', 'image', 'type',)
+        read_only_fields = ('image',)
 
     def favourite_method(self, obj):
         try:
