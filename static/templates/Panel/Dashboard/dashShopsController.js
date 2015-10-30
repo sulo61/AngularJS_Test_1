@@ -34,6 +34,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.shopsList = [];
 			this.shopsPages = [];
 			this.shopsList = response.data.results;
+			debugger
 			for (var i=0; i<Math.ceil((response.data.count/5)); i++) {
 		    	this.shopsPages.push(i+1);
 		    }
