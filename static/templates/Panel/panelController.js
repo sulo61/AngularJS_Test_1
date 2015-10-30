@@ -31,6 +31,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 				    controller: "shopController",
 				    controllerAs: 'sc'	
     		})
+    		.when("/campaign/:id?", {
+    				templateUrl: "/campaign",
+				    controller: "campaignController",
+				    controllerAs: 'cc'	
+    		})
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
         GoogleMapApiProviders.configure({
@@ -99,6 +104,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			this.appInfo.setCurrentPath("Dashboard/Campaigns");
 			$location.path('/dashCampaigns');	
 		}
+		this.showCampaign = function(name, id){
+			this.appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name);
+			$location.path('/campaign/'+id);
+		}
 		this.showShops = function(){
 			appInfo.hideApiMsg();
 			this.appInfo.setCurrentPath("Dashboard/Shops");
@@ -109,4 +119,5 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			this.appInfo.setCurrentPath("Dashboard/Shop/"+name);
 			$location.path('/shop/'+id);		
 		}
+
     })

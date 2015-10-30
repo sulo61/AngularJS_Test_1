@@ -72,6 +72,11 @@ def shop(request):
     return render(request, 'Panel/Shop/shop.html', {})
 
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaign(request):
+    return render(request, 'Panel/Campaign/campaign.html', {})
+
+@api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
         return redirect('/panel/')
