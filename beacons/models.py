@@ -165,6 +165,9 @@ class UserAwards(models.Model):
     favorite = models.BooleanField(default=False)
     bought = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = ('award', 'user',)
+
 
 class ActionBeacon(models.Model):
     campaign = models.ForeignKey('Campaign', related_name='actions')
