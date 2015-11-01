@@ -23,7 +23,9 @@ urlpatterns = [
     url(r'^panel/', views.panel, name="panel"),
 
     url(r'^shop/', views.shop, name="shop"),
-    url(r'^campaign/', views.campaign, name="campaign"),
+    url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
+    url(r'^campaign/$', views.campaign, name="campaign"),
+
 
     url(r'^login/token/', ObtainToken.as_view(), name="login"),
     url(r'^login/', views.login_view, name="login"),

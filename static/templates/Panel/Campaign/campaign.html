@@ -1,3 +1,5 @@
+
+{%verbatim%}
 <!-- TOP -->
 <div style="text-align:right;">
 	<button class="btn btn-primary" ng-click="">CLOSE EDIT</button>
@@ -9,15 +11,44 @@
 <!-- LEFT -->
 <div class="leftColumn"  style="width:25%">
 	<uib-tabset vertical="true" type="pills">
-		<uib-tab heading="Basic informations"></uib-tab>
-		<uib-tab heading="Advertisements"></uib-tab>
-		<uib-tab heading="Scenarios"></uib-tab>
-		<uib-tab heading="Awards"></uib-tab>
+		<uib-tab heading="Basic informations" ng-click="cc.showPage(0)"></uib-tab>
+		<uib-tab heading="Advertisements" ng-click="cc.showPage(1)"></uib-tab>
+		<uib-tab heading="Scenarios" ng-click="cc.showPage(2)"></uib-tab>
+		<uib-tab heading="Awards" ng-click="cc.showPage(3)"></uib-tab>
 	</uib-tabset>
 </div>
 
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:75%">
-	CONTENT
+	<!-- BASIC -->
+	<div ng-show="cc.pageVisibility[0]">
+		<form style="margin-left:auto; margin-right:auto;">
+			<label>Name:</label>
+			<input type="text" class="form-control" placeholder="Name" >
+			<br>
+			<label>Start date:</label>
+			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" >
+			<br>
+			<label>End date:</label>
+			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" >
+			<br>
+			<label>Active:</label>
+			<input type="password" class="form-control" placeholder="Password" ng-model="dpc.user.password">			
+		</form>
+	</div>
+	<!-- ADS -->
+	<div ng-show="cc.pageVisibility[1]">
+		ADS
+	</div>
+	<!-- SCENARIOS -->
+	<div ng-show="cc.pageVisibility[2]">
+		SCE
+	</div>
+	<!-- AWARDS -->
+	<div ng-show="cc.pageVisibility[3]">
+		AWARDS
+	</div>
+
 </div>
+{%endverbatim%}

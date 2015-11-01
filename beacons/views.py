@@ -77,6 +77,11 @@ def campaign(request):
     return render(request, 'Panel/Campaign/campaign.html', {})
 
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignBasic(request):
+    return render(request, 'Panel/Campaign/basic.html', {})
+
+@api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
         return redirect('/panel/')
