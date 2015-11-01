@@ -4,7 +4,7 @@
 <div style="text-align:right;">
 	<button class="btn btn-primary" ng-click="">CLOSE EDIT</button>
 	<button class="btn btn-danger" ng-click="">DISMISS</button>
-	<button class="btn btn-success" ng-click="">SAVE</button>
+	<button class="btn btn-success" ng-click="cc.save()">SAVE</button>
 	<hr><br><br>
 </div>
 
@@ -25,16 +25,16 @@
 	<div ng-show="cc.pageVisibility[0]">
 		<form style="margin-left:auto; margin-right:auto;">
 			<label>Name:</label>
-			<input type="text" class="form-control" placeholder="Name" >
+			<input type="text" class="form-control" placeholder="Name" ng-model="cc.basic.name">
 			<br>
 			<label>Start date:</label>
-			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" >
+			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="cc.basic.start_date">
 			<br>
 			<label>End date:</label>
-			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" >
+			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="cc.basic.end_date">
 			<br>
 			<label>Active:</label>
-			<input type="password" class="form-control" placeholder="Password" ng-model="dpc.user.password">			
+			<input type="checkbox" ng-model="oneAtATime">
 		</form>
 	</div>
 	<!-- ADS -->
