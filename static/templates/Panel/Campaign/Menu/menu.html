@@ -1,8 +1,10 @@
 <div class="leftColumn"  style="width:25%">
-<uib-tabset vertical="true" type="pills">
-	<uib-tab heading="Basic informations" ng-click="cc.showPage(0)"></uib-tab>
-	<uib-tab heading="Advertisements" ng-click="cc.showPage(1)"></uib-tab>
-	<uib-tab heading="Scenarios" ng-click="cc.showPage(2)"></uib-tab>
-	<uib-tab heading="Awards" ng-click="cc.showPage(3)"></uib-tab>
-</uib-tabset>
+	<button id="campaignMenuItem0" type="button" class="btn btn-default" style="width:100%" ng-click="pc.showCampaignBasic()">Basic informations</button>
+	<br><br>
+	<button id="campaignMenuItem1" type="button" class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAds()">Advertisements</button>
+	<br><br>
+	<button id="campaignMenuItem2" type="button" class="btn btn-default" style="width:100%" ng-click="pc.showCampaignSce()">Scenarios</button>
+	<br><br>
+	<button id="campaignMenuItem3" type="button" class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwa()">Awards</button>
+	<br><br>
 </div>

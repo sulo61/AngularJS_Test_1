@@ -1,31 +1,14 @@
-angular.module('panelApp').controller('campaignController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('campaignBasicController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
 	// api info
 	this.appInfo = appInfo;
 	// shop id
 	this.id = $routeParams.id;
-	// visibility
-	this.pageVisibility = [true, false, false, false];
-	this.showPage = function(which){
-		appInfo.hideApiMsg();
-		this.pageVisibility = [false, false, false, false];
-		this.pageVisibility[which] = true;
-	}
 	// model
 	this.basic = {id:"", name:"", start_date:"", end_date:""};
 	this.basicCopy = {};
 	// save
 	this.save = function(){
-		switch(this.pageVisibility.indexOf(true)){
-			case 0:
-				this.saveBasic();
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-		}
+		this.saveBasic();
 	}
 	// api
 	this.getBasic = function(){
@@ -57,6 +40,8 @@ angular.module('panelApp').controller('campaignController', ['$scope', '$http', 
 	this.saveBasic = function(){
 		if (this.id>0){
 			this.patchBasic();
+		} else {
+			alert("save error, id=0 lol?");
 		}
 	}	
 	this.getBasic();

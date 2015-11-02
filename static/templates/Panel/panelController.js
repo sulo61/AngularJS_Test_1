@@ -31,10 +31,25 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 				    controller: "shopController",
 				    controllerAs: 'sc'	
     		})
-    		.when("/campaign/:id?", {
-    				templateUrl: "/campaign",
-				    controller: "campaignController",
-				    controllerAs: 'cc'	
+    		.when("/campaign/basic/:id?", {
+    				templateUrl: "/campaign/basic",
+				    controller: "campaignBasicController",
+				    controllerAs: 'cbasicc'	
+    		})
+    		.when("/campaign/ads/:id?", {
+    				templateUrl: "/campaign/ads",
+				    controller: "campaignAdsController",
+				    controllerAs: 'cadsc'	
+    		})
+    		.when("/campaign/sce/:id?", {
+    				templateUrl: "/campaign/sce",
+				    controller: "campaignSceController",
+				    controllerAs: 'cscec'	
+    		})
+    		.when("/campaign/awa/:id?", {
+    				templateUrl: "/campaign/awa",
+				    controller: "campaignAwaController",
+				    controllerAs: 'cawac'	
     		})
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
@@ -104,10 +119,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			this.appInfo.setCurrentPath("Dashboard/Campaigns");
 			$location.path('/dashCampaigns');	
 		}
-		this.showCampaign = function(name, id){
+		this.showCampaignBasic = function(name, id){
 			this.appInfo.hideApiMsg();
 			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name);
-			$location.path('/campaign/'+id);
+			$location.path('/campaign/basic/'+id);
+		}	
+		this.showCampaignAds = function(){
+			this.appInfo.hideApiMsg();
+			$location.path('/campaign/ads/');			
+		}
+		this.showCampaignSce = function(){
+			this.appInfo.hideApiMsg();
+			$location.path('/campaign/sce/');
+		}
+		this.showCampaignAwa = function(){
+			this.appInfo.hideApiMsg();
+			$location.path('/campaign/awa/');
 		}
 		this.showShops = function(){
 			appInfo.hideApiMsg();

@@ -24,7 +24,9 @@ urlpatterns = [
 
     url(r'^shop/$', views.shop, name="shop"),
     url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
-    url(r'^campaign/$', views.campaign, name="campaign"),
+    url(r'^campaign/ads/$', views.campaignAds, name="campaignAds"),
+    url(r'^campaign/sce/$', views.campaignSce, name="campaignSce"),
+    url(r'^campaign/awa/$', views.campaignAwa, name="campaignAwa"),
     url(r'^panel/campaign/menu/$', views.campaignMenu, name="campaignMenu"),
     url(r'^panel/campaign/header/$', views.campaignHeader, name="campaignHeader"),
 
