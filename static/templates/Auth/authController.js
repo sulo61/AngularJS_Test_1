@@ -28,7 +28,7 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	$scope.showWelcome();
 	// login
 	$scope.login = {};
-	$scope.login.email = "sulo612@gmail.com";
+	$scope.login.email = "sulo612+2@gmail.com";
 	$scope.login.password = "123";
 	$scope.showLoginWarning = false;
 	$scope.loginWarning = "";

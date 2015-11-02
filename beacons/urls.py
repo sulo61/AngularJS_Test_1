@@ -16,15 +16,17 @@ retrieve = {
 }
 
 urlpatterns = [
-    url(r'^dash/beacons', views.dashBeacons, name="dashBeacons"),
-    url(r'^dash/profile', views.dashProfile, name="dashProfile"),
-    url(r'^dash/shops', views.dashShops, name="dashShops"),
-    url(r'^dash/campaigns', views.dashCampaigns, name="dashCampaigns"),
-    url(r'^panel/', views.panel, name="panel"),
+    url(r'^dash/beacons/$', views.dashBeacons, name="dashBeacons"),
+    url(r'^dash/profile/$', views.dashProfile, name="dashProfile"),
+    url(r'^dash/shops/$', views.dashShops, name="dashShops"),
+    url(r'^dash/campaigns/$', views.dashCampaigns, name="dashCampaigns"),
+    url(r'^panel/$', views.panel, name="panel"),
 
-    url(r'^shop/', views.shop, name="shop"),
+    url(r'^shop/$', views.shop, name="shop"),
     url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
     url(r'^campaign/$', views.campaign, name="campaign"),
+    url(r'^panel/campaign/menu/$', views.campaignMenu, name="campaignMenu"),
+    url(r'^panel/campaign/header/$', views.campaignHeader, name="campaignHeader"),
 
 
     url(r'^login/token/', ObtainToken.as_view(), name="login"),

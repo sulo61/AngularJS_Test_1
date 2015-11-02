@@ -78,6 +78,16 @@ def campaign(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignMenu(request):
+    return render(request, 'Panel/Campaign/Menu/menu.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignHeader(request):
+    return render(request, 'Panel/Campaign/Header/header.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignBasic(request):
     return render(request, 'Panel/Campaign/basic.html', {})
 
