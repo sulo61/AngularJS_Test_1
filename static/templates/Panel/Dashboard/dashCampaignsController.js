@@ -43,8 +43,19 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			appInfo.showFail(response);
 		});	
 	};
+	this.deleteCampaign = function(id, index){
+		$http({
+			method: 'DELETE',
+			url: '/campaigns/'+id
+		}).then(function successCallback(response){
+			appInfo.showSuccess();
+			this.getCampaigns(this.campaignsCurrentPage);
+		}.bind(this), function errorCallback(response){
+			appInfo.showFail(response);
+		});	
+	}
+
+
 
 	this.getCampaigns(1);
-
-	
 }]);

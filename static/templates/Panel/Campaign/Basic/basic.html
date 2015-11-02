@@ -1,0 +1,41 @@
+<!-- TOP -->
+<!-- <div ng-include src="'campaign/header'"></div>	 -->
+<div style="text-align:right;">
+	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>
+	<button class="btn btn-danger" ng-click="bc.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="bc.save()">SAVE</button>
+	<hr><br><br>
+</div>
+
+<!-- LEFT -->
+<!-- <div ng-include src="'campaign/menu'"></div> -->
+<div class="leftColumn"  style="width:25%">
+	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignBasic(bc.basic.name, bc.id)">Basic informations</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAds(bc.basic.name, bc.id)">Advertisements</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignSce(bc.basic.name, bc.id)">Scenarios</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwards(bc.basic.name, bc.id)">Awards</button>
+	<br><br>
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+	<!-- BASIC -->
+	<div>
+	<form style="margin-left:auto; margin-right:auto;">
+		<label>Name:</label>
+		<input type="text" class="form-control" placeholder="Name" ng-model="bc.basic.name">
+		<br>
+		<label>Start date:</label>
+		<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="bc.basic.start_date">
+		<br>
+		<label>End date:</label>
+		<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="bc.basic.end_date">
+		<br>
+		<label>Active:</label>
+		<input type="checkbox" >
+	</form>
+</div>
+</div>

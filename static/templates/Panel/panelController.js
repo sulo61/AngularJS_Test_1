@@ -31,25 +31,25 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 				    controller: "shopController",
 				    controllerAs: 'sc'	
     		})
-    		.when("/campaign/basic/:id?", {
+    		.when("/campaign/basic/:id/:name?", {
     				templateUrl: "/campaign/basic",
-				    controller: "campaignBasicController",
-				    controllerAs: 'cbasicc'	
+				    controller: "basicController",
+				    controllerAs: 'bc'	
     		})
-    		.when("/campaign/ads/:id?", {
+    		.when("/campaign/ads/:id/:name?", {
     				templateUrl: "/campaign/ads",
-				    controller: "campaignAdsController",
-				    controllerAs: 'cadsc'	
+				    controller: "basicController",
+				    controllerAs: 'bc'	
     		})
-    		.when("/campaign/sce/:id?", {
+    		.when("/campaign/sce/:id/:name?", {
     				templateUrl: "/campaign/sce",
-				    controller: "campaignSceController",
-				    controllerAs: 'cscec'	
-    		})
-    		.when("/campaign/awa/:id?", {
-    				templateUrl: "/campaign/awa",
-				    controller: "campaignAwaController",
-				    controllerAs: 'cawac'	
+				    controller: "basicController",
+				    controllerAs: 'bc'	
+    		})		
+    		.when("/campaign/awards/:id/:name?", {
+    				templateUrl: "/campaign/awards",
+				    controller: "basicController",
+				    controllerAs: 'bc'	
     		})
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
@@ -120,21 +120,21 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			$location.path('/dashCampaigns');	
 		}
 		this.showCampaignBasic = function(name, id){
-			this.appInfo.hideApiMsg();
+			appInfo.hideApiMsg();
 			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name);
-			$location.path('/campaign/basic/'+id);
-		}	
-		this.showCampaignAds = function(){
-			this.appInfo.hideApiMsg();
-			$location.path('/campaign/ads/');			
+			$location.path('/campaign/basic/'+id+'/'+name);	
 		}
-		this.showCampaignSce = function(){
-			this.appInfo.hideApiMsg();
-			$location.path('/campaign/sce/');
+		this.showCampaignAds = function(name, id){
+			appInfo.hideApiMsg();
+			$location.path('/campaign/ads/'+id+'/'+name);	
 		}
-		this.showCampaignAwa = function(){
-			this.appInfo.hideApiMsg();
-			$location.path('/campaign/awa/');
+		this.showCampaignSce = function(name, id){
+			appInfo.hideApiMsg();
+			$location.path('/campaign/sce/'+id+'/'+name);	
+		}
+		this.showCampaignAwards = function(name, id){
+			appInfo.hideApiMsg();
+			$location.path('/campaign/awards/'+id+'/'+name);	
 		}
 		this.showShops = function(){
 			appInfo.hideApiMsg();
@@ -146,5 +146,5 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			this.appInfo.setCurrentPath("Dashboard/Shop/"+name);
 			$location.path('/shop/'+id);		
 		}
-
+		
     })

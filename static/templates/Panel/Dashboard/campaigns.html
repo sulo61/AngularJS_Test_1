@@ -16,7 +16,7 @@
 				<td>{{campaign.start_date}} - {{campaign.end_date}} </td>
 				<td>
 					<button type="button" class="btn btn-info  btn-sm" ng-click="pc.showCampaignBasic(campaign.name, campaign.id)">EDIT</button>
-					<button type="button" class="btn btn-danger btn-sm" ng-click="">REMOVE</button>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="dcc.deleteCampaign(campaign.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
 		</tbody>
@@ -34,7 +34,7 @@
 	    
 	  </ul>
 	</nav>
-	<button style="float:right;" class="btn btn-success" ng-click="dcc.showCampaign('', 0)">ADD CAMPAIGNS</button>
+	<button style="float:right;" class="btn btn-success" ng-click="pc.showCampaignBasic('', 0)">ADD CAMPAIGN</button>
 
 </div>
 {%endverbatim%}

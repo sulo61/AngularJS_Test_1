@@ -1,5 +1,5 @@
-angular.module('panelApp').controller('campaignBasicController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
-	// api info
+angular.module('panelApp').controller('basicController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+// api info
 	this.appInfo = appInfo;
 	// shop id
 	this.id = $routeParams.id;
@@ -9,6 +9,10 @@ angular.module('panelApp').controller('campaignBasicController', ['$scope', '$ht
 	// save
 	this.save = function(){
 		this.saveBasic();
+	}
+	// dismiss
+	this.dismiss = function(){
+		this.basic = angular.copy(this.basicCopy);
 	}
 	// api
 	this.getBasic = function(){
@@ -37,16 +41,28 @@ angular.module('panelApp').controller('campaignBasicController', ['$scope', '$ht
 			appInfo.showFail(response);
 		});	
 	}
+	this.postBasic = function(){
+		$http({
+			method: 'POST',
+			url: '/campaigns/',
+			data: this.basic
+		}).then(function successCallback(response){
+			appInfo.setCurrentPath("Dashboard/Campaign/"+this.basic.name);
+			this.basicCopy = angular.copy(this.basic);
+			this.id = this.basic.id;
+			appInfo.showSuccess();
+		}.bind(this), function errorCallback(response){
+			appInfo.showFail(response);
+		});	
+	}
 	this.saveBasic = function(){
 		if (this.id>0){
 			this.patchBasic();
 		} else {
-			alert("save error, id=0 lol?");
+			this.postBasic();
 		}
 	}	
 	this.getBasic();
 
-	this.getAwards = function(){
 
-	}
 }]);

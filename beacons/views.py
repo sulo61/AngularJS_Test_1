@@ -77,28 +77,30 @@ def campaignMenu(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignHeader(request):
-    return render(request, 'Panel/Campaign/Header/header.html', {})
+def campaign(request):
+    return render(request, 'Panel/Campaign/campaign.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignBasic(request):
-    return render(request, 'Panel/Campaign/basic.html', {})
+    return render(request, 'Panel/Campaign/Basic/basic.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAds(request):
-    return render(request, 'Panel/Campaign/ads.html', {})
+    return render(request, 'Panel/Campaign/Ads/ads.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignSce(request):
-    return render(request, 'Panel/Campaign/sce.html', {})
+    return render(request, 'Panel/Campaign/Sce/sce.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignAwa(request):
-    return render(request, 'Panel/Campaign/awa.html', {})
+def campaignAwards(request):
+    return render(request, 'Panel/Campaign/Awards/awards.html', {})
+
+
 
 @api_view(('GET',))
 def index(request):
