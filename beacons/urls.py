@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^campaign/awards/$', views.campaignAwards, name="campaignAwards"),
     url(r'^panel/campaign/menu/$', views.campaignMenu, name="campaignMenu"),
     
-
+    url(r'^campaign/award/$', views.campaignAward, name="campaignAward"),
 
     url(r'^login/token/', ObtainToken.as_view(), name="login"),
     url(r'^login/', views.login_view, name="login"),
