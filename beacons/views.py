@@ -1,7 +1,6 @@
 import json
-from boto.cognito.identity.exceptions import NotAuthorizedException
-from django.contrib.auth.decorators import permission_required
 
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect
@@ -17,12 +16,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from beacons.models import Campaign, Beacon, Shop, Ad, Award, UserAwards
+from beacons.models import Campaign, Beacon, Shop, Ad, Award
 from beacons.serializers import CampaignSerializerPatch, TokenSerializer
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
-from beacons.serializers import AdSerializerList, UserSerializer, UserProfileView
+from beacons.serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model, login, authenticate
 
 User = get_user_model()
@@ -124,7 +123,7 @@ def get_user(request, format=None):
 class UserProfileCRUD(ModelViewSet):
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = User.objects.all()
-    serializer_class = UserProfileView
+    serializer_class = UserProfileSerializer
 
 
 class UserProfile(APIView):
@@ -375,6 +374,7 @@ class ShopView(ModelViewSet):
 
 class CampaignAdView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
+    serializer_class = AdSerializerCreate
 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -382,19 +382,13 @@ class CampaignAdView(ModelViewSet):
 
         return super(CampaignAdView, self).get_permissions()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return AdSerializerList
-        elif self.request.method == 'GET':
-            return AdSerializerCreate
-
     def get_object(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
         self.check_object_permissions(self.request, obj)
         return obj
 
     def create(self, request, *args, **kwargs):
-        serializer = AdSerializerList(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save(campaign=self.get_object())
             return Response(serializer.data)

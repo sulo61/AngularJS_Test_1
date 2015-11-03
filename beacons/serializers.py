@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
-class UserProfileView(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         return {
             'id': value.pk,
@@ -73,6 +73,7 @@ class UserProfileView(serializers.ModelSerializer):
     class Meta:
         model = BeaconUser
         fields = ('first_name', 'last_name', 'address',)
+        read_only_fields = ('id',)
 
     def update(self, instance, validated_data):
         if not ('password' in self.initial_data):
@@ -91,7 +92,7 @@ class UserProfileView(serializers.ModelSerializer):
                 'old_password': ['Entered password is not correct.']
             })
 
-        super(UserProfileView, self).update(instance, validated_data)
+        super(UserProfileSerializer, self).update(instance, validated_data)
 
         if 'password' in validated_data:
             instance.set_password(validated_data.get('password'))
@@ -209,12 +210,7 @@ class AdSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = ('id', 'title', 'description', 'image', 'type')
-
-
-class AdSerializerList(serializers.ModelSerializer):
-    class Meta:
-        model = Ad
-        fields = ('title', 'description', 'image', 'type')
+        read_only_fields = ('image',)
 
 
 class CampaignAddActionSerializer(serializers.ModelSerializer):
@@ -258,18 +254,7 @@ class PromotionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promotion
         fields = ('id', 'title', 'description', 'image', 'points',)
-
-
-class PromotionSerializerGet(serializers.ModelSerializer):
-    class Meta:
-        model = Promotion
-        fields = ('id', 'title', 'description', 'points', 'image')
-
-
-class PromotionsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Promotion
-        fields = ('id', 'title', 'description', 'image', 'points',)
+        read_only_fields = ('image',)
 
 
 class UserAwardSerializer(serializers.ModelSerializer):
