@@ -402,8 +402,6 @@ class CampaignAdView(ModelViewSet):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-            # TODO: change adds to ads
-
     def get_queryset(self):
         return self.get_object().ads.all()
 

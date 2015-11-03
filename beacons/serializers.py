@@ -87,19 +87,11 @@ class CampaignSerializer(serializers.ModelSerializer):
 
 
 class CampaignSerializerPatch(serializers.ModelSerializer):
-    beacons = serializers.PrimaryKeyRelatedField(many=True, queryset=Beacon.objects.all())
 
     class Meta:
         model = Campaign
-        fields = ('id', 'name', 'start_date', 'end_date', 'beacons',)
-
-    def update(self, instance, validated_data):
-        for beacon in validated_data.get('beacons', []):
-            beacon.campaign = instance
-            beacon.save()
-        instance.save()
-        return instance
-
+        fields = ('id', 'name', 'start_date', 'end_date',)
+        
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
