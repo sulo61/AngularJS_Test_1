@@ -1,1 +1,28 @@
-sce
+<!-- TOP -->
+<!-- <div ng-include src="'campaign/header'"></div>	 -->
+<div style="text-align:right;">
+	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>
+	<button class="btn btn-danger" ng-click="sc.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="sc.save()">SAVE</button>
+	<hr><br><br>
+</div>
+
+<!-- LEFT -->
+<!-- <div ng-include src="'campaign/menu'"></div> -->
+<div class="leftColumn"  style="width:25%">
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignBasic(sc.name, sc.id)">Basic informations</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAds(sc.name, sc.id)">Advertisements</button>
+	<br><br>
+	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignSce(sc.name, sc.id)">Scenarios</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwards(sc.name, sc.id)">Awards</button>
+	<br><br>
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+	
+	
+	
+</div>

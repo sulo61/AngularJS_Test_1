@@ -43,13 +43,13 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
     		})
     		.when("/campaign/sce/:id/:name?", {
     				templateUrl: "/campaign/sce",
-				    controller: "basicController",
-				    controllerAs: 'bc'	
+				    controller: "sceController",
+				    controllerAs: 'sc'	
     		})		
     		.when("/campaign/awards/:id/:name?", {
     				templateUrl: "/campaign/awards",
-				    controller: "basicController",
-				    controllerAs: 'bc'	
+				    controller: "awardsController",
+				    controllerAs: 'awc'	
     		})
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {

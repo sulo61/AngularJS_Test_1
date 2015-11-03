@@ -1,1 +1,65 @@
-awards
+<!-- TOP -->
+<!-- <div ng-include src="'campaign/header'"></div>	 -->
+<div style="text-align:right;">
+	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>	
+	<hr><br><br>
+</div>
+
+<!-- LEFT -->
+<!-- <div ng-include src="'campaign/menu'"></div> -->
+<div class="leftColumn"  style="width:25%">
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignBasic(awc.name, awc.id)">Basic informations</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAds(awc.name, awc.id)">Advertisements</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignSce(awc.name, awc.id)">Scenarios</button>
+	<br><br>
+	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignAwards(awc.name, awc.id)">Awards</button>
+	<br><br>
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+{%verbatim%}	
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="10%">#</th>
+				<th width="30%">Title</th>
+				<th width="30%">Desciption</th>
+				<th width="10%">Points</th>
+				<th width="20%">Options<th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="award in awc.awardsList">
+				<th scope="row">{{  $index + (awc.awardsCurrentPage * 5) - 4 }}</th>
+				<td>{{award.title}}</td>
+				<td>{{award.description}}</td>
+				<td>{{award.points}}</td>
+				<td>
+					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="awc.deleteAward(award.id, $index)">REMOVE</button>
+				</td>
+			</tr>		
+		</tbody>
+	</table>
+
+	<br><br>
+
+	<nav>
+	  <ul class="pagination" ng-show="awc.awardsPages.length>0">
+	  	<li ng-click="awc.awardsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+	  	<li ng-repeat="number in awc.awardsPages" class="{{awc.awardsNavActive(number)}}" id="awc.awardsNav{{number}}" ng-click="awc.getAwards(number)">
+	  		<a>{{number}}</a>
+	  	</li>
+	  	<li ng-click="awc.awardsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+	    
+	  </ul>
+	</nav>
+	<button style="float:right;" class="btn btn-success" ng-click="">ADD AWARD</button>
+
+
+	
+{%endverbatim%}	
+</div>
