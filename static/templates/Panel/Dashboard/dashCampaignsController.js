@@ -5,6 +5,7 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 	this.campaignsList = [];
 	this.campaignsPages = [];	// numbers
 	this.campaignsCurrentPage = 1;
+	this.numberOfItems = 0;
 
 	// nav
 	this.campaignsNavActive = function(page){
@@ -35,7 +36,8 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			this.campaignsList = [];
 			this.campaignsPages = [];
 			this.campaignsList = response.data.results;
-			for (var i=0; i<Math.ceil((response.data.count/5)); i++) {
+			this.numberOfItems = response.data.count;
+			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
 		    	this.campaignsPages.push(i+1);
 		    }
 		    this.campaignsCurrentPage = page;
@@ -49,6 +51,10 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			url: '/campaigns/'+id
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
+			this.numberOfItems = this.numberOfItems - 1;
+			if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * 5) && this.numberOfItems>=5){
+				this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
+			}
 			this.getCampaigns(this.campaignsCurrentPage);
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
