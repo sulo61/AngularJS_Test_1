@@ -61,10 +61,43 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileView(serializers.ModelSerializer):
+    def to_representation(self, value):
+        return {
+            'id': value.pk,
+            'email': value.email,
+            'first_name': value.first_name,
+            'last_name': value.last_name,
+            'address': value.address,
+        }
+
     class Meta:
         model = BeaconUser
-        fields = ('first_name', 'last_name', 'address')
-        read_only_fields = ('id', 'email')
+        fields = ('first_name', 'last_name', 'address',)
+
+    def update(self, instance, validated_data):
+        if not ('password' in self.initial_data):
+            raise ValidationError({
+                'password': ['This field is required.']
+            })
+
+        if not ('old_password' in self.initial_data):
+            raise ValidationError({
+                'old_password': ['This field is required.']
+            })
+
+        password = self.initial_data.get('old_password', '')
+        if not instance.check_password(password):
+            raise ValidationError({
+                'old_password': ['Entered password is not correct.']
+            })
+
+        super(UserProfileView, self).update(instance, validated_data)
+
+        if 'password' in validated_data:
+            instance.set_password(validated_data.get('password'))
+
+        instance.save()
+        return instance
 
 
 class CountSerializer(serializers.Serializer):
@@ -87,11 +120,10 @@ class CampaignSerializer(serializers.ModelSerializer):
 
 
 class CampaignSerializerPatch(serializers.ModelSerializer):
-
     class Meta:
         model = Campaign
         fields = ('id', 'name', 'start_date', 'end_date',)
-        
+
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
@@ -171,17 +203,6 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
         instance.address = validated_data.get('address')
         instance.save()
         return instance
-
-        # class ShopSerializerPOST(ShopSerializer):
-        #     image = serializers.SerializerMethodField(method_name='get_image_url_json')
-        #
-        # def get_image_url_json(self, obj):
-        #     try:
-        #         uri = 'http://%s/%s' % (self.context['request'].get_host(), obj.image.url)
-        #         print(self.context['request'].get_host())
-        #         return uri
-        #     except ValueError:
-        #         return None
 
 
 class AdSerializerCreate(serializers.ModelSerializer):
