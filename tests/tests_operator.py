@@ -155,7 +155,8 @@ def create_campaign(self, client):
     data = {
         'name': 'Name',
         "start_date": "2015-10-23T08:00:00Z",
-        "end_date": "2015-10-31T09:00:00Z"
+        "end_date": "2015-10-31T09:00:00Z",
+         u'is_active': False,
     }
     response = client.post('/campaigns/', data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -173,7 +174,8 @@ def create_campaign(self, client):
                 "id": id,
                 "name": "Name",
                 'start_date': "2015-10-23T08:00:00Z",
-                "end_date": "2015-10-31T09:00:00Z"
+                "end_date": "2015-10-31T09:00:00Z",
+                 u'is_active': False
             }]})
     return id
 

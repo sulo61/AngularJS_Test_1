@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from beacons.models import Campaign, Beacon, Shop, Ad, Award
-from beacons.serializers import CampaignSerializerPatch, TokenSerializer
+from beacons.serializers import TokenSerializer
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
@@ -206,13 +206,8 @@ class CampaignView(ModelViewSet):
 
 
 class CampaignRetrieveView(ModelViewSet):
+    serializer_class = CampaignSerializer
     permission_classes = (IsAuthenticated, IsOperator)
-
-    def get_serializer_class(self):
-        if self.request.method == 'PATCH':
-            return CampaignSerializerPatch
-        else:
-            return CampaignSerializer
 
     def get_queryset(self):
         return self.request.user.campaigns.all()

@@ -73,6 +73,7 @@ class Campaign(models.Model, TimestampMixin):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='campaigns')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

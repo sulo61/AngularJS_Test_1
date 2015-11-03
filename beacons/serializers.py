@@ -1,10 +1,12 @@
 import time
+import datetime
 from django.http import Http404
 
 from django.shortcuts import get_object_or_404
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
     UserAwards
-from rest_framework.exceptions import ValidationError, NotFound
+from django.utils.dateparse import parse_datetime
+from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer, IntegerField
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
@@ -117,13 +119,19 @@ class BeaconSerializer(serializers.ModelSerializer):
 class CampaignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Campaign
-        fields = ('id', 'name', 'start_date', 'end_date')
+        fields = ('id', 'name', 'start_date', 'end_date', 'is_active')
 
+    def is_valid(self, raise_exception=False):
+        valid = super(CampaignSerializer, self).is_valid(raise_exception)
+        start_date = self.validated_data['start_date']
+        end_date = self.validated_data['end_date']
+        if end_date < start_date:
+            if raise_exception:
+                raise ValidationError({'start_date': ['This field should be less then end_date']})
+            else:
+                valid = False
 
-class CampaignSerializerPatch(serializers.ModelSerializer):
-    class Meta:
-        model = Campaign
-        fields = ('id', 'name', 'start_date', 'end_date',)
+        return valid
 
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
