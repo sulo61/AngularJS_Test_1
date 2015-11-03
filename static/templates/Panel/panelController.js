@@ -126,19 +126,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 		}
 		this.showCampaignBasic = function(name, id){
 			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name);
+			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Basic information");
 			$location.path('/campaign/basic/'+id+'/'+name);	
 		}
 		this.showCampaignAds = function(name, id){
 			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Advertisements");
 			$location.path('/campaign/ads/'+id+'/'+name);	
 		}
 		this.showCampaignSce = function(name, id){
 			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Scenarios");
 			$location.path('/campaign/sce/'+id+'/'+name);	
 		}
 		this.showCampaignAwards = function(name, id){
 			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Awards");
 			$location.path('/campaign/awards/'+id+'/'+name);	
 		}
 		this.showShops = function(){
