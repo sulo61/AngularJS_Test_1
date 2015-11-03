@@ -53,7 +53,7 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
-			if (this.numberOfItems <= (this.adsCurrentPage-1) * 5){
+			if ( (this.numberOfItems <= (this.adsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
 				this.adsCurrentPage = this.adsCurrentPage - 1;
 			}
 			this.getAds(this.adsCurrentPage);
