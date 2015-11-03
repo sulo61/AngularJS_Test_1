@@ -10,13 +10,13 @@
 <!-- LEFT -->
 <!-- <div ng-include src="'campaign/menu'"></div> -->
 <div class="leftColumn"  style="width:25%">
-	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignBasic(bc.basic.name, bc.id)">Basic informations</button>
+	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignBasic(bc.name, bc.id)">Basic informations</button>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAds(bc.basic.name, bc.id)">Advertisements</button>
+	<button class="btn btn-default" ng-show="bc.id>0" style="width:100%" ng-click="pc.showCampaignAds(bc.name, bc.id)">Advertisements</button>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignSce(bc.basic.name, bc.id)">Scenarios</button>
+	<button class="btn btn-default" ng-show="bc.id>0" style="width:100%" ng-click="pc.showCampaignSce(bc.name, bc.id)">Scenarios</button>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwards(bc.basic.name, bc.id)">Awards</button>
+	<button class="btn btn-default" ng-show="bc.id>0" style="width:100%" ng-click="pc.showCampaignAwards(bc.name, bc.id)">Awards</button>
 	<br><br>
 </div>
 

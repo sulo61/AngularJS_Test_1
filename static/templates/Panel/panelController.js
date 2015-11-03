@@ -38,8 +38,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
     		})
     		.when("/campaign/ads/:id/:name?", {
     				templateUrl: "/campaign/ads",
-				    controller: "basicController",
-				    controllerAs: 'bc'	
+				    controller: "adsController",
+				    controllerAs: 'ac'	
     		})
     		.when("/campaign/sce/:id/:name?", {
     				templateUrl: "/campaign/sce",

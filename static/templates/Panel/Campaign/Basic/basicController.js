@@ -1,8 +1,9 @@
 angular.module('panelApp').controller('basicController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
 // api info
 	this.appInfo = appInfo;
-	// shop id
+	// campaign params
 	this.id = $routeParams.id;
+	this.name = $routeParams.name;
 	// model
 	this.basic = {id:"", name:"", start_date:"", end_date:""};
 	this.basicCopy = {};
@@ -47,6 +48,7 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 			url: '/campaigns/',
 			data: this.basic
 		}).then(function successCallback(response){
+			this.basic = response.data;
 			appInfo.setCurrentPath("Dashboard/Campaign/"+this.basic.name);
 			this.basicCopy = angular.copy(this.basic);
 			this.id = this.basic.id;
