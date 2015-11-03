@@ -155,11 +155,13 @@ class UserAwardsDetails(TestCase):
         self.campaign_id, operator_client = create_campaign(self)
         self.award_id = create_award(self, self.campaign_id, operator_client)
 
-    def test_award(self):
-        response = self.client.post('/campaigns/{0}/awards/{1}/favourite/'.format(self.campaign_id, self.award_id),
-                                    data={
-                                        'favourite': True
-                                    }, json='json')
+    def test_update_award(self):
+        response = self.client.patch('/campaigns/{0}/awards/{1}/'.format(self.campaign_id, self.award_id),
+                                     data={
+                                         "title": "aa",
+                                         'favorite': True,
+                                         'bought': True
+                                     }, json='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         print response.content

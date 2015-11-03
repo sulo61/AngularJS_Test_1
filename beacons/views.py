@@ -50,25 +50,30 @@ def dashCampaigns(request):
 def dashShops(request):
     return render(request, 'Panel/Dashboard/shops.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashProfile(request):
     return render(request, 'Panel/Dashboard/profile.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashBeacons(request):
     return render(request, 'Panel/Dashboard/beacons.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def panel(request):
     return render(request, 'Panel/panel.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def shop(request):
     return render(request, 'Panel/Shop/shop.html', {})
+
 
 @api_view(('GET',))
 def index(request):
@@ -76,8 +81,6 @@ def index(request):
         return redirect('/panel/')
     else:
         return render(request, 'Auth/auth.html', {})
-
-
 
 
 class CreateViewUser(ModelViewSet):
@@ -383,21 +386,16 @@ class CampaignAdView(ModelViewSet):
         return super(CampaignAdView, self).get_permissions()
 
     def get_object(self):
-        obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
-        self.check_object_permissions(self.request, obj)
-        return obj
+        return get_object_or_404(self.get_campaign().ads.all(), pk=self.kwargs.get('ad_pk'))
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save(campaign=self.get_object())
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+    def get_campaign(self):
+        return get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+
+    def perform_create(self, serializer):
+        serializer.save(campaign=self.get_campaign())
 
     def get_queryset(self):
-        return self.get_object().ads.all()
+        return self.get_campaign().ads.all()
 
 
 class CampaignAddAction(ModelViewSet):
@@ -484,6 +482,7 @@ class PromotionView(PromotionCreateView):
 
 
 class AwardCreateView(ModelViewSet):
+    serializer_class = AwardSerializerGet
     permission_classes = (IsAuthenticated,)
 
     def get_permissions(self):
@@ -491,12 +490,6 @@ class AwardCreateView(ModelViewSet):
             self.permission_classes = (IsAuthenticated, IsOperator)
 
         return super(AwardCreateView, self).get_permissions()
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return AwardSerializerGet
-        else:
-            return AwardSerializerGet
 
     def get_queryset(self):
         promotions_all = get_object_or_404(Campaign, pk=self.kwargs.get('pk')).awards.all()

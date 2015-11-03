@@ -105,11 +105,22 @@ class UserCase(TestCase):
 
     def test_user_update(self):
         data = {
-            "first_name": "Xxxx",
-            "last_name": "Zzzz",
-            "address": "Ssss"
+            u'address': "Ssss",
+            u'email': u'operator@gmail.com',
+            u'first_name': "Xxxx",
+            u'id': self.user_id,
+            u'last_name': "Zzzz",
         }
-        response = self.client.patch('/user/{0}/'.format(self.user_id), data=data, format='json')
+
+        update_data = {
+            u"first_name": u"Xxxx",
+            u"last_name": u"Zzzz",
+            u"address": u"Ssss",
+            u'password': register_operator_data.get('password'),
+            u'old_password': register_operator_data.get('password')
+        }
+
+        response = self.client.patch('/user/{0}/'.format(self.user_id), data=update_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), data)
 
