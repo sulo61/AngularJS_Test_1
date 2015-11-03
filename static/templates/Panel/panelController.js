@@ -56,6 +56,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 				    controller: "awardController",
 				    controllerAs: 'awardCtrl'	
     		})
+    		.when("/campaign/award/:campaignID/:campaignNAME/:adID/:adNAME?", {
+    				templateUrl: "/campaign/ad",
+				    controller: "adController",
+				    controllerAs: 'adCtrl'	
+    		})
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
         GoogleMapApiProviders.configure({
@@ -158,6 +163,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps'])
 			appInfo.hideApiMsg();
 			this.appInfo.setCurrentPath("Dashboard/Campaign/"+campaignNAME+'/Award/'+awardNAME);
 			$location.path('/campaign/award/'+campaignID+'/'+campaignNAME+'/'+awardID+'/'+awardNAME);		
+		}
+		this.showAd = function(campaignNAME, campaignID, adNAME, adID){
+			appInfo.hideApiMsg();
+			this.appInfo.setCurrentPath("Dashboard/Campaign/"+campaignNAME+'/Advertisements/'+adNAME);
+			$location.path('/campaign/ad/'+campaignID+'/'+campaignNAME+'/'+adID+'/'+adNAME);		
 		}
 		
     })
