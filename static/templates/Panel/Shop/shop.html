@@ -59,9 +59,11 @@
 <div class="rightColumn"  style="width:50%">
 	<div style="text-align:center;">
 		<!-- <img src="/static/templates/Panel/Shop/imageholder.jpg" alt="Imageholder"/> -->
-		<img ng-src="{{sc.shop.image}}" alt="No image"/>		
+		<img ng-src="{{sc.shop.image}}" alt="No image"/>
+		<br><br>
+		<button class="btn btn-info" type="file" ngf-select="sc.uploadFiles($file, $invalidFiles)" accept="image/*">Upload File</button>		                   	
 	</div>
-    <br>
+	<hr>
 	<ui-gmap-google-map center='sc.map.center' zoom='sc.map.zoom'>
 		<ui-gmap-marker coords="sc.marker.coords" options="sc.marker.options" events="sc.marker.events" idkey="sc.marker.id"></ui-gmap-marker>
 	</ui-gmap-google-map>
