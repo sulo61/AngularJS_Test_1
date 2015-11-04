@@ -1,0 +1,63 @@
+<!-- TOP -->
+<!-- <div ng-include src="'campaign/header'"></div>	 -->
+<div style="text-align:right;">
+	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>
+	<hr><br><br>
+</div>
+
+<!-- LEFT -->
+<!-- <div ng-include src="'campaign/menu'"></div> -->
+<div class="leftColumn"  style="width:25%">
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignBasic(ac.name, ac.id)">Basic informations</button>
+	<br><br>
+	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignAds(ac.name, ac.id)">Advertisements</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignSce(ac.name, ac.id)">Scenarios</button>
+	<br><br>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwards(ac.name, ac.id)">Awards</button>
+	<br><br>
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+{%verbatim%}	
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="10%">#</th>
+				<th width="30%">Title</th>
+				<th width="30%">Desciption</th>
+				<th width="10%">Type</th>
+				<th width="20%">Options<th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="ad in ac.adsList">
+				<th scope="row">{{  $index + (ac.adsCurrentPage * 5) - 4 }}</th>
+				<td>{{ad.title}}</td>
+				<td>{{ad.description}}</td>
+				<td>{{ad.type}}</td>
+				<td>
+					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="ac.deleteAd(ad.id, $index)">REMOVE</button>
+				</td>
+			</tr>		
+		</tbody>
+	</table>
+
+	<br><br>
+
+	<nav>
+	  <ul class="pagination" ng-show="ac.adsPages.length>0">
+	  	<li ng-click="ac.adsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+	  	<li ng-repeat="number in ac.adsPages" class="{{ac.adsNavActive(number)}}" id="ac.adsNav{{number}}" ng-click="ac.getAds(number)">
+	  		<a>{{number}}</a>
+	  	</li>
+	  	<li ng-click="ac.adsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+	    
+	  </ul>
+	</nav>
+	<button style="float:right;" class="btn btn-success" ng-click="">ADD AD</button>
+	
+{%endverbatim%}		
+</div>

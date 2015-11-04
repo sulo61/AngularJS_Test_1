@@ -44,7 +44,6 @@ class LogoutView(views.APIView):
 def dashCampaigns(request):
     return render(request, 'Panel/Dashboard/campaigns.html', {})
 
-
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashShops(request):
@@ -73,6 +72,43 @@ def panel(request):
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def shop(request):
     return render(request, 'Panel/Shop/shop.html', {})
+
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignMenu(request):
+    return render(request, 'Panel/Campaign/Menu/menu.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaign(request):
+    return render(request, 'Panel/Campaign/campaign.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignBasic(request):
+    return render(request, 'Panel/Campaign/Basic/basic.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAds(request):
+    return render(request, 'Panel/Campaign/Ads/ads.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignSce(request):
+    return render(request, 'Panel/Campaign/Sce/sce.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAwards(request):
+    return render(request, 'Panel/Campaign/Awards/awards.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAward(request):
+    return render(request, 'Panel/Campaign/Awards/Award/award.html', {})
+
 
 
 @api_view(('GET',))

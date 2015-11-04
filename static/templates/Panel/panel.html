@@ -21,10 +21,16 @@
 	<script src={% static "templates/Panel/Dashboard/dashShopsController.js" %}></script>
 	<script src={% static "templates/Panel/Dashboard/dashCampaignsController.js" %}></script>
 	<script src={% static "templates/Panel/Shop/shopController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Basic/basicController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Ads/adsController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Ads/Ad/adController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Sce/sceController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Awards/awardsController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Awards/Award/awardController.js" %}></script>
+
 </head>
 
 <body ng-app="panelApp" ng-controller="panelController as pc" >
-
 	<!-- HEADER -->
 	<button class="btn btn-warning" style="float: right;" ng-click="pc.logout()">LOGOUT</button>
 	{%verbatim%}

@@ -5,6 +5,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 	this.shopsList = [];
 	this.shopsPages = [];	// numbers
 	this.shopsCurrentPage = 1;
+	this.numberOfItems = 0;
 	// nav
 	this.shopsNavActive = function(page){
 		if (page==this.shopsCurrentPage){
@@ -34,7 +35,8 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.shopsList = [];
 			this.shopsPages = [];
 			this.shopsList = response.data.results;
-			for (var i=0; i<Math.ceil((response.data.count/5)); i++) {
+			this.numberOfItems = response.data.count;
+			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
 		    	this.shopsPages.push(i+1);
 		    }
 		    this.shopsCurrentPage = page;
@@ -48,6 +50,10 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			url: '/shops/'+id
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
+			this.numberOfItems = this.numberOfItems - 1;
+			if ( (this.numberOfItems <= (this.shopsCurrentPage-1) * 5) && this.numberOfItems>=5){
+				this.shopsCurrentPage = this.shopsCurrentPage - 1;
+			}
 			this.getShops(this.shopsCurrentPage);
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);

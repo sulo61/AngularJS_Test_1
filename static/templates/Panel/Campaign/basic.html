@@ -1,0 +1,24 @@
+<!-- TOP -->
+<div ng-include src="'campaign/header'"></div>	
+<!-- LEFT -->
+<div ng-include src="'campaign/menu'"></div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+	<!-- BASIC -->
+	<div>
+		<form style="margin-left:auto; margin-right:auto;">
+			<label>Name:</label>
+			<input type="text" class="form-control" placeholder="Name" ng-model="cbasc.basic.name">
+			<br>
+			<label>Start date:</label>
+			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="cbasc.basic.start_date">
+			<br>
+			<label>End date:</label>
+			<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="cbasc.basic.end_date">
+			<br>
+			<label>Active:</label>
+			<input type="checkbox" >
+		</form>
+	</div>
+</div>

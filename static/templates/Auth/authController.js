@@ -28,7 +28,7 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	$scope.showWelcome();
 	// login
 	$scope.login = {};
-	$scope.login.email = "sulo612@gmail.com";
+	$scope.login.email = "sulo612+2@gmail.com";
 	$scope.login.password = "123";
 	$scope.showLoginWarning = false;
 	$scope.loginWarning = "";
@@ -61,7 +61,7 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
-			url: '/operator/register/',
+			url: '/register/',
 			data: $scope.register
 		}).then(function successCallback(response){
 			$scope.showRegisterWarning = false;
