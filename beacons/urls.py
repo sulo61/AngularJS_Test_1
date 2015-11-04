@@ -17,10 +17,12 @@ retrieve = {
 }
 
 urlpatterns = [
+    url(r'^operator/register/$', views.CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
     url(r'^login/token/', ObtainToken.as_view(), name="login"),
     url(r'^login/', views.login_view, name="login"),
     url(r'^logout/', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
+
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
     url(r'^beacons/$', UserBeaconsView.as_view(methods), name='beacons'),

@@ -5,7 +5,6 @@ from rest_framework.urlpatterns import format_suffix_patterns
 __author__ = 'Mateusz'
 
 urlpatterns = [
-    url(r'^operator/register/$', views.CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
     url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
     url(r'^dash/beacons/$', views.dashBeacons, name="dashBeacons"),
     url(r'^dash/profile/$', views.dashProfile, name="dashProfile"),
