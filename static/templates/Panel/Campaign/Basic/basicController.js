@@ -5,7 +5,7 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 	this.id = $routeParams.id;
 	this.name = $routeParams.name;
 	// model
-	this.basic = {id:"", name:"", start_date:"", end_date:""};
+	this.basic = {id:"", name:"", start_date:"", end_date:"", is_active:false};
 	this.basicCopy = {};
 	// save
 	this.save = function(){
