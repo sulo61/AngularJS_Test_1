@@ -44,6 +44,7 @@ class LogoutView(views.APIView):
 def dashCampaigns(request):
     return render(request, 'Panel/Dashboard/campaigns.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashShops(request):
@@ -79,36 +80,41 @@ def shop(request):
 def campaignMenu(request):
     return render(request, 'Panel/Campaign/Menu/menu.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaign(request):
     return render(request, 'Panel/Campaign/campaign.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignBasic(request):
     return render(request, 'Panel/Campaign/Basic/basic.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAds(request):
     return render(request, 'Panel/Campaign/Ads/ads.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignSce(request):
     return render(request, 'Panel/Campaign/Sce/sce.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAwards(request):
     return render(request, 'Panel/Campaign/Awards/awards.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAward(request):
     return render(request, 'Panel/Campaign/Awards/Award/award.html', {})
-
 
 
 @api_view(('GET',))
@@ -362,10 +368,16 @@ class BeaconCampaignView(ModelViewSet):
 
 class ShopView(ModelViewSet):
     serializer_class = ShopSerializer
-    permission_classes = (IsAuthenticated,)
 
-    @detail_route(methods=['post'])
-    def create(self, request, pk=None):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (IsAuthenticated,)
+        else:
+            self.permission_classes = (IsAuthenticated, IsOperator)
+
+        return super(ShopView, self).get_permissions()
+
+    def create(self, request, *args, **kwargs):
         '''
          {
           "name": "Zara",
@@ -389,21 +401,13 @@ class ShopView(ModelViewSet):
           "longitude": 15
          }
         '''
-        serializer = ShopSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(status=status.HTTP_201_CREATED, data=serializer.data)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+        return super(ShopView, self).create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        return Shop.objects.all()
-
-    def update(self, request, *args, **kwargs):
-        request._data = request.data
-        request._full_data = request.data
-        return super(ShopView, self).update(request, *args, **kwargs)
+        return self.request.user.shops.all()
 
 
 class CampaignAdView(ModelViewSet):
@@ -467,12 +471,12 @@ class AdViewRetrieve(ModelViewSet):
 
 
 class PromotionCreateView(ModelViewSet):
-    permission_classes = (IsAuthenticated,)
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == 'GET':
+            self.permission_classes = (IsAuthenticated,)
+        else:
             self.permission_classes = (IsAuthenticated, IsOperator)
-
         return super(PromotionCreateView, self).get_permissions()
 
     def get_serializer_class(self):
@@ -493,9 +497,10 @@ class PromotionView(PromotionCreateView):
     permission_classes = (IsAuthenticated,)
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == 'GET':
+            self.permission_classes = (IsAuthenticated,)
+        else:
             self.permission_classes = (IsAuthenticated, IsOperator)
-
         return super(PromotionView, self).get_permissions()
 
     def get_serializer_class(self):
@@ -517,7 +522,9 @@ class AwardCreateView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == 'GET':
+            self.permission_classes = (IsAuthenticated,)
+        else:
             self.permission_classes = (IsAuthenticated, IsOperator)
 
         return super(AwardCreateView, self).get_permissions()
@@ -611,3 +618,25 @@ class AwardImageUpdater(ModelViewSet):
             return Response(status=status.HTTP_200_OK)
         else:
             return super(AwardImageUpdater, self).create(request, *args, **kwargs)
+
+
+class UserBeaconsView(ModelViewSet):
+    serializer_class = BeaconSerializer
+    permission_classes = (IsAuthenticated, IsOperator)
+
+    def get_queryset(self):
+        return self.request.user.beacons.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ShopBeacons(ModelViewSet):
+    serializer_class = BeaconSerializer
+    permission_classes = (IsAuthenticated, IsOperator)
+
+    def get_queryset(self):
+        return get_object_or_404(self.request.user.shops.all(), pk=self.kwargs.get('pk')).beacons.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

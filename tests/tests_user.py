@@ -158,7 +158,7 @@ class UserAwardsDetails(TestCase):
         self.award_id = create_award(self, self.campaign_id, operator_client)
 
     def test_update_award(self):
-        response = self.client.patch('/campaigns/{0}/awards/{1}/'.format(self.campaign_id, self.award_id),
+        response = self.client.patch('/campaigns/{0}/awards/{1}/update/'.format(self.campaign_id, self.award_id),
                                      data={
                                          "title": "aa",
                                          'favorite': True,
@@ -166,3 +166,22 @@ class UserAwardsDetails(TestCase):
                                      }, json='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class BeaconsUserTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        register_login_user(self)
+
+    def test_list_beacons(self):
+        response = self.client.get('/beacons/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_beacons(self):
+        beacons_data = {
+            'minor': '1',
+            'major': '1',
+            'title': 'Title',
+        }
+        response = self.client.post('/beacons/', beacons_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

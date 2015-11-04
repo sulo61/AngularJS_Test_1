@@ -29,6 +29,7 @@ class BeaconUserUserManager(BaseUserManager):
 
 
 class BeaconUser(AbstractBaseUser, PermissionsMixin):
+    image = models.ImageField(upload_to='images/user', blank=True, null=True)
     email = models.EmailField(max_length=254, unique=True, db_index=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -82,6 +83,8 @@ class Campaign(models.Model, TimestampMixin):
 class Beacon(models.Model):
     title = models.CharField(max_length=100, blank=False)
     campaign = models.ForeignKey('Campaign', related_name='beacons', blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='beacons', blank=True, null=True)
+    shop = models.ForeignKey('Shop', related_name='beacons', blank=True, null=True)
     minor = models.IntegerField(default=1)
     major = models.IntegerField(default=1)
     UUID = models.CharField(max_length=36, default='00000000-0000-0000-0000-000000000000')
@@ -171,7 +174,19 @@ class UserAwards(models.Model):
 
 
 class ActionBeacon(models.Model):
-    campaign = models.ForeignKey('Campaign', related_name='actions')
-    beacon = models.OneToOneField(Beacon, blank=True, null=True, related_name='action')
-    ad = models.OneToOneField(Ad, blank=True, null=True, related_name='action')
+    campaign = models.ForeignKey('Campaign', related_name='actions', blank=True, null=True)
+    beacon = models.ForeignKey('Beacon', blank=True, null=True, related_name='actions')
+    ad = models.ForeignKey('Ad', blank=True, null=True, related_name='actions')
     points = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('beacon', 'ad', 'campaign')
+
+
+class UserCampaign(models.Model, TimestampMixin):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_campaign')
+    campaign = models.ForeignKey('Campaign', related_name='user_details')
+    user_points = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('campaign', 'user',)
