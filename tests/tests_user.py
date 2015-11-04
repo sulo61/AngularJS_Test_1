@@ -160,7 +160,6 @@ class UserAwardsDetails(TestCase):
     def test_update_award(self):
         response = self.client.patch('/campaigns/{0}/awards/{1}/update/'.format(self.campaign_id, self.award_id),
                                      data={
-                                         "title": "aa",
                                          'favorite': True,
                                          'bought': True
                                      }, json='json')

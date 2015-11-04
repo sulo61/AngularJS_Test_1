@@ -315,6 +315,43 @@ class AwardSerializerGet(serializers.ModelSerializer):
         return instance
 
 
+class UserAwardDetail(serializers.ModelSerializer):
+    class Meta:
+        model = Award
+        fields = ('id',)
+
+    def favourite_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.favorite
+        except Http404:
+            return False
+
+    def bought_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.bought
+        except Http404:
+            return False
+
+    def to_representation(self, value):
+        representation = {}
+        representation['favorite'] = self.favourite_method(value)
+        representation['bought'] = self.bought_method(value)
+        return representation
+
+    def update(self, instance, validated_data):
+        award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+        if 'favorite' in self.initial_data:
+            award_favourite.favorite = self.initial_data.get('favorite')
+
+        if 'bought' in self.initial_data:
+            award_favourite.bought = self.initial_data.get('bought')
+
+        award_favourite.save()
+        return instance
+
+
 class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award

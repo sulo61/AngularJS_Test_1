@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from beacons.models import Campaign, Beacon, Shop, Ad, Award
-from beacons.serializers import TokenSerializer
+from beacons.serializers import TokenSerializer, UserAwardDetail
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
@@ -640,3 +640,15 @@ class ShopBeacons(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class AwardUserDetailsView(ModelViewSet):
+    serializer_class = UserAwardDetail
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        promotions_all = get_object_or_404(Campaign, pk=self.kwargs.get('pk')).awards.all()
+        return promotions_all
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('award_pk'))
