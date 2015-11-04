@@ -18,7 +18,9 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 	// copy
 	this.makeCopy = function(response){
 		this.basicCopy = angular.copy(this.basic);		
-		appInfo.setCurrentPath("Dashboard/Campaign/"+this.name+'/Basic information');
+		this.id = this.basic.id;
+		this.name = this.basic.name;
+		appInfo.setCurrentPath("Dashboard/Campaign/"+this.name+'/Basic information');			
 	}
 	// api
 	this.getBasic = function(){
@@ -41,8 +43,6 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 			url: '/campaigns/'+this.id,
 			data: this.basic
 		}).then(function successCallback(response){
-			this.id = this.basic.id;
-			this.name = this.basic.name;	
 			this.makeCopy();
 			appInfo.showSuccess();
 		}.bind(this), function errorCallback(response){
@@ -55,8 +55,7 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 			url: '/campaigns/',
 			data: this.basic
 		}).then(function successCallback(response){
-			this.id = response.data.id;
-			this.name = response.data.name;
+			this.basic = response.data;
 			this.makeCopy();
 			appInfo.showSuccess();
 		}.bind(this), function errorCallback(response){

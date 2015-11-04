@@ -109,6 +109,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
+			this.shop = response.data;
 			this.makeCopy();
 			this.updateMap();
 		}.bind(this), function errorCallback(response){

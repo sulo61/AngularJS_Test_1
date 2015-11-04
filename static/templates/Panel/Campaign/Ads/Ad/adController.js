@@ -22,6 +22,8 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 	}
 	this.makeCopy = function(){
 		this.adCOPY = angular.copy(this.ad);
+		this.adID = this.ad.id;
+		this.adNAME = this.ad.title;
 		appInfo.setCurrentPath("Dashboard/Campaign/"+this.campaignNAME+'/Advertisement/'+this.adNAME);
 	}
 	// get ad
@@ -45,10 +47,8 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 			url: '/campaigns/'+this.campaignID+"/ads/"+this.adID,
 			data: this.ad
 		}).then(function successCallback(response){
-			appInfo.showSuccess();						
-			this.adID = this.ad.id;
-			this.adNAME = this.ad.title;
 			this.makeCopy();
+			appInfo.showSuccess();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 		}.bind(this));			
@@ -61,10 +61,9 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 			url: '/campaigns/'+this.campaignID+'/ads/',
 			data: this.ad
 		}).then(function successCallback(response){
-			appInfo.showSuccess();			
-			this.adID = response.data.id;
-			this.adNAME = response.data.title;
+			this.ad = response.data;
 			this.makeCopy();			
+			appInfo.showSuccess();			
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 		}.bind(this));			
