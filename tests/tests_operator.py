@@ -14,7 +14,7 @@ class UserRegisterCase(TestCase):
         self.client = APIClient()
 
     def test_register(self):
-        response = self.client.post('/register/', register_data, format='json')
+        response = self.client.post('/api/register/', register_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         loads = json.loads(response.content)
         self.assertEqual(loads, {
@@ -36,7 +36,7 @@ class OperatorRegisterCase(TestCase):
             'password': 'mcol',
         }
 
-        response = self.client.post('/operator/register/', register_data, format='json')
+        response = self.client.post('/api/operator/register/', register_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         loads = json.loads(response.content)
         self.assertEqual(loads, {
@@ -55,7 +55,7 @@ register_operator_data = {
 
 
 def register_operator(client):
-    response = client.post('/operator/register/', register_operator_data, format='json')
+    response = client.post('/api/operator/register/', register_operator_data, format='json')
     data = json.loads(response.content)
     user_id = data.get('id')
     return response, user_id
@@ -69,7 +69,7 @@ class UserLoginCase(TestCase):
         response, id = register_operator(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post('/login/token/', register_operator_data, format='json')
+        response = self.client.post('/api/login/token/', register_operator_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         loads = json.loads(response.content)
         self.assertTrue('token' in loads)
@@ -81,12 +81,12 @@ class UserPermissionsCase(TestCase):
         register_operator(self.client)
 
     def test_register(self):
-        response = self.client.get('/campaigns/', format='json')
+        response = self.client.get('/api/campaigns/', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_not_login_in(self):
         response, id = register_operator(self.client)
-        response = self.client.get('/user/1/', format='json')
+        response = self.client.get('/api/user/1/', format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -100,7 +100,7 @@ class UserCase(TestCase):
                                           password=register_operator_data.get('password')), 'Didnt login in')
 
     def test_user_not_login_in(self):
-        response = self.client.get('/user/', format='json')
+        response = self.client.get('/api/user/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_update(self):
@@ -120,7 +120,7 @@ class UserCase(TestCase):
             u'old_password': register_operator_data.get('password')
         }
 
-        response = self.client.patch('/user/{0}/'.format(self.user_id), data=update_data, format='json')
+        response = self.client.patch('/api/user/{0}/'.format(self.user_id), data=update_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), data)
 
@@ -132,7 +132,7 @@ class TestCampaign(TestCase):
         self.client.login(email=register_operator_data.get('email'), password=register_operator_data.get('password'))
 
     def test_campaign(self):
-        response = self.client.get('/campaigns/')
+        response = self.client.get('/api/campaigns/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {"count": 0, "next": None, "previous": None, "results": []})
 
@@ -147,7 +147,7 @@ class TestCampaign(TestCase):
             "end_date": "2015-10-31T09:00:00Z"
         }
 
-        response = client.post('/campaigns/', data)
+        response = client.post('/api/campaigns/', data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
@@ -158,13 +158,13 @@ def create_campaign(self, client):
         "end_date": "2015-10-31T09:00:00Z",
         u'is_active': False,
     }
-    response = client.post('/campaigns/', data)
+    response = client.post('/api/campaigns/', data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     campaign = json.loads(response.content)
     id = campaign.get('id')
     data['id'] = id
     self.assertEqual(campaign, data)
-    response = client.get('/campaigns/')
+    response = client.get('/api/campaigns/')
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(json.loads(response.content), {
         "count": 1, "next": None,
@@ -189,7 +189,7 @@ class ShopTest(TestCase):
         self.assertTrue(loged_in, 'Didn\'t logged in')
 
     def test_get_shops(self):
-        response = self.client.get('/shops/')
+        response = self.client.get('/api/api/shops/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {"count": 0, "next": None, "previous": None, "results": []})
 
@@ -216,7 +216,7 @@ class ShopTest(TestCase):
             "longitude": 15.0
         }
 
-        response = self.client.post('/shops/', data, format='json')
+        response = self.client.post('/api/api/shops/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         shop = json.loads(response.content)
         data['id'] = shop.get('id')
@@ -251,7 +251,7 @@ class ShopTest(TestCase):
             "latitude": 30.0,
             "longitude": 30.0
         }
-        response = self.client.patch('/shops/{0}/'.format(shop_id), data_patch, format='json')
+        response = self.client.patch('/api/api/shops/{0}/'.format(shop_id), data_patch, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_shop_more_days(self):
@@ -287,7 +287,7 @@ class ShopTest(TestCase):
             "latitude": 30.0,
             "longitude": 30.0
         }
-        response = self.client.patch('/shops/{0}/'.format(shop_id), data_patch, format='json')
+        response = self.client.patch('/api/api/shops/{0}/'.format(shop_id), data_patch, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_patch['id'] = shop_id
         data_patch['image'] = None
@@ -316,7 +316,7 @@ class ShopTest(TestCase):
             "latitude": 30.0,
             "longitude": 30.0
         }
-        response = self.client.patch('/shops/{0}/'.format(shop_id), data_patch, format='json')
+        response = self.client.patch('/api/api/shops/{0}/'.format(shop_id), data_patch, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_patch['id'] = shop_id
         data_patch['image'] = None
@@ -349,7 +349,7 @@ class ShopTest(TestCase):
             "latitude": 30.0,
             "longitude": 30.0
         }
-        response = self.client.post('/shops/', data, format='json')
+        response = self.client.post('/api/api/shops/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         shop = json.loads(response.content)
         id = shop.get('id')
@@ -366,7 +366,7 @@ class Awards(TestCase):
         self.campaign_id = create_campaign(self, client=self.client)
 
     def test_awards_list(self):
-        response = self.client.get('/campaigns/{0}/awards/'.format(self.campaign_id), format=json)
+        response = self.client.get('/api/api/campaigns/{0}/awards/'.format(self.campaign_id), format=json)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -380,7 +380,7 @@ class Promotions(TestCase):
         self.campaign_id = create_campaign(self, client=self.client)
 
     def test_promotions_list(self):
-        response = self.client.get('/campaigns/{0}/promotions/'.format(self.campaign_id), format=json)
+        response = self.client.get('/api/api/campaigns/{0}/promotions/'.format(self.campaign_id), format=json)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -394,7 +394,7 @@ class Beacons(TestCase):
         self.campaign_id = create_campaign(self, client=self.client)
 
     def test_beacons_list(self):
-        response = self.client.get('/campaigns/{0}/beacons/'.format(self.campaign_id), format=json)
+        response = self.client.get('/api/api/campaigns/{0}/beacons/'.format(self.campaign_id), format=json)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -408,5 +408,5 @@ class Ads(TestCase):
         self.campaign_id = create_campaign(self, client=self.client)
 
     def test_beacons_list(self):
-        response = self.client.get('/campaigns/{0}/ads/'.format(self.campaign_id), format=json)
+        response = self.client.get('/api/api/campaigns/{0}/ads/'.format(self.campaign_id), format=json)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
