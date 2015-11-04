@@ -199,12 +199,27 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
     def update(self, instance, validated_data):
         days_data = validated_data.pop('opening_hours')
         counter = 0
+        opening_hours_len = len(instance.opening_hours.all())
+        days_data_len = len(days_data)
+
+        if opening_hours_len > days_data_len:
+            for obj in instance.opening_hours.all()[days_data_len - 1:opening_hours_len - 1]:
+                obj.delete()
+
         for openingHours in instance.opening_hours.all():
             openingHours.days = days_data[counter].get('days')
             openingHours.open_time = days_data[counter].get('open_time')
             openingHours.close_time = days_data[counter].get('close_time')
             openingHours.save()
             counter += 1
+
+        if counter < days_data_len:
+            for i in xrange(counter, days_data_len):
+                OpeningHours.objects.create(
+                    open_time=days_data[counter].get('open_time'),
+                    close_time=days_data[counter].get('close_time'),
+                    days=days_data[i].get('days'),
+                    shop=instance)
 
         instance.longitude = validated_data.get('longitude')
         instance.name = validated_data.get('name')

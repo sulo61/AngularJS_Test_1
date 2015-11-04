@@ -156,7 +156,7 @@ def create_campaign(self, client):
         'name': 'Name',
         "start_date": "2015-10-23T08:00:00Z",
         "end_date": "2015-10-31T09:00:00Z",
-         u'is_active': False,
+        u'is_active': False,
     }
     response = client.post('/campaigns/', data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -175,7 +175,7 @@ def create_campaign(self, client):
                 "name": "Name",
                 'start_date': "2015-10-23T08:00:00Z",
                 "end_date": "2015-10-31T09:00:00Z",
-                 u'is_active': False
+                u'is_active': False
             }]})
     return id
 
@@ -222,6 +222,138 @@ class ShopTest(TestCase):
         data['id'] = shop.get('id')
         data['image'] = None
         self.assertEqual(shop, data)
+
+    def test_update_shop(self):
+        shop_id = self.create_shop()
+        data_patch = {
+            "name": "Shop Name Updated",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }, {
+                    "days": [
+                        6,
+                        7
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }
+            ],
+            "address": "Some Street 2",
+            "latitude": 30.0,
+            "longitude": 30.0
+        }
+        response = self.client.patch('/shops/{0}/'.format(shop_id), data_patch, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_shop_more_days(self):
+        shop_id = self.create_shop()
+        data_patch = {
+            "name": "Shop Name Updated",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }, {
+                    "days": [
+                        6
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }, {
+                    "days": [
+                        7
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }
+            ],
+            "address": "Some Street 2",
+            "latitude": 30.0,
+            "longitude": 30.0
+        }
+        response = self.client.patch('/shops/{0}/'.format(shop_id), data_patch, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data_patch['id'] = shop_id
+        data_patch['image'] = None
+        self.assertEqual(json.loads(response.content), data_patch)
+
+    def test_update_shop_less_days(self):
+        shop_id = self.create_shop()
+        data_patch = {
+            "name": "Shop Name Updated",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }
+            ],
+            "address": "Some Street 2",
+            "latitude": 30.0,
+            "longitude": 30.0
+        }
+        response = self.client.patch('/shops/{0}/'.format(shop_id), data_patch, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data_patch['id'] = shop_id
+        data_patch['image'] = None
+        self.assertEqual(json.loads(response.content), data_patch)
+
+    def create_shop(self):
+        data = {
+            "name": "Shop Name Updated",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }, {
+                    "days": [
+                        6,
+                        7
+                    ],
+                    "open_time": "12:00:00",
+                    "close_time": "22:00:00"
+                }
+            ],
+            "address": "Some Street 2",
+            "latitude": 30.0,
+            "longitude": 30.0
+        }
+        response = self.client.post('/shops/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        shop = json.loads(response.content)
+        id = shop.get('id')
+        return id
 
 
 class Awards(TestCase):
