@@ -78,28 +78,29 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def update(self, instance, validated_data):
-        if not ('password' in self.initial_data):
-            raise ValidationError({
-                'password': ['This field is required.']
-            })
-
-        if not ('old_password' in self.initial_data):
-            raise ValidationError({
-                'old_password': ['This field is required.']
-            })
-
-        password = self.initial_data.get('old_password', '')
-        if not instance.check_password(password):
-            raise ValidationError({
-                'old_password': ['Entered password is not correct.']
-            })
-
         super(UserProfileSerializer, self).update(instance, validated_data)
 
-        if 'password' in validated_data:
-            instance.set_password(validated_data.get('password'))
+        if 'password' in self.initial_data or 'old_password' in self.initial_data:
+            if not ('password' in self.initial_data):
+                raise ValidationError({
+                    'password': ['This field is required.']
+                })
 
-        instance.save()
+            if not ('old_password' in self.initial_data):
+                raise ValidationError({
+                    'old_password': ['This field is required.']
+                })
+
+            password = self.initial_data.get('old_password', '')
+            if not instance.check_password(password):
+                raise ValidationError({
+                    'old_password': ['Entered password is not correct.']
+                })
+
+            if 'password' in validated_data:
+                instance.set_password(validated_data.get('password'))
+
+            instance.save()
         return instance
 
 
