@@ -12,7 +12,7 @@
 	<br><br>
 	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignAds(ac.name, ac.id)">Advertisements</button>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignSce(ac.name, ac.id)">Scenarios</button>
+	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignActions(ac.name, ac.id)">Actions</button>
 	<br><br>
 	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwards(ac.name, ac.id)">Awards</button>
 	<br><br>
@@ -38,7 +38,7 @@
 				<td>{{ad.description}}</td>
 				<td>{{ad.type}}</td>
 				<td>
-					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button>
+					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showAd(ac.name, ac.id, ad.title, ad.id)">EDIT</button>
 					<button type="button" class="btn btn-danger btn-sm" ng-click="ac.deleteAd(ad.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
@@ -57,7 +57,7 @@
 	    
 	  </ul>
 	</nav>
-	<button style="float:right;" class="btn btn-success" ng-click="">ADD AD</button>
+	<button style="float:right;" class="btn btn-success" ng-click="pc.showAd(ac.name, ac.id, '', 0)">ADD AD</button>
 	
 {%endverbatim%}		
 </div>

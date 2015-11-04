@@ -31,12 +31,11 @@ angular.module('panelApp').controller('dashProfileController', ['$scope', '$http
 			url: '/user/'+this.user.id+'/',
 			data: this.user
 		}).then(function successCallback(response){
-			debugger
 			appInfo.showSuccess();
-			this.userBackup = angular.copy(this.user);
-			
+			this.user.password = "";
+			this.user.old_password = "";
+			this.userBackup = angular.copy(this.user);			
 		}.bind(this), function errorCallback(response){
-			debugger
 			appInfo.showFail(response);
 			this.user = angular.copy(this.userBackup);
 

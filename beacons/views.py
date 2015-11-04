@@ -96,8 +96,8 @@ def campaignAds(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignSce(request):
-    return render(request, 'Panel/Campaign/Sce/sce.html', {})
+def campaignActions(request):
+    return render(request, 'Panel/Campaign/Actions/actions.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
@@ -108,6 +108,11 @@ def campaignAwards(request):
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAward(request):
     return render(request, 'Panel/Campaign/Awards/Award/award.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAd(request):
+    return render(request, 'Panel/Campaign/Ads/Ad/ad.html', {})
 
 
 

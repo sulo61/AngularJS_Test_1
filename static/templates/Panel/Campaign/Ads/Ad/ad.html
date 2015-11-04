@@ -1,9 +1,9 @@
 {%verbatim%} 
 <!-- TOP -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showCampaignAwards(awardCtrl.campaignNAME, awardCtrl.campaignID)">CLOSE EDIT</button>
-	<button class="btn btn-danger" ng-click="awardCtrl.dismiss()">DISMISS</button>
-	<button class="btn btn-success" ng-click="awardCtrl.save()">SAVE</button>
+	<button class="btn btn-primary" ng-click="pc.showCampaignAds(adCtrl.campaignNAME, adCtrl.campaignID)">CLOSE EDIT</button>
+	<button class="btn btn-danger" ng-click="adCtrl.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="adCtrl.save()">SAVE</button>
 	<hr><br><br>
 </div>
 
@@ -11,23 +11,20 @@
 <!-- LEFT -->
 <div class="leftColumn"  style="width:50%">
 	<label>Title: </label>
-	<input type="text" class="form-control" placeholder="Title" ng-model="awardCtrl.award.title">
+	<input type="text" class="form-control" placeholder="Title" ng-model="adCtrl.ad.title">
 	<br>
 	<label>Description: </label>
-	<input type="text" class="form-control" placeholder="Description" ng-model="awardCtrl.award.description">
-	<br>
-	<label>Points: </label>
-	<input type="text" class="form-control" placeholder="Points" ng-model="awardCtrl.award.points">
-	<br>
+	<input type="text" class="form-control" placeholder="Description" ng-model="adCtrl.ad.description">
+	<br>	
 	<label>Type: </label>
-	<input type="text" class="form-control" placeholder="Type 0 or 1 or 2" ng-model="awardCtrl.award.type">
+	<input type="text" class="form-control" placeholder="Type 0 or 1 or 2" ng-model="adCtrl.ad.type">
 	<br>
 </div>
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:50%">
 	<div style="text-align:center;">
-		<img src="/static/templates/Panel/Campaign/Awards/Award/imageholder.jpg" alt="Imageholder"/>
+		<img src="/static/templates/Panel/Campaign/Ads/Ad/imageholder.jpg" alt="Imageholder"/>
 	</div>
 </div>
 
