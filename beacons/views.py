@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from beacons.models import Campaign, Beacon, Shop, Ad, Award
+from beacons.models import Campaign, Beacon, Shop, Ad, Award, UserCampaign
 from beacons.serializers import TokenSerializer, UserAwardDetail
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
@@ -115,6 +115,7 @@ def campaignAwards(request):
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAward(request):
     return render(request, 'Panel/Campaign/Awards/Award/award.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
@@ -238,15 +239,8 @@ class CampaignView(ModelViewSet):
     serializer_class = CampaignSerializer
     permission_classes = (IsAuthenticated, IsOperator)
 
-    @detail_route(methods=['post'])
-    def create(self, request, pk=None):
-        serializer = CampaignSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     def get_queryset(self):
         return self.request.user.campaigns.all()
@@ -459,10 +453,20 @@ class ActionView(ModelViewSet):
     permission_classes = (IsActionOwner,)
 
     def get_object(self):
-        campaign = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
-        action_pl = self.kwargs.get('action_pk')
-        actions_get = campaign.actions.get(pk=action_pl)
-        return actions_get
+        return get_object_or_404(self.get_campaign().actions.all(), pk=self.kwargs.get('action_pk'))
+
+    def get_campaign(self):
+        return get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        user_campaign = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
+        user_campaign.user_points += instance.points
+        u
+
+        return Response(serializer.data)
 
 
 class AdViewRetrieve(ModelViewSet):
