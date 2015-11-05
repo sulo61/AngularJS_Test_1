@@ -30,7 +30,7 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 	this.getCampaigns = function(page){
 		$http({
 			method: 'GET',
-			url: '/campaigns/',
+			url: '/api/campaigns/',
 			params: {"page" : page}
 		}).then(function successCallback(response){
 			this.campaignsList = [];
@@ -48,7 +48,7 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 	this.deleteCampaign = function(id, index){
 		$http({
 			method: 'DELETE',
-			url: '/campaigns/'+id
+			url: '/api/campaigns/'+id
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;

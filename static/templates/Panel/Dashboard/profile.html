@@ -8,12 +8,14 @@
 		<label>Last name:</label>
 		<input type="text" class="form-control" placeholder="Last name" ng-model="dpc.user.last_name">
 		<br>
-		<label>Email:</label>
-		<input type="email" class="form-control" placeholder="Email" ng-model="dpc.user.email">
+		<hr>
+		<label>Old password:</label>
+		<input type="password" class="form-control" placeholder="Old password" ng-model="dpc.user.old_password">
 		<br>
-		<label>Password:</label>
-		<input type="password" class="form-control" placeholder="Password" ng-model="dpc.user.password">
+		<label>New password:</label>
+		<input type="password" class="form-control" placeholder="New password" ng-model="dpc.user.password">
 		<br>
+		<hr>		
 		<br>
 		<button style="float:right;" class="btn btn-success" ng-click="dpc.pathUser()">SAVE</button>
 	</form>

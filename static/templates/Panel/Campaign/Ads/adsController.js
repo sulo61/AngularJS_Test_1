@@ -31,7 +31,7 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 	this.getAds = function(page){
 		$http({
 			method: 'GET',
-			url: '/campaigns/'+this.id+'/ads',
+			url: '/api/campaigns/'+this.id+'/ads',
 			params: {"page" : page}
 		}).then(function successCallback(response){
 			this.adsList = [];
@@ -49,7 +49,7 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 	this.deleteAd = function(adID, index){
 		$http({
 			method: 'DELETE',
-			url: '/campaigns/'+this.id+'/ads/'+adID
+			url: '/api/campaigns/'+this.id+'/ads/'+adID
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;

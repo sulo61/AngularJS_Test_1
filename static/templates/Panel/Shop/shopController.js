@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'appInfo', function($scope, $http, $routeParams, $timeout, Upload, appInfo){
 	// api info
 	this.appInfo = appInfo;
 	// shop id
@@ -74,7 +74,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		if (this.id>0){
 			$http({
 				method: 'GET',
-				url: '/shops/'+this.id+"/"
+				url: '/api/shops/'+this.id+"/"
 			}).then(function successCallback(response){
 				this.shop = response.data;
 				this.updateMap();
@@ -88,7 +88,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.patchShop = function(){		
 		$http({
 			method: 'PATCH',
-			url: '/shops/'+this.id+"/",
+			url: '/api/shops/'+this.id+"/",
 			data: this.shop
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
@@ -104,11 +104,12 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.postShop = function(){
 		$http({
 			method: 'POST',
-			url: '/shops/',
+			url: '/api/shops/',
 			data: this.shop
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
+			this.shop = response.data;
 			this.makeCopy();
 			this.updateMap();
 		}.bind(this), function errorCallback(response){
@@ -137,6 +138,43 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		}.bind(this));	
 	}
 
+	this.upload = function(file) {
+        Upload.upload({
+            url: '/api/shops/'+this.shop.id+'/image/',
+            data: {image: file}
+        }).then(function (resp) {
+        	debugger
+            
+        }, function (resp) {
+        	debugger
+            
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);           
+        });
+    };
+
+
+	this.uploadFiles = function(file, errFiles) {
+        $scope.f = file;
+        $scope.errFile = errFiles && errFiles[0];
+        if (file) {
+            file.upload = Upload.upload({
+                url: '/api/shops/'+this.shop.id+'/image/',
+                data: {image: file}
+            });
+            file.upload.then(function (response) {
+            	this.shop.image = angular.copy(response.data.image);
+            	appInfo.showSuccess();
+                // $timeout(function () {                	
+                //     appInfo.showFail(response.data);
+                // });
+            }.bind(this), function (response) {
+            	if (response.status > 0)
+                	appInfo.showFail(response.status + ': ' + response.data);
+            }, function (evt) {                
+            });
+        }   
+    }
 
 
 	this.getShop(this.id);

@@ -29,7 +29,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 
 		$http({
 			method: 'GET',
-			url: '/shops/',
+			url: '/api/shops/',
 			params: {"page" : page}
 		}).then(function successCallback(response){
 			this.shopsList = [];
@@ -47,7 +47,7 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 	this.deleteShop = function(id, index){
 		$http({
 			method: 'DELETE',
-			url: '/shops/'+id
+			url: '/api/shops/'+id
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
