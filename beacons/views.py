@@ -462,11 +462,13 @@ class ActionView(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
 
-        user_campaign = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
+        user_campaign, created = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
+        # TODO: add time restriction for add points
         user_campaign.user_points += instance.points
-        u
-
-        return Response(serializer.data)
+        user_campaign.save()
+        data = serializer.data
+        data['user_points'] = user_campaign.user_points
+        return Response(data)
 
 
 class AdViewRetrieve(ModelViewSet):
