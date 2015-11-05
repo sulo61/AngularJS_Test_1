@@ -250,6 +250,12 @@ class CampaignRetrieveView(ModelViewSet):
     serializer_class = CampaignSerializer
     permission_classes = (IsAuthenticated, IsOperator)
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (IsAuthenticated,)
+
+        return super(CampaignRetrieveView, self).get_permissions()
+
     def get_queryset(self):
         return self.request.user.campaigns.all()
 
@@ -347,7 +353,8 @@ class BeaconCampaignActionView(ModelViewSet):
         return obj
 
     def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), minor=self.request.query_params.get('minor'), major=self.request.query_params.get('major'))
+        obj = get_object_or_404(self.get_queryset(), minor=self.request.query_params.get('minor'),
+                                major=self.request.query_params.get('major'))
         return obj
 
     def create(self, request, *args, **kwargs):
