@@ -6,27 +6,27 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     }])
     .config(['$routeProvider', function($routeProvider){
     	$routeProvider
-    		.when("/dashBeacons", {
+    		.when("/beacons", {
 					templateUrl: "/dash/beacons",
 				    controller: "panelController",
 				    controllerAs: 'pc'
     		})
-    		.when("/dashProfile", {
+    		.when("/profile", {
     				templateUrl: "/dash/profile",
 				    controller: "dashProfileController",
 				    controllerAs: 'dpc'
     		})
-    		.when("/dashCampaigns", {
+    		.when("/campaigns", {
     				templateUrl: "/dash/campaigns",
 				    controller: "dashCampaignsController",
 				    controllerAs: 'dcc'
     		})
-    		.when("/dashShops", {
+    		.when("/shops", {
     				templateUrl: "/dash/shops",
 				    controller: "dashShopsController",
 				    controllerAs: 'dsc'
     		})
-    		.when("/shop/:id?", {
+    		.when("/shops/:id?", {
     				templateUrl: "/shop",
 				    controller: "shopController",
 				    controllerAs: 'sc'	
@@ -101,8 +101,27 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	    	}
     	}
     	return new appInfo();
-    }).controller("panelController", function($scope, $window, $http, $location, appInfo){
+    })
+	.directive("checkIfActive", function($location, appInfo) {
+		return {
+			link: function(scope, el, attrs) {
+				var elementPath;
+				elementPath = attrs.href;
+				scope.$on('$locationChangeSuccess', function(event, newURL, oldURL) {
+					appInfo.hideApiMsg(); // EXTRACT THIS TO NEXT DIRECTIVE								
+					if (newURL.search(elementPath) !== -1) {
+					 	el.parent().addClass("active");
+					 } else {
+					 	el.parent().removeClass("active");
+					 }
+		      	})
+			}
+		};
+	})
+    .controller("panelController", function($scope, $window, $http, $location, appInfo){
 		this.appInfo = appInfo;
+
+		
 	
 		this.logout = function(){
 			$http({
@@ -114,21 +133,21 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				appInfo.showFail(response);
 			}.bind(this));	
 		};
-		this.showBeacons = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Beacons");
-			$location.path('/dashBeacons');
-		}
-		this.showProfile = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Profile");
-			$location.path('/dashProfile');
-		}
-		this.showCampaigns = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaigns");
-			$location.path('/dashCampaigns');	
-		}
+		// this.showBeacons = function(){
+		// 	appInfo.hideApiMsg();
+		// 	this.appInfo.setCurrentPath("Dashboard/Beacons");
+		// 	$location.path('/dashBeacons');
+		// }
+		// this.showProfile = function(){
+		// 	appInfo.hideApiMsg();
+		// 	this.appInfo.setCurrentPath("Dashboard/Profile");
+		// 	$location.path('/dashProfile');
+		// }
+		// this.showCampaigns = function(){
+		// 	appInfo.hideApiMsg();
+		// 	this.appInfo.setCurrentPath("Dashboard/Campaigns");
+		// 	$location.path('/dashCampaigns');	
+		// }
 		this.showCampaignBasic = function(name, id){
 			appInfo.hideApiMsg();
 			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Basic information");
@@ -149,15 +168,15 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Awards");
 			$location.path('/campaign/awards/'+id+'/'+name);	
 		}
-		this.showShops = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Shops");
-			$location.path('/dashShops');	
-		}
+		// this.showShops = function(){
+		// 	appInfo.hideApiMsg();
+		// 	this.appInfo.setCurrentPath("Dashboard/Shops");
+		// 	$location.path('/dashShops');	
+		// }
 		this.showShop = function(name, id){
 			appInfo.hideApiMsg();
 			this.appInfo.setCurrentPath("Dashboard/Shop/"+name);
-			$location.path('/shop/'+id);		
+			$location.path('/shops/'+id);		
 		}
 		this.showAward = function(campaignNAME, campaignID, awardNAME, awardID){
 			appInfo.hideApiMsg();
