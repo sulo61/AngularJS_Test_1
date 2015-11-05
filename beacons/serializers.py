@@ -254,7 +254,7 @@ class BeaconActionSerializer(serializers.ModelSerializer):
 class ActionSerializer(ModelSerializer):
     class Meta:
         model = ActionBeacon
-        fields = ('id', 'beacon', 'ad')
+        fields = ('id', 'beacon', 'ad', 'points')
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):

@@ -337,6 +337,67 @@ def create_beacons(request, pk, format=None):
     return Response(json.dumps(list(beacons)))
 
 
+class BeaconCampaignActionView(ModelViewSet):
+    serializer_class = BeaconSerializer
+    # TODO: perrmission is operator and owner of campaign
+    permission_classes = (IsAuthenticated, IsOperator)
+
+    def get_campaign(self):
+        obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
+        return obj
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), minor=self.request.query_params.get('minor'), major=self.request.query_params.get('major'))
+        return obj
+
+    def create(self, request, *args, **kwargs):
+        serializer = BeaconSerializer(data=request.data)
+        if serializer.is_valid():
+            count = serializer.data.get('beacons_count', 0)
+            beacons = []
+            for x in xrange(count):
+                create = Beacon.objects.create(campaign=self.get_object())
+                create.minor = x
+                create.major = request.user.pk
+                create.save()
+                beacons.append({
+                    'id': create.pk,
+                    'minor': create.minor,
+                    'major': create.major,
+                })
+            return Response(json.dumps(list(beacons)))
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def get_queryset(self):
+        return self.get_campaign().beacons.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+         ---
+         parameters:
+             - name: minor
+               type: integer
+               paramType: query
+             - name: major
+               type: integer
+               paramType: query
+         """
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        user_campaign, created = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
+        # TODO: add time restriction for add points
+        for action in instance.actions.all():
+            user_campaign.user_points += action.points
+
+        user_campaign.save()
+        data = serializer.data
+        data['user_points'] = user_campaign.user_points
+        return Response(data)
+
+
 class BeaconCampaignView(ModelViewSet):
     serializer_class = BeaconSerializer
     # TODO: perrmission is operator and owner of campaign
