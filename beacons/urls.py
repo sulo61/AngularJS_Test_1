@@ -16,6 +16,11 @@ retrieve = {
     'patch': 'update',
 }
 
+get_retrieve = {
+    'post': 'create',
+    'get': 'retrieve'
+}
+
 urlpatterns = [
     url(r'^operator/register/$', views.CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
     url(r'^login/token/', ObtainToken.as_view(), name="login"),
@@ -39,7 +44,7 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/ads/$', views.CampaignAdView.as_view(methods), name="campaign-ads"),
     url(r'campaigns/(?P<pk>[0-9]+)/ads/(?P<ad_pk>[0-9]+)/$', views.AdViewRetrieve.as_view(retrieve),
         name="campaign-ads"),
-    url(r'campaigns/(?P<pk>[0-9]+)/ads/(?P<ad_pk>[0-9]+)/image$', views.AdImageUpdater.as_view({'post': 'create'}),
+    url(r'campaigns/(?P<pk>[0-9]+)/ads/(?P<ad_pk>[0-9]+)/image$', views.AdImageUpdater.as_view(get_retrieve),
         name="campaign-ads"),
 
     url(r'campaigns/(?P<pk>[0-9]+)/beacons/$', views.CampaignBeaconView.as_view({'get': 'list'}),
@@ -53,7 +58,7 @@ urlpatterns = [
     url(r'shops/$', views.ShopView.as_view(methods), name="shops"),
     url(r'shops/(?P<pk>[0-9]+)/$', views.ShopView.as_view(retrieve), name="shops"),
     url(r'shops/(?P<pk>[0-9]+)/beacons/$', ShopBeacons.as_view(methods), name="shop_beacons"),
-    url(r'shops/(?P<pk>[0-9]+)/image/$', views.ImageUpdater.as_view({'post': 'create'}), name="shops"),
+    url(r'shops/(?P<pk>[0-9]+)/image/$', views.ImageUpdater.as_view(get_retrieve), name="shops"),
 
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
 
@@ -68,8 +73,7 @@ urlpatterns = [
         views.AwardUserDetailsView.as_view({'get': 'retrieve', 'patch': 'update', }),
         name='promotions_crud'),
 
-    url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/image/$',
-        views.AwardImageUpdater.as_view({'post': 'create'}),
+    url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/image/$', views.AwardImageUpdater.as_view(get_retrieve),
         name='promotions_crud'),
 ]
 retrieve_only = {'get': 'retrieve', }
