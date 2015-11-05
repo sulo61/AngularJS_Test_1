@@ -476,7 +476,6 @@ class AdViewRetrieve(ModelViewSet):
 
 
 class PromotionCreateView(ModelViewSet):
-
     def get_permissions(self):
         if self.request.method == 'GET':
             self.permission_classes = (IsAuthenticated,)
@@ -580,7 +579,7 @@ class ImageUpdater(ModelViewSet):
 
             shop.image.delete()
             shop.image.save(upload.name, upload)
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK, data={'image': shop.image.url})
         else:
             return super(ImageUpdater, self).create(request, *args, **kwargs)
 
@@ -600,7 +599,7 @@ class AdImageUpdater(ModelViewSet):
 
             shop.image.delete()
             shop.image.save(upload.name, upload)
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK, data={'image': shop.image.url})
         else:
             return super(AdImageUpdater, self).create(request, *args, **kwargs)
 
@@ -620,7 +619,7 @@ class AwardImageUpdater(ModelViewSet):
 
             shop.image.delete()
             shop.image.save(upload.name, upload)
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK, data={'image': shop.image.url})
         else:
             return super(AwardImageUpdater, self).create(request, *args, **kwargs)
 

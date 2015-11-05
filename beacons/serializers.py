@@ -147,6 +147,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Shop
         fields = ('id', 'name', 'opening_hours', 'address', 'latitude', 'longitude', 'image')
+        read_only_fields = ('image',)
 
     def create(self, validated_data):
         opening_hours_data = validated_data.pop('opening_hours')
