@@ -1,26 +1,26 @@
+{%verbatim%}
 <!-- TOP -->
 <!-- <div ng-include src="'campaign/header'"></div>	 -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>
+	<a href="#/campaigns"class="btn btn-primary" role="button">CLOSE EDIT</a>
 	<hr><br><br>
 </div>
 
 <!-- LEFT -->
 <!-- <div ng-include src="'campaign/menu'"></div> -->
 <div class="leftColumn"  style="width:25%">
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignBasic(ac.name, ac.id)">Basic informations</button>
+	<a href={{"#/campaigns/"+ac.id+"/basic/"}} class="btn btn-default" style="width:100%" role="button">Basic informations</a>
 	<br><br>
-	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignAds(ac.name, ac.id)">Advertisements</button>
+	<a href={{"#/campaigns/"+ac.id+"/ads/"}} ng-show="ac.id>0" class="btn btn-primary" style="width:100%" role="button">Advertisements</a>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignActions(ac.name, ac.id)">Actions</button>
+	<a href={{"#/campaigns/"+ac.id+"/actions/"}} ng-show="ac.id>0" class="btn btn-default" style="width:100%" role="button">Actions</a>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAwards(ac.name, ac.id)">Awards</button>
+	<a href={{"#/campaigns/"+ac.id+"/awards/"}} ng-show="ac.id>0" class="btn btn-default" style="width:100%" role="button">Awards</a>
 	<br><br>
 </div>
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:75%">
-{%verbatim%}	
 	<table class="table table-hover">
 		<thead>
 			<tr>
@@ -38,7 +38,7 @@
 				<td>{{ad.description}}</td>
 				<td>{{ad.type}}</td>
 				<td>
-					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showAd(ac.name, ac.id, ad.title, ad.id)">EDIT</button>
+					<a href={{"#/campaigns/"+ac.id+"/ads/"+ad.id}} class="btn btn-info btn-sm" role="button">EDIT</a>
 					<button type="button" class="btn btn-danger btn-sm" ng-click="ac.deleteAd(ad.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
@@ -57,7 +57,9 @@
 	    
 	  </ul>
 	</nav>
-	<button style="float:right;" class="btn btn-success" ng-click="pc.showAd(ac.name, ac.id, '', 0)">ADD AD</button>
+	<a href={{"#/campaigns/"+ac.id+"/ads/0"}} style="float:right;" class="btn btn-success" role="button">ADD AD</a>
+
 	
-{%endverbatim%}		
+
 </div>
+{%endverbatim%}

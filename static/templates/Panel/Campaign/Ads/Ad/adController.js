@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('adController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('adController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', function($scope, $http, $routeParams, Upload, appInfo){
 	// api info
 	this.appInfo = appInfo;
 	// award params
@@ -68,6 +68,28 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 			appInfo.showFail(response);
 		}.bind(this));			
 	}
+	// upload photo	
+	this.uploadFiles = function(file, errFiles) {
+        $scope.f = file;
+        $scope.errFile = errFiles && errFiles[0];
+        if (file) {
+            file.upload = Upload.upload({
+                url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID+"/image",
+                data: {image: file}
+            });
+            file.upload.then(function (response) {
+            	this.ad.image = angular.copy(response.data.image);
+            	appInfo.showSuccess();
+                // $timeout(function () {                	
+                //     appInfo.showFail(response.data);
+                // });
+            }.bind(this), function (response) {
+            	if (response.status > 0)
+                	appInfo.showFail(response.status + ': ' + response.data);
+            }, function (evt) {                
+            });
+        }   
+    }
 
 
 	this.getAd(this.adID);

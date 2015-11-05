@@ -6,57 +6,57 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     }])
     .config(['$routeProvider', function($routeProvider){
     	$routeProvider
-    		.when("/dashBeacons", {
+    		.when("/beacons", {
 					templateUrl: "/dash/beacons",
 				    controller: "panelController",
 				    controllerAs: 'pc'
     		})
-    		.when("/dashProfile", {
+    		.when("/profile", {
     				templateUrl: "/dash/profile",
 				    controller: "dashProfileController",
 				    controllerAs: 'dpc'
     		})
-    		.when("/dashCampaigns", {
+    		.when("/campaigns", {
     				templateUrl: "/dash/campaigns",
 				    controller: "dashCampaignsController",
 				    controllerAs: 'dcc'
     		})
-    		.when("/dashShops", {
+    		.when("/shops", {
     				templateUrl: "/dash/shops",
 				    controller: "dashShopsController",
 				    controllerAs: 'dsc'
     		})
-    		.when("/shop/:id?", {
+    		.when("/shops/:id?", {
     				templateUrl: "/shop",
 				    controller: "shopController",
 				    controllerAs: 'sc'	
     		})
-    		.when("/campaign/basic/:id/:name?", {
+    		.when("/campaigns/:id?/basic/", {
     				templateUrl: "/campaign/basic",
 				    controller: "basicController",
 				    controllerAs: 'bc'	
     		})
-    		.when("/campaign/ads/:id/:name?", {
+    		.when("/campaigns/:id?/ads/", {
     				templateUrl: "/campaign/ads",
 				    controller: "adsController",
 				    controllerAs: 'ac'	
     		})
-    		.when("/campaign/actions/:id/:name?", {
+    		.when("/campaigns/:id?/actions/", {
     				templateUrl: "/campaign/actions",
 				    controller: "actionsController",
 				    controllerAs: 'actionsCtrl'	
     		})		
-    		.when("/campaign/awards/:id/:name?", {
+    		.when("/campaigns/:id?/awards/", {
     				templateUrl: "/campaign/awards",
 				    controller: "awardsController",
 				    controllerAs: 'awc'	
     		})
-    		.when("/campaign/award/:campaignID/:campaignNAME/:awardID/:awardNAME?", {
+    		.when("/campaigns/:campaignID?/awards/:awardID?", {
     				templateUrl: "/campaign/award",
 				    controller: "awardController",
 				    controllerAs: 'awardCtrl'	
     		})
-    		.when("/campaign/ad/:campaignID/:campaignNAME/:adID/:adNAME?", {
+    		.when("/campaigns/:campaignID?/ads/:adID?", {
     				templateUrl: "/campaign/ad",
 				    controller: "adController",
 				    controllerAs: 'adCtrl'	
@@ -101,8 +101,25 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	    	}
     	}
     	return new appInfo();
-    }).controller("panelController", function($scope, $window, $http, $location, appInfo){
-		this.appInfo = appInfo;
+    })
+	.directive("checkIfActive", function($location, appInfo) {
+		return {
+			link: function(scope, el, attrs) {
+				var elementPath;
+				elementPath = attrs.href;
+				scope.$on('$locationChangeSuccess', function(event, newURL, oldURL) {
+					appInfo.hideApiMsg(); // EXTRACT THIS TO NEXT DIRECTIVE								
+					if (newURL.search(elementPath) !== -1) {
+					 	el.parent().addClass("active");
+					 } else {
+					 	el.parent().removeClass("active");
+					 }
+		      	})
+			}
+		};
+	})
+    .controller("panelController", function($scope, $window, $http, $location, appInfo){
+		this.appInfo = appInfo;		
 	
 		this.logout = function(){
 			$http({
@@ -114,60 +131,5 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				appInfo.showFail(response);
 			}.bind(this));	
 		};
-		this.showBeacons = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Beacons");
-			$location.path('/dashBeacons');
-		}
-		this.showProfile = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Profile");
-			$location.path('/dashProfile');
-		}
-		this.showCampaigns = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaigns");
-			$location.path('/dashCampaigns');	
-		}
-		this.showCampaignBasic = function(name, id){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Basic information");
-			$location.path('/campaign/basic/'+id+'/'+name);	
-		}
-		this.showCampaignAds = function(name, id){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Advertisements");
-			$location.path('/campaign/ads/'+id+'/'+name);	
-		}
-		this.showCampaignActions = function(name, id){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Actions");
-			$location.path('/campaign/actions/'+id+'/'+name);	
-		}
-		this.showCampaignAwards = function(name, id){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+name+"/Awards");
-			$location.path('/campaign/awards/'+id+'/'+name);	
-		}
-		this.showShops = function(){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Shops");
-			$location.path('/dashShops');	
-		}
-		this.showShop = function(name, id){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Shop/"+name);
-			$location.path('/shop/'+id);		
-		}
-		this.showAward = function(campaignNAME, campaignID, awardNAME, awardID){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+campaignNAME+'/Award/'+awardNAME);
-			$location.path('/campaign/award/'+campaignID+'/'+campaignNAME+'/'+awardID+'/'+awardNAME);		
-		}
-		this.showAd = function(campaignNAME, campaignID, adNAME, adID){
-			appInfo.hideApiMsg();
-			this.appInfo.setCurrentPath("Dashboard/Campaign/"+campaignNAME+'/Advertisements/'+adNAME);
-			$location.path('/campaign/ad/'+campaignID+'/'+campaignNAME+'/'+adID+'/'+adNAME);		
-		}
 		
     })

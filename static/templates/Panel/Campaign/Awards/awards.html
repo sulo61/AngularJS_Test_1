@@ -1,26 +1,26 @@
+{%verbatim%}
 <!-- TOP -->
 <!-- <div ng-include src="'campaign/header'"></div>	 -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>	
+	<a href="#/campaigns" class="btn btn-primary" role="button">CLOSE EDIT</a>
 	<hr><br><br>
 </div>
 
 <!-- LEFT -->
 <!-- <div ng-include src="'campaign/menu'"></div> -->
 <div class="leftColumn"  style="width:25%">
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignBasic(awc.name, awc.id)">Basic informations</button>
+	<a href={{"#/campaigns/"+awc.id+"/basic/"}} class="btn btn-default" style="width:100%" role="button">Basic informations</a>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignAds(awc.name, awc.id)">Advertisements</button>
+	<a href={{"#/campaigns/"+awc.id+"/ads/"}} ng-show="awc.id>0" class="btn btn-default" style="width:100%" role="button">Advertisements</a>
 	<br><br>
-	<button class="btn btn-default" style="width:100%" ng-click="pc.showCampaignActions(awc.name, awc.id)">Actions</button>
+	<a href={{"#/campaigns/"+awc.id+"/actions/"}} ng-show="awc.id>0" class="btn btn-default" style="width:100%" role="button">Actions</a>
 	<br><br>
-	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignAwards(awc.name, awc.id)">Awards</button>
+	<a href={{"#/campaigns/"+awc.id+"/awards/"}} ng-show="awc.id>0" class="btn btn-primary" style="width:100%" role="button">Awards</a>
 	<br><br>
 </div>
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:75%">
-{%verbatim%}	
 	<table class="table table-hover">
 		<thead>
 			<tr>
@@ -38,7 +38,7 @@
 				<td>{{award.description}}</td>
 				<td>{{award.points}}</td>
 				<td>
-					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showAward(awc.name, awc.id, award.title, award.id)">EDIT</button>
+					<a href={{"#/campaigns/"+awc.id+"/awards/"+award.id}} class="btn btn-info btn-sm" role="button">EDIT</a>
 					<button type="button" class="btn btn-danger btn-sm" ng-click="awc.deleteAward(award.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
@@ -57,9 +57,8 @@
 	    
 	  </ul>
 	</nav>
-	<button style="float:right;" class="btn btn-success" ng-click="pc.showAward(awc.name, awc.id, '', 0)">ADD AWARD</button>
+	<a href={{"#/campaigns/"+awc.id+"/awards/0"}} style="float:right;" class="btn btn-success" role="button">ADD AWARDS</a>
 
 
-	
-{%endverbatim%}	
 </div>
+{%endverbatim%}

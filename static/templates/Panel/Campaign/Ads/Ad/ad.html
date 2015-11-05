@@ -1,7 +1,7 @@
 {%verbatim%} 
 <!-- TOP -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showCampaignAds(adCtrl.campaignNAME, adCtrl.campaignID)">CLOSE EDIT</button>
+	<a href={{"#/campaigns/"+adCtrl.campaignID+"/ads"}} class="btn btn-primary" role="button">CLOSE EDIT</a>	
 	<button class="btn btn-danger" ng-click="adCtrl.dismiss()">DISMISS</button>
 	<button class="btn btn-success" ng-click="adCtrl.save()">SAVE</button>
 	<hr><br><br>
@@ -24,8 +24,9 @@
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:50%">
 	<div style="text-align:center;">
-		<!-- <img src="/static/templates/Panel/Campaign/Ads/Ad/imageholder.jpg" alt="Imageholder"/> -->
-		<img ng-src="{{adCtrl.ad.image}}" alt="No image"/>
+		<img ng-src="{{adCtrl.ad.image}}" alt="No image" style="width:100%"/>
+		<br><br>
+		<button class="btn btn-info" type="file" ngf-select="adCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD IMAGE</button>
 	</div>
 </div>
 

@@ -137,23 +137,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			appInfo.showFail(response);
 		}.bind(this));	
 	}
-
-	this.upload = function(file) {
-        Upload.upload({
-            url: '/api/shops/'+this.shop.id+'/image/',
-            data: {image: file}
-        }).then(function (resp) {
-        	debugger
-            
-        }, function (resp) {
-        	debugger
-            
-        }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);           
-        });
-    };
-
-
+	// upload photo	
 	this.uploadFiles = function(file, errFiles) {
         $scope.f = file;
         $scope.errFile = errFiles && errFiles[0];

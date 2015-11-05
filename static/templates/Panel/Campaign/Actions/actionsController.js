@@ -3,7 +3,6 @@ angular.module('panelApp').controller('actionsController', ['$scope', '$http', '
 	this.appInfo = appInfo;
 	// campaign params
 	this.id = $routeParams.id;
-	this.name = $routeParams.name;
 	// model
 	
 
