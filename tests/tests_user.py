@@ -13,7 +13,7 @@ register_data = {
 
 
 def register(client):
-    response = client.post('/register/', register_data, format='json')
+    response = client.post('/api/register/', register_data, format='json')
     return json.loads(response.content).get('id')
 
 
@@ -23,7 +23,7 @@ def create_campaign(self):
         'email': 'operator@gmail.com',
         'password': 'operator',
     }
-    client.post('/operator/register/', data, format='json')
+    client.post('/api/operator/register/', data, format='json')
     client.login(email=data.get('email'), password=data.get('password'))
 
     data = {
@@ -32,13 +32,13 @@ def create_campaign(self):
         "end_date": "2015-10-31T09:00:00Z",
         u'is_active': False,
     }
-    response = client.post('/campaigns/', data)
+    response = client.post('/api/campaigns/', data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     campaign = json.loads(response.content)
     id = campaign.get('id')
     data['id'] = id
     self.assertEqual(campaign, data)
-    response = client.get('/campaigns/')
+    response = client.get('/api/campaigns/')
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(json.loads(response.content), {
         "count": 1, "next": None,
@@ -59,7 +59,7 @@ class UserRegisterCase(TestCase):
         self.client = APIClient()
 
     def test_register(self):
-        response = self.client.post('/register/', register_data, format='json')
+        response = self.client.post('/api/register/', register_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         loads = json.loads(response.content)
         self.assertEqual(loads, {
@@ -77,7 +77,7 @@ class UserLoginCase(TestCase):
         register(self.client)
 
     def test_login(self):
-        response = self.client.post('/login/', register_data)
+        response = self.client.post('/api/login/', register_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -89,27 +89,27 @@ class UserGETMethods(TestCase):
         self.client.login(email=register_data.get('email'), password=register_data.get('password'))
 
     def test_get_ads(self):
-        response = self.client.get('/campaigns/{0}/ads/'.format(self.campaign_id))
+        response = self.client.get('/api/campaigns/{0}/ads/'.format(self.campaign_id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_promotions(self):
-        response = self.client.get('/campaigns/{0}/promotions/'.format(self.campaign_id))
+        response = self.client.get('/api/campaigns/{0}/promotions/'.format(self.campaign_id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_awards(self):
-        response = self.client.get('/campaigns/{0}/awards/'.format(self.campaign_id))
+        response = self.client.get('/api/campaigns/{0}/awards/'.format(self.campaign_id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_shops(self):
-        response = self.client.get('/shops/'.format(self.campaign_id))
+        response = self.client.get('/api/shops/'.format(self.campaign_id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_beacons(self):
-        response = self.client.get('/campaigns/{0}/beacons/'.format(self.campaign_id))
+        response = self.client.get('/api/campaigns/{0}/beacons/'.format(self.campaign_id))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_actions(self):
-        response = self.client.get('/campaigns/{0}/actions/'.format(self.campaign_id))
+        response = self.client.get('/api/campaigns/{0}/actions/'.format(self.campaign_id))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
@@ -125,7 +125,7 @@ class UserCreateCampaign(TestCase):
             "end_date": "2015-10-31T09:00:00Z"
         }
 
-        response = self.client.post('/campaigns/', data)
+        response = self.client.post('/api/campaigns/', data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_ads(self):
@@ -135,12 +135,12 @@ class UserCreateCampaign(TestCase):
             "end_date": "2015-10-31T09:00:00Z"
         }
 
-        response = self.client.post('/campaigns/{0}/ads/'.format(self.id), data)
+        response = self.client.post('/api/campaigns/{0}/ads/'.format(self.id), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 def create_award(self, campaign_id, client):
-    response = client.post('/campaigns/{0}/awards/'.format(campaign_id), data={
+    response = client.post('/api/campaigns/{0}/awards/'.format(campaign_id), data={
         "title": "Test",
         "description": "test desc",
         "points": 10,
@@ -158,11 +158,29 @@ class UserAwardsDetails(TestCase):
         self.award_id = create_award(self, self.campaign_id, operator_client)
 
     def test_update_award(self):
-        response = self.client.patch('/campaigns/{0}/awards/{1}/'.format(self.campaign_id, self.award_id),
+        response = self.client.patch('/api/campaigns/{0}/awards/{1}/update/'.format(self.campaign_id, self.award_id),
                                      data={
-                                         "title": "aa",
                                          'favorite': True,
                                          'bought': True
                                      }, json='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class BeaconsUserTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        register_login_user(self)
+
+    def test_list_beacons(self):
+        response = self.client.get('/api/beacons/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_beacons(self):
+        beacons_data = {
+            'minor': '1',
+            'major': '1',
+            'title': 'Title',
+        }
+        response = self.client.post('/api/beacons/', beacons_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

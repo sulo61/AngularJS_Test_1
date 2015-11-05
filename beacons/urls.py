@@ -1,7 +1,8 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from beacons import views
-from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView, CreateViewOperator
+from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView, CreateViewOperator, UserBeaconsView, \
+    ShopBeacons
 
 __author__ = 'Mateusz'
 
@@ -16,30 +17,17 @@ retrieve = {
 }
 
 urlpatterns = [
-    url(r'^dash/beacons/$', views.dashBeacons, name="dashBeacons"),
-    url(r'^dash/profile/$', views.dashProfile, name="dashProfile"),
-    url(r'^dash/shops/$', views.dashShops, name="dashShops"),
-    url(r'^dash/campaigns/$', views.dashCampaigns, name="dashCampaigns"),
-    url(r'^panel/$', views.panel, name="panel"),
 
-    url(r'^shop/$', views.shop, name="shop"),
-    url(r'^campaign/$', views.campaign, name="campaign"),
-    url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
-    url(r'^campaign/ads/$', views.campaignAds, name="campaignAds"),
-    url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
-    url(r'^campaign/awards/$', views.campaignAwards, name="campaignAwards"),
-    url(r'^panel/campaign/menu/$', views.campaignMenu, name="campaignMenu"),
-    
-    url(r'^campaign/award/$', views.campaignAward, name="campaignAward"),
-    url(r'^campaign/ad/$', views.campaignAd, name="campaignAd"),
-
+    url(r'^operator/register/$', views.CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
     url(r'^login/token/', ObtainToken.as_view(), name="login"),
     url(r'^login/', views.login_view, name="login"),
     url(r'^logout/', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
-    url(r'^operator/register/$', CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
+
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
+    url(r'^beacons/$', UserBeaconsView.as_view(methods), name='beacons'),
+    url(r'^beacons/(?P<pk>[0-9]+)/$', UserBeaconsView.as_view(retrieve), name='beacons_details'),
 
     url(r'campaigns/(?P<pk>[0-9]+)/beacons$', views.BeaconCampaignView.as_view(retrieve),
         name="beacons"),
@@ -65,6 +53,7 @@ urlpatterns = [
 
     url(r'shops/$', views.ShopView.as_view(methods), name="shops"),
     url(r'shops/(?P<pk>[0-9]+)/$', views.ShopView.as_view(retrieve), name="shops"),
+    url(r'shops/(?P<pk>[0-9]+)/beacons/$', ShopBeacons.as_view(methods), name="shop_beacons"),
     url(r'shops/(?P<pk>[0-9]+)/image/$', views.ImageUpdater.as_view({'post': 'create'}), name="shops"),
 
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -75,6 +64,9 @@ urlpatterns = [
 
     url(r'campaigns/(?P<pk>[0-9]+)/awards/$', views.AwardView.as_view(methods), name='promotions'),
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/$', views.AwardCreateView.as_view(retrieve),
+        name='promotions_crud'),
+    url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/update/$',
+        views.AwardUserDetailsView.as_view({'get': 'retrieve', 'patch': 'update', }),
         name='promotions_crud'),
 
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/image/$',

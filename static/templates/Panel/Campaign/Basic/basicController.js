@@ -27,7 +27,7 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 		if (this.id>0){
 			$http({
 				method: 'GET',
-				url: '/campaigns/'+this.id
+				url: '/api/campaigns/'+this.id
 			}).then(function successCallback(response){
 				this.basic = response.data;	
 				this.basic.beacons = [];
@@ -40,7 +40,7 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 	this.patchBasic = function(){
 		$http({
 			method: 'PATCH',
-			url: '/campaigns/'+this.id,
+			url: '/api/campaigns/'+this.id,
 			data: this.basic
 		}).then(function successCallback(response){
 			this.makeCopy();
@@ -52,7 +52,7 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 	this.postBasic = function(){
 		$http({
 			method: 'POST',
-			url: '/campaigns/',
+			url: '/api/campaigns/',
 			data: this.basic
 		}).then(function successCallback(response){
 			this.basic = response.data;

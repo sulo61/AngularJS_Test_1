@@ -31,7 +31,7 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 		if (this.adID>0){
 			$http({
 				method: 'GET',
-				url: '/campaigns/'+this.campaignID+"/ads/"+this.adID
+				url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID
 			}).then(function successCallback(response){
 				this.ad = response.data;
 				this.makeCopy();
@@ -44,7 +44,7 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 	this.patchAd = function(){		
 		$http({
 			method: 'PATCH',
-			url: '/campaigns/'+this.campaignID+"/ads/"+this.adID,
+			url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID,
 			data: this.ad
 		}).then(function successCallback(response){
 			this.makeCopy();
@@ -58,7 +58,7 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 	this.postAd = function(){
 		$http({
 			method: 'POST',
-			url: '/campaigns/'+this.campaignID+'/ads/',
+			url: '/api/campaigns/'+this.campaignID+'/ads/',
 			data: this.ad
 		}).then(function successCallback(response){
 			this.ad = response.data;

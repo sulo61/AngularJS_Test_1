@@ -31,7 +31,7 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 		if (this.awardID>0){
 			$http({
 				method: 'GET',
-				url: '/campaigns/'+this.campaignID+"/awards/"+this.awardID
+				url: '/api/campaigns/'+this.campaignID+"/awards/"+this.awardID
 			}).then(function successCallback(response){
 				this.award = response.data;
 				this.makeCopy();
@@ -44,7 +44,7 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 	this.patchAward = function(){		
 		$http({
 			method: 'PATCH',
-			url: '/campaigns/'+this.campaignID+"/awards/"+this.awardID,
+			url: '/api/campaigns/'+this.campaignID+"/awards/"+this.awardID,
 			data: this.award
 		}).then(function successCallback(response){
 			this.makeCopy();
@@ -58,7 +58,7 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 	this.postAward = function(){
 		$http({
 			method: 'POST',
-			url: '/campaigns/'+this.campaignID+'/awards/',
+			url: '/api/campaigns/'+this.campaignID+'/awards/',
 			data: this.award
 		}).then(function successCallback(response){
 			this.award = response.data;

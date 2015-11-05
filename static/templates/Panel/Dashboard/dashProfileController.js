@@ -15,7 +15,7 @@ angular.module('panelApp').controller('dashProfileController', ['$scope', '$http
 	this.getUser = function(){
 		$http({
 			method: 'GET',
-			url: '/user/'
+			url: '/api/user/'
 		}).then(function successCallback(response){
 			this.user = response.data;
 			this.userBackup = angular.copy(this.user);
@@ -28,7 +28,7 @@ angular.module('panelApp').controller('dashProfileController', ['$scope', '$http
 	this.pathUser = function(){
 		$http({
 			method: 'PATCH',
-			url: '/user/'+this.user.id+'/',
+			url: '/api/user/'+this.user.id+'/',
 			data: this.user
 		}).then(function successCallback(response){
 			appInfo.showSuccess();

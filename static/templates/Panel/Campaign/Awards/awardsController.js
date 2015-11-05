@@ -31,7 +31,7 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 	this.getAwards = function(page){
 		$http({
 			method: 'GET',
-			url: '/campaigns/'+this.id+'/awards',
+			url: '/api/campaigns/'+this.id+'/awards',
 			params: {"page" : page}
 		}).then(function successCallback(response){
 			this.awardsList = [];
@@ -49,7 +49,7 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 	this.deleteAward = function(awardID, index){
 		$http({
 			method: 'DELETE',
-			url: '/campaigns/'+this.id+'/awards/'+awardID
+			url: '/api/campaigns/'+this.id+'/awards/'+awardID
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;

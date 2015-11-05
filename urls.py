@@ -13,7 +13,7 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from beacons.views import index, panel
+from beacons.views import index
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.decorators import api_view
@@ -22,14 +22,15 @@ from rest_framework.reverse import reverse
 admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('beacons.urls')),
+    url(r'^api/', include('beacons.urls')),
+    url(r'^', include('beacons.front_urls')),
 ]
 
 
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
-        'login': reverse('login', request=request, format=format),
+        'beacons': reverse('beacons', request=request, format=format),
         'user': reverse('user', request=request, format=format),
         'register': reverse('register', request=request, format=format),
         'shops': reverse('shops', request=request, format=format),
@@ -38,9 +39,7 @@ def api_root(request, format=None):
     })
 
 urlpatterns += [
-    url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
     url(r'^$', index),
-    url(r'^panel/$', panel),
     url(r'^rest_framework/$', api_root),
 
 ]

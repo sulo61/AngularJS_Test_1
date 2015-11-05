@@ -74,7 +74,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		if (this.id>0){
 			$http({
 				method: 'GET',
-				url: '/shops/'+this.id+"/"
+				url: '/api/shops/'+this.id+"/"
 			}).then(function successCallback(response){
 				this.shop = response.data;
 				this.updateMap();
@@ -88,7 +88,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.patchShop = function(){		
 		$http({
 			method: 'PATCH',
-			url: '/shops/'+this.id+"/",
+			url: '/api/shops/'+this.id+"/",
 			data: this.shop
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
@@ -104,7 +104,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	this.postShop = function(){
 		$http({
 			method: 'POST',
-			url: '/shops/',
+			url: '/api/shops/',
 			data: this.shop
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
@@ -140,7 +140,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 
 	this.upload = function(file) {
         Upload.upload({
-            url: '/shops/'+this.shop.id+'/image/',
+            url: '/api/shops/'+this.shop.id+'/image/',
             data: {image: file}
         }).then(function (resp) {
         	debugger
@@ -159,7 +159,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         $scope.errFile = errFiles && errFiles[0];
         if (file) {
             file.upload = Upload.upload({
-                url: '/shops/'+this.shop.id+'/image/',
+                url: '/api/shops/'+this.shop.id+'/image/',
                 data: {image: file}
             });
             file.upload.then(function (response) {

@@ -157,7 +157,7 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
 
     def is_valid(self, raise_exception=False):
         valid = super(ShopSerializer, self).is_valid(raise_exception)
-        opening_hours = self.validated_data.get('opening_hours')
+        opening_hours = self.initial_data.get('opening_hours')
         if valid:
             valid = self.valid_days(opening_hours)
 
@@ -238,22 +238,11 @@ class AdSerializerCreate(serializers.ModelSerializer):
 
 
 class CampaignAddActionSerializer(serializers.ModelSerializer):
+    ad = AdSerializerCreate(many=False, read_only=True)
+
     class Meta:
         model = ActionBeacon
-        fields = ('id', 'beacon', 'ad')
-
-    def get_fields(self):
-        fields = super(CampaignAddActionSerializer, self).get_fields()
-        if len(self.context) == 0:
-            return fields
-        request = self.context['view'].request
-        user = request.user
-        fields['beacon'].queryset = user.beacons
-        if not user:
-            return fields
-        get = request._request.resolver_match.kwargs.get('pk')
-        fields['ad'].queryset = get_object_or_404(Campaign, pk=get).ads
-        return fields
+        fields = ('id', 'beacon', 'ad', 'points')
 
 
 class BeaconActionSerializer(serializers.ModelSerializer):
@@ -315,6 +304,43 @@ class AwardSerializerGet(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance = super(AwardSerializerGet, self).update(instance, validated_data)
+        award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+        if 'favorite' in self.initial_data:
+            award_favourite.favorite = self.initial_data.get('favorite')
+
+        if 'bought' in self.initial_data:
+            award_favourite.bought = self.initial_data.get('bought')
+
+        award_favourite.save()
+        return instance
+
+
+class UserAwardDetail(serializers.ModelSerializer):
+    class Meta:
+        model = Award
+        fields = ('id',)
+
+    def favourite_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.favorite
+        except Http404:
+            return False
+
+    def bought_method(self, obj):
+        try:
+            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+            return user_award.bought
+        except Http404:
+            return False
+
+    def to_representation(self, value):
+        representation = {}
+        representation['favorite'] = self.favourite_method(value)
+        representation['bought'] = self.bought_method(value)
+        return representation
+
+    def update(self, instance, validated_data):
         award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
         if 'favorite' in self.initial_data:
             award_favourite.favorite = self.initial_data.get('favorite')
