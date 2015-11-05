@@ -27,8 +27,11 @@
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:50%">
 	<div style="text-align:center;">
-		<!-- <img src="/static/templates/Panel/Campaign/Awards/Award/imageholder.jpg" alt="Imageholder"/> -->
-		<img ng-src="{{awardCtrl.award.image}}" alt="No image"/>
+		<div style="text-align:center;">
+		<img ng-src="{{awardCtrl.award.image}}" alt="No image" style="width:100%"/>
+		<br><br>
+		<button class="btn btn-info" type="file" ngf-select="awardCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD IMAGE</button>
+	</div>
 	</div>
 </div>
 
