@@ -253,6 +253,15 @@ class CampaignRetrieveView(ModelViewSet):
     def get_queryset(self):
         return self.request.user.campaigns.all()
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        user_campaign, created = UserCampaign.objects.get_or_create(campaign=instance, user=request.user)
+        data = serializer.data
+        data['user_points'] = user_campaign.user_points
+        return Response(data)
+
 
 class CampaignBeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
