@@ -163,12 +163,13 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
                 data: {image: file}
             });
             file.upload.then(function (response) {
+            	this.shop.image = angular.copy(response.data.image);
             	appInfo.showSuccess();
                 // $timeout(function () {                	
                 //     appInfo.showFail(response.data);
                 // });
-            }, function (response) {
-                if (response.status > 0)
+            }.bind(this), function (response) {
+            	if (response.status > 0)
                 	appInfo.showFail(response.status + ': ' + response.data);
             }, function (evt) {                
             });
