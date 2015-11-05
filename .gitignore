@@ -8,3 +8,4 @@ local_settings.py
 heroku_settings.py
 images/
 staticfiles
+static/media
