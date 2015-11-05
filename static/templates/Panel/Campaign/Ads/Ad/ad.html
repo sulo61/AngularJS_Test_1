@@ -1,7 +1,7 @@
 {%verbatim%} 
 <!-- TOP -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showCampaignAds(adCtrl.campaignNAME, adCtrl.campaignID)">CLOSE EDIT</button>
+	<a href={{"#/campaigns/"+adCtrl.campaignID+"/ads"}} class="btn btn-primary" role="button">CLOSE EDIT</a>	
 	<button class="btn btn-danger" ng-click="adCtrl.dismiss()">DISMISS</button>
 	<button class="btn btn-success" ng-click="adCtrl.save()">SAVE</button>
 	<hr><br><br>

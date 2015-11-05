@@ -15,7 +15,7 @@
 				<td>{{shop.name}}</td>
 				<td>{{shop.address}}</td>
 				<td>
-					<button type="button" class="btn btn-info btn-sm" ng-click="pc.showShop(shop.name, shop.id)">EDIT</button>
+					<a href={{"#/shops/"+shop.id}} class="btn btn-info btn-sm" role="button">EDIT</a>
 					<button type="button" class="btn btn-danger btn-sm" ng-click="dsc.deleteShop(shop.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
@@ -34,7 +34,7 @@
 	    
 	  </ul>
 	</nav>
-	<button style="float:right;" class="btn btn-success" ng-click="pc.showShop('', 0)">ADD SHOP</button>
+	<a href="#/shops/0" style="float:right;" class="btn btn-success" role="button">ADD SHOP</a>
 
 </div>
 {%endverbatim%}

@@ -3,7 +3,6 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 	this.appInfo = appInfo;
 	// campaign params
 	this.id = $routeParams.id;
-	this.name = $routeParams.name;
 	// models
 	this.adsList = [];
 	this.adsPages = [];	// numbers

@@ -1,9 +1,9 @@
 angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+	debugger
 	// api info
 	this.appInfo = appInfo;
 	// campaign params
 	this.id = $routeParams.id;
-	this.name = $routeParams.name;
 	// models
 	this.awardsList = [];
 	this.awardsPages = [];	// numbers
@@ -29,6 +29,7 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 	};
 	// api
 	this.getAwards = function(page){
+		debugger
 		$http({
 			method: 'GET',
 			url: '/api/campaigns/'+this.id+'/awards',

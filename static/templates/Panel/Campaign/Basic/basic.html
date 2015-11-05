@@ -1,7 +1,8 @@
+
 <!-- TOP -->
 <!-- <div ng-include src="'campaign/header'"></div>	 -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showCampaigns()">CLOSE EDIT</button>
+	<a href="#/campaigns"class="btn btn-primary" role="button">CLOSE EDIT</a>
 	<button class="btn btn-danger" ng-click="bc.dismiss()">DISMISS</button>
 	<button class="btn btn-success" ng-click="bc.save()">SAVE</button>
 	<hr><br><br>
@@ -10,14 +11,16 @@
 <!-- LEFT -->
 <!-- <div ng-include src="'campaign/menu'"></div> -->
 <div class="leftColumn"  style="width:25%">
-	<button class="btn btn-primary" style="width:100%" ng-click="pc.showCampaignBasic(bc.name, bc.id)">Basic informations</button>
+	{%verbatim%}
+	<a href={{"#/campaigns/"+bc.id+"/basic/"}} class="btn btn-primary" style="width:100%" role="button">Basic informations</a>
 	<br><br>
-	<button class="btn btn-default" ng-show="bc.id>0" style="width:100%" ng-click="pc.showCampaignAds(bc.name, bc.id)">Advertisements</button>
+	<a href={{"#/campaigns/"+bc.id+"/ads/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Advertisements</a>
 	<br><br>
-	<button class="btn btn-default" ng-show="bc.id>0" style="width:100%" ng-click="pc.showCampaignActions(bc.name, bc.id)">Actions</button>
+	<a href={{"#/campaigns/"+bc.id+"/actions/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Actions</a>
 	<br><br>
-	<button class="btn btn-default" ng-show="bc.id>0" style="width:100%" ng-click="pc.showCampaignAwards(bc.name, bc.id)">Awards</button>
+	<a href={{"#/campaigns/"+bc.id+"/awards/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Awards</a>
 	<br><br>
+	{%endverbatim%}
 </div>
 
 <!-- RIGHT -->
@@ -37,5 +40,5 @@
 		<label>Active:</label>
 		<input type="checkbox" ng-model="bc.basic.is_active" >
 	</form>
-</div>
+	</div>
 </div>

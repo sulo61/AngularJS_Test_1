@@ -125,7 +125,7 @@ def campaignAd(request):
 @api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/panel/')
+        return redirect('/panel/#/beacons')
     else:
         return render(request, 'Auth/auth.html', {})
 
