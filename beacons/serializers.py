@@ -242,7 +242,7 @@ class CampaignAddActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActionBeacon
-        fields = ('id', 'beacon', 'ad', 'points')
+        fields = ('id', 'beacon', 'ad', 'points', 'time_limit')
 
 
 class BeaconActionSerializer(serializers.ModelSerializer):
@@ -254,7 +254,7 @@ class BeaconActionSerializer(serializers.ModelSerializer):
 class ActionSerializer(ModelSerializer):
     class Meta:
         model = ActionBeacon
-        fields = ('id', 'beacon', 'ad', 'points')
+        fields = ('id', 'beacon', 'ad', 'points', 'time_limit')
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):

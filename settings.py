@@ -131,6 +131,13 @@ REST_FRAMEWORK = {
     )
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'main_cache_table',
+    }
+}
+
 #
 # # Simplified static file serving.
 # # https://warehouse.python.org/project/whitenoise/

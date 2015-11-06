@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.shortcuts import render, redirect
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BaseAuthentication
 from rest_framework.authtoken import views
@@ -393,15 +394,19 @@ class BeaconCampaignActionView(ModelViewSet):
          """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-
+        data = serializer.data
+        messages = []
         user_campaign, created = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
-        # TODO: add time restriction for add points
         for action in instance.actions.all():
-            user_campaign.user_points += action.points
+            limit_key = 'user_action_points_time_limit_user_id_{0}_action_id_{1}'
+            if not cache.get(limit_key.format(request.user.pk, action.pk)):
+                user_campaign.user_points += action.points
+                messages.append('You gathered {0} POINTS'.format(action.points))
+                cache.set(limit_key.format(request.user.pk, action.pk), True, action.time_limit)
 
         user_campaign.save()
-        data = serializer.data
         data['user_points'] = user_campaign.user_points
+        data['messages'] = messages
         return Response(data)
 
 
@@ -540,9 +545,6 @@ class ActionView(ModelViewSet):
         serializer = self.get_serializer(instance)
 
         user_campaign, created = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
-        # TODO: add time restriction for add points
-        user_campaign.user_points += instance.points
-        user_campaign.save()
         data = serializer.data
         data['user_points'] = user_campaign.user_points
         return Response(data)

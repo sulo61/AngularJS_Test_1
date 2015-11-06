@@ -178,6 +178,7 @@ class ActionBeacon(models.Model):
     beacon = models.ForeignKey('Beacon', blank=True, null=True, related_name='actions')
     ad = models.ForeignKey('Ad', blank=True, null=True, related_name='actions')
     points = models.IntegerField(default=0)
+    time_limit = models.BigIntegerField(default=0)
 
     class Meta:
         unique_together = ('beacon', 'ad', 'campaign')
