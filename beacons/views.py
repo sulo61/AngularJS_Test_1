@@ -383,14 +383,34 @@ class BeaconCampaignActionView(ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         """
-         ---
-         parameters:
-             - name: minor
-               type: integer
-               paramType: query
-             - name: major
-               type: integer
-               paramType: query
+        ---
+        parameters:
+            - name: minor
+              type: integer
+              paramType: query
+            - name: major
+              type: integer
+              paramType: query
+
+        type:
+            id:
+                required: true
+                type: integer
+            user_points:
+                required: true
+                type: integer
+            title:
+                required: true
+                type: sting
+            minor:
+                required: true
+                type: integer
+            major:
+                required: true
+                type: integer
+            messages:
+                required: true
+                type: array(string)
          """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
@@ -460,27 +480,27 @@ class ShopView(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         '''
-         {
-          "name": "Zara",
-          "opening_hours": [
-            {
-              "days": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7
-              ],
-              "open_time": "10:00:00",
-              "close_time": "20:00:00"
-            }
-          ],
-          "address": "Krakusa 8",
-          "latitude": 15,
-          "longitude": 15
-         }
+        Create shops with opening hours.
+        \n\nissue:\n
+        days should be array of integers:
+            "days" : [1,2,3,4,5,6,7]
+
+         ---
+
+
+         omit_parameters:
+            - name
+            - opening_hours
+            - address
+         parameters:
+            -   name: body
+                pytype: ShopSerializer
+                paramType: body
+
+         response_serializer: beacons.serializers.ShopSerializer
+         omit_parameters:
+            - form
+
         '''
         return super(ShopView, self).create(request, *args, **kwargs)
 
