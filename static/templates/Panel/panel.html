@@ -37,6 +37,11 @@
 
 <body ng-app="panelApp" ng-controller="panelController as pc" >
 	<!-- HEADER -->
+	{%verbatim%}
+	<div style="float: right;">
+		{{pc.email}}
+	</div><br><br>
+	{%endverbatim%}
 	<button class="btn btn-warning" style="float: right;" ng-click="pc.logout()">LOGOUT</button>
 	<!-- {%verbatim%}
 	<h1>{{pc.appInfo.currentPath}}</h1>
