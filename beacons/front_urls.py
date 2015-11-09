@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^panel/$', views.panel, name="panel"),
 
     url(r'^shop/$', views.shop, name="shop"),
+    url(r'^beacon/$', views.beacon, name="beacon"),
     url(r'^campaign/$', views.campaign, name="campaign"),
     url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
     url(r'^campaign/ads/$', views.campaignAds, name="campaignAds"),
