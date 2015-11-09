@@ -1,8 +1,10 @@
+import datetime
 from django.contrib.postgres.fields import ArrayField
 
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.utils import timezone
 
 
 class BeaconUserUserManager(BaseUserManager):
@@ -78,6 +80,9 @@ class Campaign(models.Model, TimestampMixin):
 
     def __str__(self):
         return self.name
+
+    def is_active_campaign(self):
+        return self.is_active and self.start_date < timezone.now() < self.end_date
 
 
 class Beacon(models.Model):

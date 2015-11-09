@@ -1,4 +1,5 @@
 import json
+from beacons.utils import get_api_key, get_user_from_api_key
 
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission
@@ -9,7 +10,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner, IsOperator
+from beacons.permissions import IsCampaignOwner, IsAdOwner, IsActionOwner, IsOperator, SdkPermission
 from rest_framework import status
 from rest_framework.decorators import detail_route, api_view, authentication_classes
 from rest_framework.generics import get_object_or_404
@@ -168,6 +169,7 @@ def get_user(request, format=None):
         'first_name': user.first_name,
         'email': user.email,
         'address': user.address,
+        'api_key': get_api_key(user)
     }
     return Response(map)
 
@@ -346,8 +348,7 @@ def create_beacons(request, pk, format=None):
 
 class BeaconCampaignActionView(ModelViewSet):
     serializer_class = BeaconSerializer
-    # TODO: perrmission is operator and owner of campaign
-    permission_classes = (IsAuthenticated, IsOperator)
+    permission_classes = (IsAuthenticated, SdkPermission)
 
     def get_campaign(self):
         obj = get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -761,3 +762,30 @@ class AwardUserDetailsView(ModelViewSet):
 
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('award_pk'))
+
+
+class CampaignActive(APIView):
+    permission_classes = (IsAuthenticated, SdkPermission)
+
+    def get(self, request, format=None):
+        '''
+        ---
+        parameters:
+            - name: api_key
+              description: mobile_api_key
+              required: true
+              type: string
+              paramType: header
+        '''
+        api_key = request.META['HTTP_API_KEY']
+        user = get_user_from_api_key(api_key)
+        campaigns = user.campaigns.all()
+        for campaign in campaigns:
+            if campaign.is_active_campaign():
+                serializer = CampaignSerializer(instance=campaign)
+                user_campaign, created = UserCampaign.objects.get_or_create(campaign=campaign, user=request.user)
+                data = serializer.data
+                data['user_points'] = user_campaign.user_points
+                return Response(data=data, status=status.HTTP_200_OK)
+
+        return Response(data=[], status=status.HTTP_200_OK)

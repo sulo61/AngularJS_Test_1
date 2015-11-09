@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'storages',
     'beacons',
+    'itsdangerous',
 )
 
 MIDDLEWARE_CLASSES = (
