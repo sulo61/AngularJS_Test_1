@@ -1,0 +1,62 @@
+{%verbatim%}
+<!-- TOP -->
+<!-- <div ng-include src="'campaign/header'"></div>	 -->
+<div style="text-align:right;">
+	<a href="#/campaigns"class="btn btn-primary" role="button">CLOSE EDIT</a>
+	<hr><br><br>
+</div>
+
+<!-- LEFT -->
+<!-- <div ng-include src="'campaign/menu'"></div> -->
+<div class="leftColumn"  style="width:25%">	
+	<a href={{"#/campaigns/"+beaconsCtrl.id+"/basic/"}} class="btn btn-default" style="width:100%" role="button">Basic informations</a>
+	<br><br>
+	<a href={{"#/campaigns/"+beaconsCtrl.id+"/ads/"}} ng-show="beaconsCtrl.id>0" class="btn btn-default" style="width:100%" role="button">Advertisements</a>
+	<br><br>
+	<a href={{"#/campaigns/"+beaconsCtrl.id+"/actions/"}} ng-show="beaconsCtrl.id>0" class="btn btn-default" style="width:100%" role="button">Actions</a>
+	<br><br>
+	<a href={{"#/campaigns/"+beaconsCtrl.id+"/awards/"}} ng-show="beaconsCtrl.id>0" class="btn btn-default" style="width:100%" role="button">Awards</a>
+	<br><br>
+	<a href={{"#/campaigns/"+beaconsCtrl.id+"/beacons/"}} ng-show="beaconsCtrl.id>0" class="btn btn-primary" style="width:100%" role="button">Beacons</a>
+	<br><br>	
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+	<!-- BASIC -->
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="10%">#</th>
+				<th width="20%">Title</th>
+				<th width="20%">Minor</th>
+				<th width="30%">Major</th>
+				<th width="20%">Used<th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="beacon in beaconsCtrl.beaconsList">
+				<th scope="row">{{  $index + (beaconsCtrl.beaconsCurrentPage * 5) - 4 }}</th>
+				<td>{{beacon.title}}</td>
+				<td>{{beacon.minor}}</td>
+				<td>{{beacon.major}}</td>
+				<td><input type="checkbox" id={{"beacon"+beacon.id}} ></td>
+			</tr>		
+		</tbody>
+	</table>
+
+	<br><br>
+
+	<nav>
+	  <ul class="pagination" ng-show="beaconsCtrl.beaconsPages.length>0">
+	  	<li ng-click="beaconsCtrl.beaconsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+	  	<li ng-repeat="number in beaconsCtrl.beaconsPages" class="{{beaconsCtrl.beaconsNavActive(number)}}" id="beaconsCtrl.beaconsNav{{number}}" ng-click="beaconsCtrl.getBeacons(number)">
+	  		<a>{{number}}</a>
+	  	</li>
+	  	<li ng-click="beaconsCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+	    
+	  </ul>
+	</nav>
+</div>
+
+{%endverbatim%}
