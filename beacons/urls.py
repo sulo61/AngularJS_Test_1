@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/beacons/$', views.CampaignBeaconView.as_view({'get': 'list'}),
         name="campaign-beacon"),
     url(r'campaigns/(?P<pk>[0-9]+)/create_beacons/$', views.create_beacons, name="campaign-beacon"),
+    url(r'campaigns/(?P<pk>[0-9]+)/beacons/import/$', views.CampaignCopyBeacons.as_view(), name="campaign-beacon"),
     url(r'campaigns/(?P<pk>[0-9]+)/beacons/(?P<beacon_id>[0-9]+)/$',
         views.BeaconCampaignView.as_view(retrieve),
         name="beacon"),

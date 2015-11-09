@@ -82,6 +82,7 @@ def shop(request):
 def beacon(request):
     return render(request, 'Panel/Beacon/beacon.html', {})
 
+
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignMenu(request):
@@ -122,6 +123,7 @@ def campaignAwards(request):
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignBeacons(request):
     return render(request, 'Panel/Campaign/Beacons/beacons.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
@@ -283,6 +285,7 @@ class CampaignRetrieveView(ModelViewSet):
 class CampaignBeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
     permission_classes = (IsAuthenticated, IsCampaignOwner, IsOperator)
+    pagination_class = None
 
     def get_campaign(self):
         campaign = get_object_or_404(Campaign, pk=self.kwargs['pk'])
@@ -797,3 +800,18 @@ class CampaignActive(APIView):
                 return Response(data=data, status=status.HTTP_200_OK)
 
         return Response(data=[], status=status.HTTP_200_OK)
+
+
+class CampaignCopyBeacons(APIView):
+    def post(self, request, pk, format=None):
+        campaign = get_object_or_404(request.user.campaigns.all(), pk=pk)
+        if len(campaign.beacons.all()) == 0:
+            for beacon in request.user.beacons.all():
+                Beacon.objects.create(minor=beacon.minor,
+                                      major=beacon.major,
+                                      title=beacon.title,
+                                      campaign=campaign)
+
+            serializer = BeaconSerializer(instance=campaign.beacons.all(), many=True)
+            return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'non_field_error': ['campaign has beacons already']})
