@@ -24,8 +24,8 @@ get_retrieve = {
 urlpatterns = [
 
     url(r'^operator/register/$', views.CreateViewOperator.as_view({'post': 'create'}), name='register_operator'),
-    url(r'^login/token/&', ObtainToken.as_view(), name="login"),
-    url(r'^login/&', views.login_view, name="login"),
+    url(r'^login/token/', ObtainToken.as_view(), name="login"),
+    url(r'^login/', views.login_view, name="login"),
     url(r'^logout/&', LogoutView.as_view(), name="login"),
     url(r'^register/$', CreateViewUser.as_view({'post': 'create'}), name='register'),
 

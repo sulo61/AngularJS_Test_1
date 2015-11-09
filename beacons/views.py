@@ -237,8 +237,6 @@ class ObtainToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        authenticate(email=user.email, password=user.password)
-        login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
 
@@ -528,7 +526,7 @@ class CampaignAdView(ModelViewSet):
         return super(CampaignAdView, self).get_permissions()
 
     def get_object(self):
-        return get_object_or_404(self.get_campaign().ads.all(), pk=self.kwargs.get('ad_pk'))
+        return get_object_or_404(Ad, pk=self.kwargs.get('ad_pk'))
 
     def get_campaign(self):
         return get_object_or_404(Campaign, pk=self.kwargs.get('pk'))
@@ -776,7 +774,7 @@ class CampaignActive(APIView):
         '''
         ---
         parameters:
-            - name: api_key
+            - name: Api-Key
               description: mobile_api_key
               required: true
               type: string

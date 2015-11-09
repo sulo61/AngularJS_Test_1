@@ -133,11 +133,6 @@ class CampaignSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def update(self, instance, validated_data):
-        instance = super(CampaignSerializer, self).update(instance,validated_data)
-
-
-
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
