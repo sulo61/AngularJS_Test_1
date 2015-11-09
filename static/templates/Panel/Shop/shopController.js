@@ -127,7 +127,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 				this.shop.latitude = response.data.results[0].geometry.location.lat;
 				this.shop.longitude = response.data.results[0].geometry.location.lng;
 			}
-			if (this.id<0){
+			if (this.id>0){
 				this.patchShop();
 			} else {
 				this.postShop();

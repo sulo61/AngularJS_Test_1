@@ -78,6 +78,11 @@ def shop(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
+def beacon(request):
+    return render(request, 'Panel/Beacon/beacon.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignMenu(request):
     return render(request, 'Panel/Campaign/Menu/menu.html', {})
 

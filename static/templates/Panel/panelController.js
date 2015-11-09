@@ -8,8 +8,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     	$routeProvider
     		.when("/beacons", {
 					templateUrl: "/dash/beacons",
-				    controller: "panelController",
-				    controllerAs: 'pc'
+				    controller: "dashBeaconsController",
+				    controllerAs: 'beaconsCtrl'
     		})
     		.when("/profile", {
     				templateUrl: "/dash/profile",
@@ -30,6 +30,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     				templateUrl: "/shop",
 				    controller: "shopController",
 				    controllerAs: 'sc'	
+    		})
+    		.when("/beacons/:id?", {
+    				templateUrl: "/beacon",
+				    controller: "beaconController",
+				    controllerAs: 'beaconCtrl'	
     		})
     		.when("/campaigns/:id?/basic/", {
     				templateUrl: "/campaign/basic",
