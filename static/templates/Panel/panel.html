@@ -26,6 +26,7 @@
 	<script src={% static "templates/Panel/Shop/shopController.js" %}></script>
 	<script src={% static "templates/Panel/Beacon/beaconController.js" %}></script>
 	<script src={% static "templates/Panel/Campaign/Basic/basicController.js" %}></script>
+	<script src={% static "templates/Panel/Campaign/Beacons/beaconsController.js" %}></script>
 	<script src={% static "templates/Panel/Campaign/Ads/adsController.js" %}></script>
 	<script src={% static "templates/Panel/Campaign/Ads/Ad/adController.js" %}></script>
 	<script src={% static "templates/Panel/Campaign/Actions/actionsController.js" %}></script>
@@ -36,6 +37,11 @@
 
 <body ng-app="panelApp" ng-controller="panelController as pc" >
 	<!-- HEADER -->
+	{%verbatim%}
+	<div style="float: right;">
+		{{pc.email}}
+	</div><br><br>
+	{%endverbatim%}
 	<button class="btn btn-warning" style="float: right;" ng-click="pc.logout()">LOGOUT</button>
 	<!-- {%verbatim%}
 	<h1>{{pc.appInfo.currentPath}}</h1>

@@ -120,6 +120,11 @@ def campaignAwards(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignBeacons(request):
+    return render(request, 'Panel/Campaign/Beacons/beacons.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAward(request):
     return render(request, 'Panel/Campaign/Awards/Award/award.html', {})
 

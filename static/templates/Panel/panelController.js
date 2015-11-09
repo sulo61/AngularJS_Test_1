@@ -56,6 +56,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				    controller: "awardsController",
 				    controllerAs: 'awc'	
     		})
+    		.when("/campaigns/:id?/beacons/", {
+    				templateUrl: "/campaign/beacons",
+				    controller: "beaconsController",
+				    controllerAs: 'beaconsCtrl'	
+    		})
     		.when("/campaigns/:campaignID?/awards/:awardID?", {
     				templateUrl: "/campaign/award",
 				    controller: "awardController",
@@ -136,5 +141,21 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				appInfo.showFail(response);
 			}.bind(this));	
 		};
-		
+
+		this.email = "";	
+
+
+		// get user
+		this.getUser = function(){
+			$http({
+				method: 'GET',
+				url: '/api/user/'
+			}).then(function successCallback(response){
+				this.email = response.data.email;
+			}.bind(this), function errorCallback(response){
+			});
+		};
+
+		this.getUser();
+
     })
