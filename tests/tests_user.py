@@ -33,7 +33,7 @@ def create_campaign(self):
         u'is_active': False,
     }
     response = client.post('/api/campaigns/', data)
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     campaign = json.loads(response.content)
     id = campaign.get('id')
     data['id'] = id

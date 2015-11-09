@@ -54,6 +54,11 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/beacons/(?P<beacon_id>[0-9]+)/$',
         views.BeaconCampaignView.as_view(retrieve),
         name="beacon"),
+
+    url(r'campaigns/(?P<pk>[0-9]+)/action/$',
+        views.BeaconCampaignActionView.as_view(retrieve),
+        name="beacon"),
+
     url(r'campaigns/$', views.CampaignView.as_view(methods), name="campaigns"),
 
     url(r'shops/$', views.ShopView.as_view(methods), name="shops"),

@@ -150,6 +150,14 @@ class TestCampaign(TestCase):
         response = client.post('/api/campaigns/', data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_create_campaign_no_data(self):
+
+        data = {
+        }
+
+        response = self.client.post('/api/campaigns/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 def create_campaign(self, client):
     data = {
@@ -159,7 +167,7 @@ def create_campaign(self, client):
         u'is_active': False,
     }
     response = client.post('/api/campaigns/', data)
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     campaign = json.loads(response.content)
     id = campaign.get('id')
     data['id'] = id

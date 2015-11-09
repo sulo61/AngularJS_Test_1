@@ -122,17 +122,16 @@ class CampaignSerializer(serializers.ModelSerializer):
         model = Campaign
         fields = ('id', 'name', 'start_date', 'end_date', 'is_active')
 
-    def is_valid(self, raise_exception=False):
-        valid = super(CampaignSerializer, self).is_valid(raise_exception)
-        start_date = self.validated_data['start_date']
-        end_date = self.validated_data['end_date']
+    def validate(self, attrs):
+        start_date = attrs['start_date']
+        end_date = attrs['end_date']
         if end_date < start_date:
-            if raise_exception:
-                raise ValidationError({'start_date': ['This field should be less then end_date']})
-            else:
-                valid = False
+            raise ValidationError({
+                'start_date': ['This field should be before end_date'],
+                'end_date': ['This field should be after start_date']
+            })
 
-        return valid
+        return attrs
 
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
@@ -243,7 +242,7 @@ class CampaignAddActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActionBeacon
-        fields = ('id', 'beacon', 'ad', 'points')
+        fields = ('id', 'beacon', 'ad', 'points', 'time_limit')
 
 
 class BeaconActionSerializer(serializers.ModelSerializer):
@@ -255,7 +254,7 @@ class BeaconActionSerializer(serializers.ModelSerializer):
 class ActionSerializer(ModelSerializer):
     class Meta:
         model = ActionBeacon
-        fields = ('id', 'beacon', 'ad')
+        fields = ('id', 'beacon', 'ad', 'points', 'time_limit')
 
 
 class PromotionSerializerGet(serializers.ModelSerializer):
