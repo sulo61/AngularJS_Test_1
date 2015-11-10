@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="campaign in dcc.campaignsList">
-				<th scope="row">{{campaign.id}}</th>
+				<th scope="row">{{  $index + (dcc.campaignsCurrentPage * 5) - 4 }}</th>
 				<td>{{campaign.name}}</td>
 				<td>{{campaign.start_date}} - {{campaign.end_date}} </td>
 				<td>
