@@ -1,5 +1,12 @@
 angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
-	debugger
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// campaign params
@@ -29,7 +36,11 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 	};
 	// api
 	this.getAwards = function(page){
-		debugger
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'GET',
 			url: '/api/campaigns/'+this.id+'/awards',
@@ -43,11 +54,18 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 		    	this.awardsPages.push(i+1);
 		    }
 		    this.awardsCurrentPage = page;
+		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	};
 	this.deleteAward = function(awardID, index){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'DELETE',
 			url: '/api/campaigns/'+this.id+'/awards/'+awardID
@@ -58,8 +76,10 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 				this.awardsCurrentPage = this.awardsCurrentPage - 1;
 			}
 			this.getAwards(this.awardsCurrentPage);
+			this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	}
 

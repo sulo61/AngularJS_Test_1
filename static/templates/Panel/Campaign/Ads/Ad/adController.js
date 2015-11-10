@@ -1,4 +1,12 @@
 angular.module('panelApp').controller('adController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', function($scope, $http, $routeParams, Upload, appInfo){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// award params
@@ -29,19 +37,31 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 	// get ad
 	this.getAd = function(){
 		if (this.adID>0){
+			if (this.isLock){
+				return;
+			} else {
+				this.lock();
+			}
 			$http({
 				method: 'GET',
 				url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID
 			}).then(function successCallback(response){
 				this.ad = response.data;
 				this.makeCopy();
+				this.unlock();
 			}.bind(this), function errorCallback(response){
 				appInfo.showFail(response);
+				this.unlock();
 			}.bind(this));	
 		}
 	}
 	// patch ad
-	this.patchAd = function(){		
+	this.patchAd = function(){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}		
 		$http({
 			method: 'PATCH',
 			url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID,
@@ -49,13 +69,20 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 		}).then(function successCallback(response){
 			this.makeCopy();
 			appInfo.showSuccess();
+			this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		}.bind(this));			
 				
 	}
 	// post ad
 	this.postAd = function(){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'POST',
 			url: '/api/campaigns/'+this.campaignID+'/ads/',
@@ -63,9 +90,11 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 		}).then(function successCallback(response){
 			this.ad = response.data;
 			this.makeCopy();			
-			appInfo.showSuccess();			
+			appInfo.showSuccess();
+			this.unlock();			
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		}.bind(this));			
 	}
 	// upload photo	

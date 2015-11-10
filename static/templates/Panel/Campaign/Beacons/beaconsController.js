@@ -1,4 +1,12 @@
 angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// models
@@ -29,6 +37,11 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 	};
 	// api
 	this.getBeacons = function(page){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'GET',
 			url: '/api/beacons/',
@@ -42,11 +55,18 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 		    	this.beaconsPages.push(i+1);
 		    }
 		    this.beaconsCurrentPage = page;
+		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	};	
 	this.getCampaignBeacons = function(){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'GET',
 			url: '/api/campaigns/'+this.id+"/beacons",
@@ -60,8 +80,10 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 		    	this.beaconsPages.push(i+1);
 		    }
 		    this.beaconsCurrentPage = page;
+		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	}
 

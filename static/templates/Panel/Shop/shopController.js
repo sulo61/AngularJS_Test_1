@@ -1,4 +1,12 @@
 angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'appInfo', function($scope, $http, $routeParams, $timeout, Upload, appInfo){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// shop id
@@ -72,6 +80,11 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	// get shop
 	this.getShop = function(){
 		if (this.id>0){
+			if (this.isLock){
+				return;
+			} else {
+				this.lock();
+			}
 			$http({
 				method: 'GET',
 				url: '/api/shops/'+this.id+"/"
@@ -79,13 +92,20 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 				this.shop = response.data;
 				this.updateMap();
 				this.makeCopy();
+				this.unlock();
 			}.bind(this), function errorCallback(response){
 				appInfo.showFail(response);
+				this.unlock();
 			}.bind(this));	
 		}
 	}
 	// patch shop
 	this.patchShop = function(){		
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'PATCH',
 			url: '/api/shops/'+this.id+"/",
@@ -95,13 +115,20 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
 			this.makeCopy();
 			this.updateMap();
+			this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		}.bind(this));			
 				
 	}
 	// post shop
 	this.postShop = function(){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'POST',
 			url: '/api/shops/',
@@ -112,8 +139,10 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			this.shop = response.data;
 			this.makeCopy();
 			this.updateMap();
+			this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		}.bind(this));			
 	}
 	// get lat long

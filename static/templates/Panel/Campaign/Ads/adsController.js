@@ -1,4 +1,12 @@
 angular.module('panelApp').controller('adsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// campaign params
@@ -28,6 +36,11 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 	};
 	// api
 	this.getAds = function(page){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'GET',
 			url: '/api/campaigns/'+this.id+'/ads',
@@ -41,11 +54,18 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 		    	this.adsPages.push(i+1);
 		    }
 		    this.adsCurrentPage = page;
+		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	};
 	this.deleteAd = function(adID, index){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'DELETE',
 			url: '/api/campaigns/'+this.id+'/ads/'+adID
@@ -56,8 +76,10 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 				this.adsCurrentPage = this.adsCurrentPage - 1;
 			}
 			this.getAds(this.adsCurrentPage);
+			this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	}
 

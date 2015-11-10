@@ -130,14 +130,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	})
     .controller("panelController", function($scope, $window, $http, $location, appInfo){
 		this.appInfo = appInfo;		
-	
+		this.lock = false;
+
 		this.logout = function(){
+			if (this.lock){
+				return;
+			} else {
+				this.lock = true;
+			}
 			$http({
 				method: 'POST',
 				url: '/logout/'
 			}).then(function successCallback(response){
+				this.lock = false;
 				$window.location.href = "/";
 			}, function errorCallback(response){
+				this.lock = false;
 				appInfo.showFail(response);
 			}.bind(this));	
 		};
