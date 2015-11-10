@@ -57,7 +57,7 @@
 	  </ul>
 	</nav>
 	<div style="float:right;">
-		<input type="number" class="form-control" placeholder="0" ng-model="beaconsCtrl.numberOfNewBeacons" style="width:100px; float: left; margin-right:10px;">
+		<input type="number" class="form-control" min="0" max="20" placeholder="0" ng-model="beaconsCtrl.numberOfNewBeacons" style="width:100px; float: left; margin-right:10px;">
 		<button style="display: inline-block;" type="button" class="btn btn-success" ng-click="beaconsCtrl.generateBeacons()">GENERATE BEACONS</button>		
 	</div>
 	
