@@ -28,19 +28,19 @@
 		<thead>
 			<tr>
 				<th width="10%">#</th>
-				<th width="20%">Title</th>
 				<th width="20%">Minor</th>
 				<th width="30%">Major</th>
-				<th width="20%">Used<th>
+				<th width="20%">Enabled</th>
+				<th width="20%">Options</th>	
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="beacon in beaconsCtrl.beaconsList">
 				<th scope="row">{{  $index + (beaconsCtrl.beaconsCurrentPage * 5) - 4 }}</th>
-				<td>{{beacon.title}}</td>
 				<td>{{beacon.minor}}</td>
 				<td>{{beacon.major}}</td>
 				<td><input type="checkbox" id={{"beacon"+beacon.id}} ></td>
+				<td><button type="button" class="btn btn-danger btn-sm" ng-click="beaconsCtrl.deleteBeacon(beacon.id, $index)">REMOVE</button></td>
 			</tr>		
 		</tbody>
 	</table>
@@ -53,10 +53,15 @@
 	  	<li ng-repeat="number in beaconsCtrl.beaconsPages" class="{{beaconsCtrl.beaconsNavActive(number)}}" id="beaconsCtrl.beaconsNav{{number}}" ng-click="beaconsCtrl.getBeacons(number)">
 	  		<a>{{number}}</a>
 	  	</li>
-	  	<li ng-click="beaconsCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-	    
+	  	<li ng-click="beaconsCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>	    
 	  </ul>
 	</nav>
+	<div style="float:right;">
+		<input type="number" class="form-control" placeholder="0" ng-model="beaconsCtrl.numberOfNewBeacons" style="width:100px; float: left; margin-right:10px;">
+		<button style="display: inline-block;" type="button" class="btn btn-success" ng-click="beaconsCtrl.generateBeacons()">GENERATE BEACONS</button>		
+	</div>
+	
+
 </div>
 
 {%endverbatim%}

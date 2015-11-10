@@ -15,6 +15,7 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 	this.beaconsCurrentPage = 1;
 	this.numberOfItems = 0;
 	this.campaignBeacons = [];
+	this.numberOfNewBeacons = 0;	
 	// campaign params
 	this.id = $routeParams.id;
 	// nav
@@ -35,32 +36,7 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 			this.getbeacons(this.beaconsCurrentPage-1);	
 		}
 	};
-	// api
-	this.getBeacons = function(page){
-		if (this.isLock){
-			return;
-		} else {
-			this.lock();
-		}
-		$http({
-			method: 'GET',
-			url: '/api/beacons/',
-			params: {"page" : page}
-		}).then(function successCallback(response){
-			this.beaconsList = [];
-			this.beaconsPages = [];
-			this.beaconsList = response.data.results;
-			this.numberOfItems = response.data.count;
-			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.beaconsPages.push(i+1);
-		    }
-		    this.beaconsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
-			this.unlock();
-		});	
-	};	
+	// api	
 	this.getCampaignBeacons = function(){
 		if (this.isLock){
 			return;
@@ -69,24 +45,54 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 		}
 		$http({
 			method: 'GET',
-			url: '/api/campaigns/'+this.id+"/beacons",
-			params: {"page" : page}
+			url: '/api/campaigns/'+this.id+"/beacons/"
 		}).then(function successCallback(response){
 			this.beaconsList = [];
-			this.beaconsPages = [];
-			this.beaconsList = response.data.results;
-			this.numberOfItems = response.data.count;
-			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.beaconsPages.push(i+1);
-		    }
-		    this.beaconsCurrentPage = page;
+			this.beaconsList = response.data;			
 		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 			this.unlock();
 		});	
 	}
+	this.deleteBeacon = function(beaconID, index){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
+		$http({
+			method: 'DELETE',
+			url: '/api/campaigns/'+this.id+'/beacons/'+beaconID
+		}).then(function successCallback(response){
+			appInfo.showSuccess();
+			this.unlock();
+			this.getCampaignBeacons();
+		}.bind(this), function errorCallback(response){
+			appInfo.showFail(response);
+			this.unlock();
+		});	
+	}
+	this.generateBeacons = function(){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
+		$http({
+			method: 'POST',
+			url: '/api/campaigns/'+this.id+'/create_beacons/',
+			data: {pk:this.id, count:this.numberOfNewBeacons}
+		}).then(function successCallback(response){
+			appInfo.showSuccess();
+			this.unlock();
+			this.getCampaignBeacons();
+		}.bind(this), function errorCallback(response){
+			appInfo.showFail(response);
+			this.unlock();
+		});
+	}
 
-	this.getBeacons(1)
+	this.getCampaignBeacons()
 
 }]);
