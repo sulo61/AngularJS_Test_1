@@ -75,8 +75,8 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 			if ( (this.numberOfItems <= (this.awardsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
 				this.awardsCurrentPage = this.awardsCurrentPage - 1;
 			}
-			this.getAwards(this.awardsCurrentPage);
 			this.unlock();
+			this.getAwards(this.awardsCurrentPage);			
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 			this.unlock();

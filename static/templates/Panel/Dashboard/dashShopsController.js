@@ -73,8 +73,8 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			if ( (this.numberOfItems <= (this.shopsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.shopsCurrentPage = this.shopsCurrentPage - 1;
 			}
-			this.getShops(this.shopsCurrentPage);
 			this.unlock();
+			this.getShops(this.shopsCurrentPage);
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 			this.unlock();

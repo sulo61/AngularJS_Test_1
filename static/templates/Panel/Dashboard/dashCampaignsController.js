@@ -75,8 +75,8 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
 			}
-			this.getCampaigns(this.campaignsCurrentPage);
 			this.unlock();
+			this.getCampaigns(this.campaignsCurrentPage);			
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
 			this.unlock();

@@ -112,7 +112,6 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			data: this.shop
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
-			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
 			this.makeCopy();
 			this.updateMap();
 			this.unlock();
@@ -135,8 +134,9 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			data: this.shop
 		}).then(function successCallback(response){
 			appInfo.showSuccess();
-			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
 			this.shop = response.data;
+			debugger
+			this.id = this.shop.id;
 			this.makeCopy();
 			this.updateMap();
 			this.unlock();
