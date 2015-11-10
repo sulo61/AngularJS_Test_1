@@ -114,7 +114,7 @@ class CountSerializer(serializers.Serializer):
 class BeaconSerializer(serializers.ModelSerializer):
     class Meta:
         model = Beacon
-        fields = ('id', 'title', 'minor', 'major')
+        fields = ('id', 'title', 'minor', 'major', 'UUID')
 
 
 class CampaignSerializer(serializers.ModelSerializer):
