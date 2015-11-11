@@ -39,7 +39,7 @@
 			<tr ng-repeat="action in actionsCtrl.actionsList">
 				<th scope="row">{{  $index + (actionsCtrl.actionsCurrentPage * 5) - 4 }}</th>
 				<td>{{action.beacon}}</td>
-				<td>{{action.ad}}</td>
+				<td>{{action.ad.id}}</td>
 				<td>{{action.points}}</td>
 				<td>{{action.time_limit}}</td>
 				<td>
@@ -62,7 +62,7 @@
 	    
 	  </ul>
 	</nav>
-	<a href={{"#/campaigns/"+actionsCtrl.id+"/actions/0"}} style="float:right;" class="btn btn-success" role="button">ADD ACTION</a>
+	<a href={{"#/campaigns/"+actionsCtrl.campaignID+"/actions/0"}} style="float:right;" class="btn btn-success" role="button">ADD ACTION</a>
 	
 </div>
 {%endverbatim%}
