@@ -1,1 +1,46 @@
-action
+{%verbatim%} 
+<!-- TOP -->
+<div style="text-align:right;">
+	<a href={{"#/campaigns/"+actionCtrl.campaignID+"/actions"}} class="btn btn-primary" role="button">CLOSE EDIT</a>	
+	<button class="btn btn-danger" ng-click="actionCtrl.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="actionCtrl.save()">SAVE</button>
+	<hr><br><br>
+</div>
+
+
+<!-- LEFT -->
+<div class="leftColumn"  style="width:50%">
+	<label>Points: </label>
+	<input type="number" min="0" class="form-control" placeholder="Title" ng-model="actionCtrl.action.points">
+	<br>
+	<label>Time limit: </label>
+	<input type="text" class="form-control" placeholder="Description" ng-model="actionCtrl.action.time_limit">
+	<br>
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:50%">
+	<!-- BEACON -->
+	<div>
+		<label>Beacon: </label>
+		<input disabled ng-show="actionCtrl.action.beacon>0" acttype="text" class="form-control" placeholder="0" ng-model="actionCtrl.action.beacon">
+		<br>
+		<br>
+		<button style="float:right;" type="button" class="btn btn-warning">CHOOSE BEACON</button>
+		<br><br>
+	</div>
+
+	<hr><br>
+	<!-- AD -->
+	<div>
+		<label>Ad: </label>
+		<input disabled ng-show="actionCtrl.action.ad>0"  type="text" class="form-control" placeholder="0" ng-model="actionCtrl.action.ad">
+		<br>
+		<br>
+		<button style="float:right;" type="button" class="btn btn-warning">CHOOSE AD</button>
+		<br><br>
+	</div>
+</div>
+
+
+{%endverbatim%}

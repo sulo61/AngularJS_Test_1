@@ -71,6 +71,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				    controller: "adController",
 				    controllerAs: 'adCtrl'	
     		})
+    		.when("/campaigns/:campaignID?/actions/:actionID?", {
+    				templateUrl: "/campaign/action",
+				    controller: "actionController",
+				    controllerAs: 'actionCtrl'	
+    		})
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
         GoogleMapApiProviders.configure({

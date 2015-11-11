@@ -43,7 +43,7 @@
 				<td>{{action.points}}</td>
 				<td>{{action.time_limit}}</td>
 				<td>
-					<a href={{"#/campaigns/"+actionsCtrl.id+"/actions/"+action.id}} class="btn btn-info btn-sm" role="button">EDIT</a>
+					<a href={{"#/campaigns/"+actionsCtrl.campaignID+"/actions/"+action.id}} class="btn btn-info btn-sm" role="button">EDIT</a>
 					<button type="button" class="btn btn-danger btn-sm" ng-click="actionsCtrl.deleteAction(action.id, $index)">REMOVE</button>
 				</td>
 			</tr>		

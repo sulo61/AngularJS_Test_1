@@ -138,6 +138,12 @@ def campaignAd(request):
 
 
 @api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAction(request):
+    return render(request, 'Panel/Campaign/Actions/Action/action.html', {})
+
+
+@api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
         return redirect('/panel/#/beacons')
