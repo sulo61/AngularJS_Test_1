@@ -90,14 +90,36 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     })
 	.factory('User', ['$resource',
 		function($resource){
-			return $resource('../api/user/', {}, {
-				get: {method:'GET', isObject:true}
+			return $resource('../api/user/:userID', {userID: '@id'}, {
+				get: {method:'GET', isObject:true},
+				patch: {method:'PATCH', isObject:true}
 			});
 	}])
 	.factory('Logout', ['$resource',
 		function($resource){
 			return $resource('../logout/', {}, {
 				post: {method:'POST'}
+			});
+	}])
+	.factory('Shops', ['$resource',
+		function($resource){
+			return $resource('../api/shops/:shopID', {shopID: '@id'}, {
+				get: {method:'GET'},
+				delete: {method:'DELETE'}
+			});
+	}])
+	.factory('Campaigns', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'}, {
+				get: {method:'GET'},
+				delete: {method:'DELETE'}
+			});
+	}])
+	.factory('Beacons', ['$resource',
+		function($resource){
+			return $resource('../api/beacons/:beaconID', {beaconID: '@id'}, {
+				get: {method:'GET'},
+				delete: {method:'DELETE'}
 			});
 	}])
     .factory('appInfo', function() {
@@ -148,29 +170,17 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     .controller("panelController", function($scope, $window, $http, $location, appInfo, User, Logout){
 		this.lock = false;
 
-		//this.logout = function(){
-		//	if (this.lock){
-		//		return;
-		//	} else {
-		//		this.lock = true;
-		//	}
-		//	$http({
-		//		method: 'POST',
-		//		url: '/logout/'
-		//	}).then(function successCallback(response){
-		//		this.lock = false;
-		//		$window.location.href = "/";
-		//	}, function errorCallback(response){
-		//		this.lock = false;
-		//		appInfo.showFail(response);
-		//	}.bind(this));
-		//};
-		//
-
 		this.logout = function () {
+			if (this.lock){
+				return;
+			} else {
+				this.lock = true;
+			}
 			Logout.post(function(){
+				this.lock = false;
 				$window.location.href = "/";
 			}, function(error) {
+				this.lock = false;
 				appInfo.showFail(error);
 			}
 		)};
@@ -180,5 +190,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 		}.bind(this), function(error){
 			this.email = "?"
 		});
+
 
     })

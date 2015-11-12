@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('dashProfileController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
+angular.module('panelApp').controller('dashProfileController', ['$scope', '$http', 'appInfo', 'User', function($scope, $http, appInfo, User){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -17,7 +17,7 @@ angular.module('panelApp').controller('dashProfileController', ['$scope', '$http
 	this.password = ""
 	this.id = -1;
 	this.userBackup = {}
-	
+
 	// api
 	// get user
 	this.getUser = function(){
@@ -26,15 +26,12 @@ angular.module('panelApp').controller('dashProfileController', ['$scope', '$http
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/user/'
-		}).then(function successCallback(response){
-			this.user = response.data;
-			this.userBackup = angular.copy(this.user);
+		User.get(function(user) {
+			this.user = angular.copy(user);
+			this.userBackup = angular.copy(user);
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.unlock();
 		});
 	};
@@ -46,21 +43,19 @@ angular.module('panelApp').controller('dashProfileController', ['$scope', '$http
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'PATCH',
-			url: '/api/user/'+this.user.id+'/',
-			data: this.user
-		}).then(function successCallback(response){
+
+		User.patch({userID:this.user.id}, this.user, function(){
 			appInfo.showSuccess();
 			this.user.password = "";
 			this.user.old_password = "";
 			this.userBackup = angular.copy(this.user);
-			this.unlock();			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.unlock();
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.user = angular.copy(this.userBackup);
 			this.unlock();
 		}.bind(this));
+
 	};
 
 	this.getUser();

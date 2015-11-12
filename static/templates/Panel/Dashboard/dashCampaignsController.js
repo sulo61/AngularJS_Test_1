@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
+angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'appInfo', 'Campaigns', function($scope, $http, appInfo, Campaigns){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -41,24 +41,22 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/campaigns/',
-			params: {"page" : page}
-		}).then(function successCallback(response){
+
+		Campaigns.get({page:page}, function(success){
 			this.campaignsList = [];
 			this.campaignsPages = [];
-			this.campaignsList = response.data.results;
-			this.numberOfItems = response.data.count;
+			this.campaignsList = success.results;
+			this.numberOfItems = success.count;
 			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.campaignsPages.push(i+1);
-		    }
-		    this.campaignsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+				this.campaignsPages.push(i+1);
+			}
+			this.campaignsCurrentPage = page;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		});
+
 	};
 	this.deleteCampaign = function(id, index){
 		if (this.isLock){
@@ -66,21 +64,20 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'DELETE',
-			url: '/api/campaigns/'+id
-		}).then(function successCallback(response){
+
+		Campaigns.delete({campaignID:id}, function(){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
 			}
 			this.unlock();
-			this.getCampaigns(this.campaignsCurrentPage);			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.getCampaigns(this.campaignsCurrentPage);
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.unlock();
-		});	
+		});
+
 	}
 
 

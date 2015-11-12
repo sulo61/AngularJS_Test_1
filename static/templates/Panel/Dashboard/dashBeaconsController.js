@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
+angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http', 'appInfo', 'Beacons', function($scope, $http, appInfo, Beacons){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -39,24 +39,22 @@ angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/beacons/',
-			params: {"page" : page}
-		}).then(function successCallback(response){
+
+		Beacons.get({page:page}, function(success){
 			this.beaconsList = [];
 			this.beaconsPages = [];
-			this.beaconsList = response.data.results;
-			this.numberOfItems = response.data.count;
+			this.beaconsList = success.results;
+			this.numberOfItems = success.count;
 			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.beaconsPages.push(i+1);
-		    }
-		    this.beaconsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+				this.beaconsPages.push(i+1);
+			}
+			this.beaconsCurrentPage = page;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		});
+
 	};
 	this.deleteBeacon = function(id, index){
 		if (this.isLock){
@@ -64,21 +62,20 @@ angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'DELETE',
-			url: '/api/beacons/'+id
-		}).then(function successCallback(response){
+
+		Beacons.delete({beaconID:id}, function(){
 			appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.beaconsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.beaconsCurrentPage = this.beaconsCurrentPage - 1;
 			}
 			this.unlock();
-			this.getBeacons(this.beaconsCurrentPage);			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.getBeacons(this.beaconsCurrentPage);
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.unlock();
-		});	
+		});
+
 	}
 
 	this.getBeacons(1)
