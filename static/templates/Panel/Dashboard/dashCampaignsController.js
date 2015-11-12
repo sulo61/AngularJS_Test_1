@@ -1,4 +1,12 @@
 angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'appInfo', function($scope, $http, appInfo){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// models
@@ -28,6 +36,11 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 	
 	// api
 	this.getCampaigns = function(page){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'GET',
 			url: '/api/campaigns/',
@@ -41,11 +54,18 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 		    	this.campaignsPages.push(i+1);
 		    }
 		    this.campaignsCurrentPage = page;
+		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	};
 	this.deleteCampaign = function(id, index){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'DELETE',
 			url: '/api/campaigns/'+id
@@ -55,9 +75,11 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
 			}
-			this.getCampaigns(this.campaignsCurrentPage);
+			this.unlock();
+			this.getCampaigns(this.campaignsCurrentPage);			
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	}
 

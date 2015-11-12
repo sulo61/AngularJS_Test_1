@@ -16,12 +16,18 @@ urlpatterns = [
     url(r'^beacon/$', views.beacon, name="beacon"),
     url(r'^campaign/$', views.campaign, name="campaign"),
     url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
+
     url(r'^campaign/ads/$', views.campaignAds, name="campaignAds"),
     url(r'^campaign/ad/$', views.campaignAd, name="campaignAd"),
+    
     url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
+    url(r'^campaign/action/$', views.campaignAction, name="campaignAction"),
+    
     url(r'^campaign/awards/$', views.campaignAwards, name="campaignAwards"),
-    url(r'^campaign/beacons/$', views.campaignBeacons, name="campaignBeacons"),
     url(r'^campaign/award/$', views.campaignAward, name="campaignAward"),
+
+    url(r'^campaign/beacons/$', views.campaignBeacons, name="campaignBeacons"),
+    
     url(r'^panel/campaign/menu/$', views.campaignMenu, name="campaignMenu"),
 
     

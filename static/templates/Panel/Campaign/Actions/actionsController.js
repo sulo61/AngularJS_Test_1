@@ -1,4 +1,12 @@
 angular.module('panelApp').controller('actionsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// campaign params
@@ -28,6 +36,11 @@ angular.module('panelApp').controller('actionsController', ['$scope', '$http', '
 	};
 	// api
 	this.getActions = function(page){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'GET',
 			url: '/api/campaigns/'+this.campaignID+'/actions',
@@ -41,11 +54,18 @@ angular.module('panelApp').controller('actionsController', ['$scope', '$http', '
 		    	this.actionsPages.push(i+1);
 		    }
 		    this.actionsCurrentPage = page;
+		    this.unlock();
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	};
 	this.deleteAction = function(actionID, index){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
 		$http({
 			method: 'DELETE',
 			url: '/api/campaigns/'+this.campaignID+'/actions/'+actionID
@@ -55,9 +75,11 @@ angular.module('panelApp').controller('actionsController', ['$scope', '$http', '
 			if ( (this.numberOfItems <= (this.actionsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
 				this.actionsCurrentPage = this.actionsCurrentPage - 1;
 			}
-			this.getActions(this.actionsCurrentPage);
+			this.unlock();
+			this.getActions(this.actionsCurrentPage);			
 		}.bind(this), function errorCallback(response){
 			appInfo.showFail(response);
+			this.unlock();
 		});	
 	}
 

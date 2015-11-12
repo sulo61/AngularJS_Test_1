@@ -1,1 +1,121 @@
-action
+{%verbatim%} 
+<!-- TOP -->
+<div style="text-align:right;">
+	<a href={{"#/campaigns/"+actionCtrl.campaignID+"/actions"}} class="btn btn-primary" role="button">CLOSE EDIT</a>	
+	<button class="btn btn-danger" ng-click="actionCtrl.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="actionCtrl.save()">SAVE</button>
+	<hr><br><br>
+</div>
+
+
+<!-- LEFT -->
+<div class="leftColumn"  style="width:50%">
+	<label>Points: </label>
+	<input type="number" min="0" class="form-control" plactionCtrleholder="Title" ng-model="actionCtrl.action.points">
+	<br>
+	<label>Time limit: </label>
+	<input type="text" class="form-control" plactionCtrleholder="Description" ng-model="actionCtrl.action.time_limit">
+	<br>
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:50%">
+	<!-- BEACON -->
+	<div>
+		<label>Beacon: </label>
+		{{actionCtrl.beacon}}
+		<input disabled ng-show="actionCtrl.action.beacon>0" actionCtrlttype="text" class="form-control" plactionCtrleholder="0" ng-model="actionCtrl.action.beacon">
+		<br>
+		<br>
+		<button style="float:right;" type="button" class="btn btn-warning" ng-click="actionCtrl.toggleNewBeacon()">CHOOSE BEACON</button>
+		<br><br><br>
+		<div ng-show="actionCtrl.chooseBeacon">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th width="10%">#</th>
+						<th width="15%">ID</th>
+						<th width="20%">Minor</th>
+						<th width="35%">Major</th>
+						<th width="20%">Options</th>	
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="beacon in actionCtrl.beaconsList">
+						<th scope="row">{{  $index + (actionCtrl.beaconsCurrentPage * 5) - 4 }}</th>
+						<td>{{beacon.id}}</td>
+						<td>{{beacon.minor}}</td>
+						<td>{{beacon.major}}</td>
+						<td><button type="button" class="btn btn-success btn-sm" ng-click="actionCtrl.useNewBeacon(beacon.id)">USE</button></td>
+					</tr>		
+				</tbody>
+			</table>
+
+			<br><br>
+
+			<nav>
+			  <ul class="pagination" ng-show="actionCtrl.beaconsPages.length>0">
+			  	<li ng-click="actionCtrl.beaconsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+			  	<li ng-repeat="number in actionCtrl.beaconsPages" class="{{actionCtrl.beaconsNavActive(number)}}" id="actionCtrl.beaconsNav{{number}}" ng-click="actionCtrl.getBeacons(number)">
+			  		<a>{{number}}</a>
+			  	</li>
+			  	<li ng-click="actionCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>	    
+			  </ul>
+			</nav>
+		</div>
+		<br>
+	</div>
+
+	<hr><br>
+	<!-- AD -->
+	<div>
+		<label>Ad: </label>
+		<input disabled ng-show="actionCtrl.action.ad>0"  type="text" class="form-control" plactionCtrleholder="0" ng-model="actionCtrl.action.ad">
+		<br>
+		<br>
+		<button style="float:right;" type="button" class="btn btn-warning" ng-click="actionCtrl.toggleNewAd()">CHOOSE AD</button>
+		<br><br><br>
+		<div ng-show="actionCtrl.chooseAd">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th width="10%">#</th>
+						<th width="10%">ID</th>
+						<th width="25%">Title</th>
+						<th width="25%">Desciption</th>
+						<th width="10%">Type</th>
+						<th width="20%">Options</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="ad in actionCtrl.adsList">
+						<th scope="row">{{  $index + (actionCtrl.adsCurrentPage * 5) - 4 }}</th>
+						<td>{{ad.id}}</td>
+						<td>{{ad.title}}</td>
+						<td>{{ad.description}}</td>
+						<td>{{ad.type}}</td>
+						<td>
+							<td><button type="button" class="btn btn-success btn-sm" ng-click="actionCtrl.useNewAd(ad.id)">USE</button></td>
+						</td>
+					</tr>		
+				</tbody>
+			</table>
+
+			<br><br>
+
+			<nav>
+			  <ul class="pagination" ng-show="actionCtrl.adsPages.length>0">
+			  	<li ng-click="actionCtrl.adsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+			  	<li ng-repeat="number in actionCtrl.adsPages" class="{{actionCtrl.adsNavActive(number)}}" id="actionCtrl.adsNav{{number}}" ng-click="actionCtrl.getAds(number)">
+			  		<a>{{number}}</a>
+			  	</li>
+			  	<li ng-click="actionCtrl.adsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+			    
+			  </ul>
+			</nav>
+		</div>
+	</div>
+</div>
+
+
+{%endverbatim%}
