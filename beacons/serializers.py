@@ -7,6 +7,7 @@ from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeaco
     UserAwards
 from django.utils.dateparse import parse_datetime
 from rest_framework.exceptions import ValidationError
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, IntegerField
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
@@ -238,7 +239,25 @@ class AdSerializerCreate(serializers.ModelSerializer):
 
 
 class CampaignAddActionSerializer(serializers.ModelSerializer):
-    ad = AdSerializerCreate(many=False, read_only=True)
+    def get_fields(self):
+        fields = super(CampaignAddActionSerializer, self).get_fields()
+        if 'request' in self.context:
+            if 'ad' in fields:
+                fields['ad'].queryset = \
+                    get_object_or_404(Campaign, pk=self.context['request'].parser_context.get('kwargs').get('pk')).ads.all()
+
+            if 'beacon' in fields:
+                fields['beacon'].queryset = \
+                    get_object_or_404(Campaign,
+                                      pk=self.context['request'].parser_context.get('kwargs').get('pk')).beacons.all()
+        return fields
+
+    def create(self, validated_data):
+        if 'ad' in self.initial_data:
+            validated_data['ad'] = get_object_or_404(Ad, pk=self.initial_data['ad'])
+        return super(CampaignAddActionSerializer, self).create(validated_data)
+
+    ad = PrimaryKeyRelatedField(many=False, queryset=Beacon.objects.all())
 
     class Meta:
         model = ActionBeacon
