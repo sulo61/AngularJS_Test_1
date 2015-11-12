@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'appInfo', function($scope, $http, $routeParams, $timeout, Upload, appInfo){
+angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'appInfo', 'Shop', 'Shops', 'GoogleCoords', function($scope, $http, $routeParams, $timeout, Upload, appInfo, Shop, Shops, GoogleCoords){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -85,18 +85,15 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			} else {
 				this.lock();
 			}
-			$http({
-				method: 'GET',
-				url: '/api/shops/'+this.id+"/"
-			}).then(function successCallback(response){
-				this.shop = response.data;
+			Shop.get({shopID:this.id}, function(success){
+				this.shop = success;
 				this.updateMap();
 				this.makeCopy();
 				this.unlock();
-			}.bind(this), function errorCallback(response){
-				appInfo.showFail(response);
+			}.bind(this), function(error){
+				appInfo.showFail(error);
 				this.unlock();
-			}.bind(this));	
+			});
 		}
 	}
 	// patch shop
@@ -106,19 +103,15 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'PATCH',
-			url: '/api/shops/'+this.id+"/",
-			data: this.shop
-		}).then(function successCallback(response){
+		Shop.patch({shopID:this.id}, this.shop, function(){
 			appInfo.showSuccess();
 			this.makeCopy();
 			this.updateMap();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.unlock();
-		}.bind(this));			
+		});
 				
 	}
 	// post shop
@@ -128,43 +121,35 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'POST',
-			url: '/api/shops/',
-			data: this.shop
-		}).then(function successCallback(response){
+
+		Shops.post(this.shop, function(success){
 			appInfo.showSuccess();
-			this.shop = response.data;
-			debugger
+			this.shop = success;
 			this.id = this.shop.id;
 			this.makeCopy();
 			this.updateMap();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.unlock();
-		}.bind(this));			
+		});
+
 	}
 	// get lat long
 	this.getCoords = function(){
-		$http({
-			method: 'GET',
-			url: 'http://maps.google.com/maps/api/geocode/json',
-			params: {"address" : this.shop.address, "sensor": false}
-		}).then(function successCallback(response){
-			if (response.data.results.length>0){
-				this.shop.latitude = response.data.results[0].geometry.location.lat;
-				this.shop.longitude = response.data.results[0].geometry.location.lng;
+		GoogleCoords.get({"address" : this.shop.address, "sensor": false}, function(success){
+			if (success.results.length>0){
+				this.shop.latitude = success.results[0].geometry.location.lat;
+				this.shop.longitude = success.results[0].geometry.location.lng;
 			}
 			if (this.id>0){
 				this.patchShop();
 			} else {
 				this.postShop();
 			}
-			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
-		}.bind(this));	
+		}, function (error) {
+			appInfo.showFail(error);
+		});
 	}
 	// upload photo	
 	this.uploadFiles = function(file, errFiles) {
@@ -188,7 +173,6 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             });
         }   
     }
-
 
 	this.getShop(this.id);
 }]);

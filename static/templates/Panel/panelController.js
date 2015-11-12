@@ -4,6 +4,9 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }])
+	.config(function($resourceProvider) {
+		$resourceProvider.defaults.stripTrailingSlashes = false;
+	})
     .config(['$routeProvider', function($routeProvider){
     	$routeProvider
     		.when("/beacons", {
@@ -103,11 +106,20 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	}])
 	.factory('Shops', ['$resource',
 		function($resource){
-			return $resource('../api/shops/:shopID', {shopID: '@id'}, {
+			return $resource('../api/shops/:shopID/', {shopID: '@id'}, {
 				get: {method:'GET'},
-				delete: {method:'DELETE'}
+				delete: {method:'DELETE'},
+				post: {method:'POST'}
 			});
 	}])
+	.factory('Shop', ['$resource',
+		function($resource){
+			return $resource('../api/shops/:shopID/', {shopID: '@id'}, {
+				get: {method:'GET'},
+				patch: {method:'PATCH'}
+
+			});
+		}])
 	.factory('Campaigns', ['$resource',
 		function($resource){
 			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'}, {
@@ -120,6 +132,12 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 			return $resource('../api/beacons/:beaconID', {beaconID: '@id'}, {
 				get: {method:'GET'},
 				delete: {method:'DELETE'}
+			});
+	}])
+	.factory('GoogleCoords', ['$resource',
+		function($resource){
+			return $resource('http://maps.google.com/maps/api/geocode/json', {}, {
+				get: {method:'GET'}
 			});
 	}])
     .factory('appInfo', function() {
