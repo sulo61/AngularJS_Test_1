@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload', 'ngResource'])
 	// django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -88,6 +88,18 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             headers['Authorization'] = ('Basic ' + btoa(data.username + ':' + data.password));
         }
     })
+	.factory('User', ['$resource',
+		function($resource){
+			return $resource('../api/user/', {}, {
+				get: {method:'GET', isObject:true}
+			});
+	}])
+	.factory('Logout', ['$resource',
+		function($resource){
+			return $resource('../logout/', {}, {
+				post: {method:'POST'}
+			});
+	}])
     .factory('appInfo', function() {
     	appInfo = function () {
 	    	this.appInfoShow = false;
@@ -133,42 +145,40 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 			}
 		};
 	})
-    .controller("panelController", function($scope, $window, $http, $location, appInfo){
-		this.appInfo = appInfo;		
+    .controller("panelController", function($scope, $window, $http, $location, appInfo, User, Logout){
 		this.lock = false;
 
-		this.logout = function(){
-			if (this.lock){
-				return;
-			} else {
-				this.lock = true;
-			}
-			$http({
-				method: 'POST',
-				url: '/logout/'
-			}).then(function successCallback(response){
-				this.lock = false;
+		//this.logout = function(){
+		//	if (this.lock){
+		//		return;
+		//	} else {
+		//		this.lock = true;
+		//	}
+		//	$http({
+		//		method: 'POST',
+		//		url: '/logout/'
+		//	}).then(function successCallback(response){
+		//		this.lock = false;
+		//		$window.location.href = "/";
+		//	}, function errorCallback(response){
+		//		this.lock = false;
+		//		appInfo.showFail(response);
+		//	}.bind(this));
+		//};
+		//
+
+		this.logout = function () {
+			Logout.post(function(){
 				$window.location.href = "/";
-			}, function errorCallback(response){
-				this.lock = false;
-				appInfo.showFail(response);
-			}.bind(this));	
-		};
+			}, function(error) {
+				appInfo.showFail(error);
+			}
+		)};
 
-		this.email = "";	
-
-
-		// get user
-		this.getUser = function(){
-			$http({
-				method: 'GET',
-				url: '/api/user/'
-			}).then(function successCallback(response){
-				this.email = response.data.email;
-			}.bind(this), function errorCallback(response){
-			});
-		};
-
-		this.getUser();
+		User.get(function(user) {
+			this.email = user.email;
+		}.bind(this), function(error){
+			this.email = "?"
+		});
 
     })
