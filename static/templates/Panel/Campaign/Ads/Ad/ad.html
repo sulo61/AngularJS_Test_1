@@ -23,7 +23,7 @@
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:50%">
-	<div style="text-align:center;">
+	<div style="text-align:center;" ng-show="adCtrl.ad.id>0">
 		<img ng-src="{{adCtrl.ad.image}}" alt="No image" style="width:100%"/>
 		<br><br>
 		<button class="btn btn-info" type="file" ngf-select="adCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD IMAGE</button>
