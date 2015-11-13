@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('dashShopsController', ['$scope', '$http', 'appInfo', 'Shops', function($scope, $http, appInfo, Shops){
+angular.module('panelApp').controller('dashShopsController', ['$scope', '$http', 'appInfo', 'Shops', 'Shop', function($scope, $http, appInfo, Shops, Shop){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -51,9 +51,9 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.shopsCurrentPage = page;
 			this.unlock();
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 	};
 
 	this.deleteShop = function(id, index){
@@ -63,8 +63,8 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.lock();
 		}
 
-		Shops.delete({shopID:id}, function(){
-			appInfo.showSuccess();
+		Shop.delete({shopID:id}, function(){
+			this.appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.shopsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.shopsCurrentPage = this.shopsCurrentPage - 1;
@@ -72,9 +72,9 @@ angular.module('panelApp').controller('dashShopsController', ['$scope', '$http',
 			this.unlock();
 			this.getShops(this.shopsCurrentPage);
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 
 
 	}

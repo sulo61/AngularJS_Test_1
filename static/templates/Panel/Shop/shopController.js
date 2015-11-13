@@ -91,13 +91,14 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 				this.makeCopy();
 				this.unlock();
 			}.bind(this), function(error){
-				appInfo.showFail(error);
+				this.appInfo.showFail(error);
 				this.unlock();
-			});
+			}.bind(this));
 		}
 	}
 	// patch shop
-	this.patchShop = function(){		
+	this.patchShop = function(){
+		debugger
 		if (this.isLock){
 			return;
 		} else {
@@ -111,7 +112,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		}.bind(this), function(error){
 			appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 				
 	}
 	// post shop
@@ -123,16 +124,16 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 		}
 
 		Shops.post(this.shop, function(success){
-			appInfo.showSuccess();
+			this.appInfo.showSuccess();
 			this.shop = success;
 			this.id = this.shop.id;
 			this.makeCopy();
 			this.updateMap();
 			this.unlock();
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 
 	}
 	// get lat long
@@ -147,9 +148,9 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			} else {
 				this.postShop();
 			}
-		}, function (error) {
-			appInfo.showFail(error);
-		});
+		}.bind(this), function (error) {
+			this.appInfo.showFail(error);
+		}.bind(this));
 	}
 	// upload photo	
 	this.uploadFiles = function(file, errFiles) {

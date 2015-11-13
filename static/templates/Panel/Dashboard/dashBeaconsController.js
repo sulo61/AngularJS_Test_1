@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http', 'appInfo', 'Beacons', function($scope, $http, appInfo, Beacons){
+angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http', 'appInfo', 'Beacons', 'Beacon', function($scope, $http, appInfo, Beacons, Beacon){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -51,9 +51,9 @@ angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http
 			this.beaconsCurrentPage = page;
 			this.unlock();
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 
 	};
 	this.deleteBeacon = function(id, index){
@@ -63,8 +63,8 @@ angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http
 			this.lock();
 		}
 
-		Beacons.delete({beaconID:id}, function(){
-			appInfo.showSuccess();
+		Beacon.delete({beaconID:id}, function(){
+			this.appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.beaconsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.beaconsCurrentPage = this.beaconsCurrentPage - 1;
@@ -72,9 +72,9 @@ angular.module('panelApp').controller('dashBeaconsController', ['$scope', '$http
 			this.unlock();
 			this.getBeacons(this.beaconsCurrentPage);
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 
 	}
 

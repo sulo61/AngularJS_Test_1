@@ -94,8 +94,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	.factory('User', ['$resource',
 		function($resource){
 			return $resource('../api/user/:userID', {userID: '@id'}, {
-				get: {method:'GET', isObject:true},
-				patch: {method:'PATCH', isObject:true}
+				patch: {method:'PATCH'}
 			});
 	}])
 	.factory('Logout', ['$resource',
@@ -106,47 +105,45 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	}])
 	.factory('Shops', ['$resource',
 		function($resource){
-			return $resource('../api/shops/:shopID/', {shopID: '@id'}, {
-				get: {method:'GET'},
-				delete: {method:'DELETE'},
-				post: {method:'POST'}
-			});
+			return $resource('../api/shops/');
 	}])
 	.factory('Shop', ['$resource',
 		function($resource){
 			return $resource('../api/shops/:shopID/', {shopID: '@id'}, {
-				get: {method:'GET'},
 				patch: {method:'PATCH'}
-
 			});
 		}])
 	.factory('Campaigns', ['$resource',
 		function($resource){
-			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'}, {
-				get: {method:'GET'},
-				delete: {method:'DELETE'}
-			});
+			return $resource('../api/campaigns/');
+	}])
+	.factory('Campaign', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'});
 	}])
 	.factory('Beacons', ['$resource',
 		function($resource){
-			return $resource('../api/beacons/:beaconID', {beaconID: '@id'}, {
-				get: {method:'GET'},
-				delete: {method:'DELETE'}
-			});
+			return $resource('../api/beacons');
 	}])
+	.factory('Beacon', ['$resource',
+		function($resource){
+			return $resource('../api/beacons/:beaconID', {beaconID: '@id'});
+		}])
 	.factory('GoogleCoords', ['$resource',
 		function($resource){
-			return $resource('http://maps.google.com/maps/api/geocode/json', {}, {
-				get: {method:'GET'}
-			});
+			return $resource('http://maps.google.com/maps/api/geocode/json');
 	}])
+	.factory('CampaignBeacons', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/beacons/', {campaignID:'@campaignID'});
+	}])
+
     .factory('appInfo', function() {
     	appInfo = function () {
 	    	this.appInfoShow = false;
 	    	this.appInfoSuccess = true;
 	    	//this.appInfoMsg = { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' };
 	    	this.appInfoMsg = {};
-	    	this.currentPath = "Dashboard";
 
 	    	this.showSuccess = function(){
 	    		this.appInfoShow = true;
@@ -163,9 +160,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 		    	this.appInfoSuccess = true;
 		    	this.appInfoMsg = {};
 	    	};
-	    	this.setCurrentPath = function(path){
-	    		this.currentPath = path;
-	    	}
     	}
     	return new appInfo();
     })
@@ -187,6 +181,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	})
     .controller("panelController", function($scope, $window, $http, $location, appInfo, User, Logout){
 		this.lock = false;
+		this.appInfo = appInfo;
 
 		this.logout = function () {
 			if (this.lock){

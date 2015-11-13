@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'appInfo', 'Campaigns', function($scope, $http, appInfo, Campaigns){
+angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$http', 'appInfo', 'Campaigns', 'Campaign', function($scope, $http, appInfo, Campaigns, Campaign){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -53,9 +53,9 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			this.campaignsCurrentPage = page;
 			this.unlock();
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 
 	};
 	this.deleteCampaign = function(id, index){
@@ -65,8 +65,8 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			this.lock();
 		}
 
-		Campaigns.delete({campaignID:id}, function(){
-			appInfo.showSuccess();
+		Campaign.delete({campaignID:id}, function(){
+			this.appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * 5) && this.numberOfItems>=5){
 				this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
@@ -74,9 +74,9 @@ angular.module('panelApp').controller('dashCampaignsController', ['$scope', '$ht
 			this.unlock();
 			this.getCampaigns(this.campaignsCurrentPage);
 		}.bind(this), function(error){
-			appInfo.showFail(error);
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this));
 
 	}
 
