@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('basicController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('basicController', ['$scope', '$http', '$routeParams', 'appInfo', 'Campaign', 'Campaigns', function($scope, $http, $routeParams, appInfo, Campaign, Campaigns){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -31,24 +31,21 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 	}
 	// api
 	this.getBasic = function(){
-		if (this.isLock){
-			return;
-		} else {
-			this.lock();
-		}
 		if (this.id>0){
-			$http({
-				method: 'GET',
-				url: '/api/campaigns/'+this.id
-			}).then(function successCallback(response){
-				this.basic = response.data;	
+			if (this.isLock){
+				return;
+			} else {
+				this.lock();
+			}
+			Campaign.get({campaignID:this.id}, function(success){
+				this.basic = success;
 				this.basic.beacons = [];
 				this.basicCopy = angular.copy(this.basic);
 				this.unlock();
-			}.bind(this), function errorCallback(response){
-				appInfo.showFail(response);
+			}.bind(this), function(error){
+				this.appInfo.showFail(error);
 				this.unlock();
-			});	
+			}.bind(this));
 		}
 	}
 	this.patchBasic = function(){
@@ -57,39 +54,35 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'PATCH',
-			url: '/api/campaigns/'+this.id,
-			data: this.basic
-		}).then(function successCallback(response){
+		Campaign.patch({campaignID:this.id}, this.basic, function(){
 			this.makeCopy();
-			appInfo.showSuccess();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		});	
+		}.bind(this));
 	}
+
 	this.postBasic = function(){
 		if (this.isLock){
 			return;
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'POST',
-			url: '/api/campaigns/',
-			data: this.basic
-		}).then(function successCallback(response){
-			this.basic = response.data;
+
+		Campaigns.save(this.basic, function(success){
+			this.basic = success;
 			this.makeCopy();
-			appInfo.showSuccess();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		});	
+		}.bind(this))
+
 	}
+
 	this.saveBasic = function(){
 		if (this.id>0){
 			this.patchBasic();

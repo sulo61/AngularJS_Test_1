@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '$routeParams', 'appInfo', 'CampaignBeacons', function($scope, $http, $routeParams, appInfo, CampaignBeacons){
+angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '$routeParams', 'appInfo', 'CampaignBeacons', 'CampaignBeacon', 'CampaignBeaconsGenerate', function($scope, $http, $routeParams, appInfo, CampaignBeacons, CampaignBeacon, CampaignBeaconsGenerate){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -70,17 +70,6 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 			this.unlock();
 		}.bind(this))
 
-		//$http({
-		//	method: 'DELETE',
-		//	url: '/api/campaigns/'+this.id+'/beacons/'+beaconID
-		//}).then(function successCallback(response){
-		//	appInfo.showSuccess();
-		//	this.unlock();
-		//	this.getCampaignBeacons();
-		//}.bind(this), function errorCallback(response){
-		//	appInfo.showFail(response);
-		//	this.unlock();
-		//});
 	}
 	this.generateBeacons = function(){
 		if (this.isLock){
@@ -88,18 +77,16 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'POST',
-			url: '/api/campaigns/'+this.id+'/create_beacons/',
-			data: {pk:this.id, count:this.numberOfNewBeacons}
-		}).then(function successCallback(response){
+
+		CampaignBeaconsGenerate.save({campaignID:this.id}, {pk:this.id, count:this.numberOfNewBeacons}, function(){
 			this.appInfo.showSuccess();
 			this.unlock();
 			this.getCampaignBeacons();
-		}.bind(this), function errorCallback(response){
-			this.appInfo.showFail(response);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		});
+		}.bind(this))
+
 	}
 
 	this.getCampaignBeacons()

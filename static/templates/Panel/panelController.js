@@ -119,7 +119,9 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	}])
 	.factory('Campaign', ['$resource',
 		function($resource){
-			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'});
+			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'}, {
+				patch: {method:'PATCH'}
+			});
 	}])
 	.factory('Beacons', ['$resource',
 		function($resource){
@@ -137,7 +139,14 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 		function($resource){
 			return $resource('../api/campaigns/:campaignID/beacons/', {campaignID:'@campaignID'});
 	}])
-
+	.factory('CampaignBeacon', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/beacons/:beaconID', {campaignID:'@campaignID', beaconID:'@beaconID'});
+	}])
+	.factory('CampaignBeaconsGenerate', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/create_beacons/', {campaignID:'@campaignID'});
+	}])
     .factory('appInfo', function() {
     	appInfo = function () {
 	    	this.appInfoShow = false;

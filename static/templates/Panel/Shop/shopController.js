@@ -123,7 +123,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 			this.lock();
 		}
 
-		Shops.post(this.shop, function(success){
+		Shops.save(this.shop, function(success){
 			this.appInfo.showSuccess();
 			this.shop = success;
 			this.id = this.shop.id;
