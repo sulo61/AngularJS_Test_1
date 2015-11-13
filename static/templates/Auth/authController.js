@@ -75,7 +75,7 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
-			url: '/operator/register/',
+			url: '/api/operator/register/',
 			data: $scope.register
 		}).then(function successCallback(response){
 			$scope.showRegisterWarning = false;
