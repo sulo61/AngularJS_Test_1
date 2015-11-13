@@ -32,7 +32,6 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 		this.adCOPY = angular.copy(this.ad);
 		this.adID = this.ad.id;
 		this.adNAME = this.ad.title;
-		appInfo.setCurrentPath("Dashboard/Campaign/"+this.campaignNAME+'/Advertisement/'+this.adNAME);
 	}
 	// get ad
 	this.getAd = function(){

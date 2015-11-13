@@ -98,7 +98,6 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	}
 	// patch shop
 	this.patchShop = function(){
-		debugger
 		if (this.isLock){
 			return;
 		} else {

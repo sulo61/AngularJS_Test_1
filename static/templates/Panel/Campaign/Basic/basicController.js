@@ -27,7 +27,6 @@ angular.module('panelApp').controller('basicController', ['$scope', '$http', '$r
 		this.basicCopy = angular.copy(this.basic);		
 		this.id = this.basic.id;
 		this.name = this.basic.name;
-		appInfo.setCurrentPath("Dashboard/Campaign/"+this.name+'/Basic information');			
 	}
 	// api
 	this.getBasic = function(){
