@@ -32,7 +32,7 @@ urlpatterns = [
 
     
     url(r'^login/', views.login_view, name="login"),
-    url(r'^logout/', views.LogoutView.as_view(), name="login"),
+    url(r'^logout', views.LogoutView.as_view(), name="login"),
 
 ]
 

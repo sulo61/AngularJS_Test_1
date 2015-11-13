@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$routeParams', 'appInfo', 'CampaignAwards', 'CampaignAward', function($scope, $http, $routeParams, appInfo, CampaignAwards, CampaignAward){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -41,24 +41,22 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/campaigns/'+this.id+'/awards',
-			params: {"page" : page}
-		}).then(function successCallback(response){
+
+		CampaignAwards.get({campaignID:this.id}, {page:page}, function(success){
 			this.awardsList = [];
 			this.awardsPages = [];
-			this.awardsList = response.data.results;
-			this.numberOfItems = response.data.count;
+			this.awardsList = success.results;
+			this.numberOfItems = success.count;
 			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.awardsPages.push(i+1);
-		    }
-		    this.awardsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+				this.awardsPages.push(i+1);
+			}
+			this.awardsCurrentPage = page;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
+
 	};
 	this.deleteAward = function(awardID, index){
 		if (this.isLock){
@@ -66,21 +64,20 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'DELETE',
-			url: '/api/campaigns/'+this.id+'/awards/'+awardID
-		}).then(function successCallback(response){
-			appInfo.showSuccess();
+
+		CampaignAward.delete({campaignID:this.id, awardID:awardID}, function(){
+			this.appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.awardsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
 				this.awardsCurrentPage = this.awardsCurrentPage - 1;
 			}
 			this.unlock();
-			this.getAwards(this.awardsCurrentPage);			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.getAwards(this.awardsCurrentPage);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		});	
+		}.bind(this));
+
 	}
 
 	this.getAwards(1);

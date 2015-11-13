@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('awardController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', function($scope, $http, $routeParams, Upload, appInfo){
+angular.module('panelApp').controller('awardController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', 'CampaignAwards', 'CampaignAward', function($scope, $http, $routeParams, Upload, appInfo, CampaignAwards, CampaignAward){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -31,8 +31,7 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 	this.makeCopy = function(){
 		this.awardCOPY = angular.copy(this.award);
 		this.awardID = this.award.id;
-		this.awardNAME = this.award.title;	
-		appInfo.setCurrentPath("Dashboard/Campaign/"+this.campaignNAME+'/Award/'+this.awardNAME);
+		this.awardNAME = this.award.title;
 	}
 	// get award
 	this.getAward = function(){		
@@ -42,17 +41,15 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 			} else {
 				this.lock();
 			}
-			$http({
-				method: 'GET',
-				url: '/api/campaigns/'+this.campaignID+"/awards/"+this.awardID
-			}).then(function successCallback(response){
-				this.award = response.data;
+			CampaignAward.get({campaignID:this.campaignID, awardID:this.awardID}, function(success){
+				this.award = success;
 				this.makeCopy();
 				this.unlock();
-			}.bind(this), function errorCallback(response){
-				appInfo.showFail(response);
+			}.bind(this), function(error){
+				this.appInfo.showFail(error);
 				this.unlock();
-			}.bind(this));	
+			}.bind(this));
+
 		}
 	}
 	// patch award
@@ -61,20 +58,16 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 			return;
 		} else {
 			this.lock();
-		}		
-		$http({
-			method: 'PATCH',
-			url: '/api/campaigns/'+this.campaignID+"/awards/"+this.awardID,
-			data: this.award
-		}).then(function successCallback(response){
+		}
+		CampaignAward.patch({campaignID:this.campaignID, awardID:this.awardID}, this.award, function(){
 			this.makeCopy();
-			appInfo.showSuccess();
-			this.unlock();		
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this));			
-				
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
+
 	}
 	// post award
 	this.postAward = function(){
@@ -83,19 +76,15 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'POST',
-			url: '/api/campaigns/'+this.campaignID+'/awards/',
-			data: this.award
-		}).then(function successCallback(response){
-			this.award = response.data;
+		CampaignAwards.save({campaignID:this.campaignID}, this.award,  function(success){
+			this.award = success;
 			this.makeCopy();
-			appInfo.showSuccess();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			appInfo.showFail(error);
 			this.unlock();
-		}.bind(this));			
+		}.bind(this))
 	}
 	// upload photo	
 	this.uploadFiles = function(file, errFiles) {
@@ -119,7 +108,6 @@ angular.module('panelApp').controller('awardController', ['$scope', '$http', '$r
             });
         }   
     }
-	
 
 
 	this.getAward(this.awardID);

@@ -1,9 +1,12 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload', 'ngResource'])
 	// django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }])
+	.config(function($resourceProvider) {
+		$resourceProvider.defaults.stripTrailingSlashes = false;
+	})
     .config(['$routeProvider', function($routeProvider){
     	$routeProvider
     		.when("/beacons", {
@@ -88,13 +91,78 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             headers['Authorization'] = ('Basic ' + btoa(data.username + ':' + data.password));
         }
     })
+	.factory('User', ['$resource',
+		function($resource){
+			return $resource('../api/user/:userID', {userID: '@id'}, {
+				patch: {method:'PATCH'}
+			});
+	}])
+	.factory('Logout', ['$resource',
+		function($resource){
+			return $resource('../logout/', {}, {
+				post: {method:'POST'}
+			});
+	}])
+	.factory('Shops', ['$resource',
+		function($resource){
+			return $resource('../api/shops/');
+	}])
+	.factory('Shop', ['$resource',
+		function($resource){
+			return $resource('../api/shops/:shopID/', {shopID: '@id'}, {
+				patch: {method:'PATCH'}
+			});
+		}])
+	.factory('Campaigns', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/');
+	}])
+	.factory('Campaign', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID', {campaignID: '@id'}, {
+				patch: {method:'PATCH'}
+			});
+	}])
+	.factory('Beacons', ['$resource',
+		function($resource){
+			return $resource('../api/beacons');
+	}])
+	.factory('Beacon', ['$resource',
+		function($resource){
+			return $resource('../api/beacons/:beaconID', {beaconID: '@id'});
+		}])
+	.factory('GoogleCoords', ['$resource',
+		function($resource){
+			return $resource('http://maps.google.com/maps/api/geocode/json');
+	}])
+	.factory('CampaignBeacons', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/beacons/', {campaignID:'@campaignID'});
+	}])
+	.factory('CampaignBeacon', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/beacons/:beaconID', {campaignID:'@campaignID', beaconID:'@beaconID'});
+	}])
+	.factory('CampaignBeaconsGenerate', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/create_beacons/', {campaignID:'@campaignID'});
+	}])
+	.factory('CampaignAwards', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/awards/', {campaignID:'@campaignID'});
+	}])
+	.factory('CampaignAward', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/awards/:awardID', {campaignID:'@campaignID', awardID:'@awardID'}, {
+				patch: {method:'PATCH'}
+			});
+		}])
     .factory('appInfo', function() {
     	appInfo = function () {
 	    	this.appInfoShow = false;
 	    	this.appInfoSuccess = true;
 	    	//this.appInfoMsg = { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' };
 	    	this.appInfoMsg = {};
-	    	this.currentPath = "Dashboard";
 
 	    	this.showSuccess = function(){
 	    		this.appInfoShow = true;
@@ -111,9 +179,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 		    	this.appInfoSuccess = true;
 		    	this.appInfoMsg = {};
 	    	};
-	    	this.setCurrentPath = function(path){
-	    		this.currentPath = path;
-	    	}
     	}
     	return new appInfo();
     })
@@ -133,42 +198,30 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 			}
 		};
 	})
-    .controller("panelController", function($scope, $window, $http, $location, appInfo){
-		this.appInfo = appInfo;		
+    .controller("panelController", function($scope, $window, $http, $location, appInfo, User, Logout){
 		this.lock = false;
+		this.appInfo = appInfo;
 
-		this.logout = function(){
+		this.logout = function () {
 			if (this.lock){
 				return;
 			} else {
 				this.lock = true;
 			}
-			$http({
-				method: 'POST',
-				url: '/logout/'
-			}).then(function successCallback(response){
+			Logout.post(function(){
 				this.lock = false;
 				$window.location.href = "/";
-			}, function errorCallback(response){
+			}, function(error) {
 				this.lock = false;
-				appInfo.showFail(response);
-			}.bind(this));	
-		};
+				appInfo.showFail(error);
+			}
+		)};
 
-		this.email = "";	
+		User.get(function(user) {
+			this.email = user.email;
+		}.bind(this), function(error){
+			this.email = "?"
+		});
 
-
-		// get user
-		this.getUser = function(){
-			$http({
-				method: 'GET',
-				url: '/api/user/'
-			}).then(function successCallback(response){
-				this.email = response.data.email;
-			}.bind(this), function errorCallback(response){
-			});
-		};
-
-		this.getUser();
 
     })
