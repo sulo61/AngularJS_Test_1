@@ -147,6 +147,16 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 		function($resource){
 			return $resource('../api/campaigns/:campaignID/create_beacons/', {campaignID:'@campaignID'});
 	}])
+	.factory('CampaignAwards', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/awards/', {campaignID:'@campaignID'});
+	}])
+	.factory('CampaignAward', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/awards/:awardID', {campaignID:'@campaignID', awardID:'@awardID'}, {
+				patch: {method:'PATCH'}
+			});
+		}])
     .factory('appInfo', function() {
     	appInfo = function () {
 	    	this.appInfoShow = false;
