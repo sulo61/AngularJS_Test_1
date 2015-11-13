@@ -211,7 +211,6 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-		debugger
 		$http({
 			method: 'POST',
 			url: '/api/campaigns/'+this.campaignID+'/actions/',
