@@ -1,7 +1,5 @@
 import json
-
 from rest_framework.exceptions import ValidationError
-
 from beacons.utils import get_api_key, get_user_from_api_key
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission
@@ -375,18 +373,20 @@ def create_beacons(request, pk, format=None):
     '''
     campaign = get_object_or_404(Campaign, pk=pk)
     count = request.data.get('count', 0)
-    beacons = []
-    for x in xrange(int(count)):
-        create = Beacon.objects.create(campaign=campaign)
-        create.minor = x
-        create.major = request.user.pk
-        create.save()
-        beacons.append({
-            'id': create.pk,
-            'minor': create.minor,
-            'major': create.major,
-        })
-    return Response(json.dumps(list(beacons)))
+    count_beacons = len(campaign.beacons.all())
+    if count_beacons < count:
+        for x in xrange(count_beacons, int(count)):
+            create = Beacon.objects.create(campaign=campaign)
+            create.minor = x
+            create.major = request.user.pk
+            create.save()
+
+    elif count_beacons > count:
+        for beacon in campaign.beacons.all().order_by('minor').reverse()[:(count_beacons - count)]:
+            beacon.delete()
+
+    serializer = BeaconSerializer(instance=campaign.beacons.all(), many=True)
+    return Response(serializer.data, status.HTTP_200_OK)
 
 
 class BeaconCampaignActionView(ModelViewSet):
