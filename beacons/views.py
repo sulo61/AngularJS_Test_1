@@ -1,6 +1,5 @@
 import json
 from beacons.utils import get_api_key, get_user_from_api_key
-
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -24,12 +23,11 @@ from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerial
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import UserSerializer, UserProfileSerializer
-from django.contrib.auth import get_user_model, login, authenticate
+from django.contrib.auth import get_user_model, login, authenticate, update_session_auth_hash
 
 User = get_user_model()
 
 from django.contrib.auth import logout
-
 from rest_framework import permissions
 
 
@@ -196,6 +194,11 @@ class UserProfileCRUD(ModelViewSet):
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+
+    def perform_update(self, serializer):
+        super(UserProfileCRUD, self).perform_update(serializer)
+
+        # if 'password' in serializer.initial_data and 'old_password' in serializer.initial_data:
 
 
 class UserProfile(APIView):

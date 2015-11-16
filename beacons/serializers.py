@@ -1,17 +1,16 @@
 import time
-import datetime
-from django.http import Http404
 
+from django.contrib.auth import authenticate, logout, login
+from django.http import Http404
 from django.shortcuts import get_object_or_404
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
-    UserAwards
-from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _
+from rest_framework import exceptions, serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, IntegerField
-from django.contrib.auth import authenticate
-from django.utils.translation import ugettext_lazy as _
-from rest_framework import exceptions, serializers
+
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
+    UserAwards
 
 
 class TokenSerializer(serializers.Serializer):
@@ -82,26 +81,30 @@ class UserProfileSerializer(serializers.ModelSerializer):
         super(UserProfileSerializer, self).update(instance, validated_data)
 
         if 'password' in self.initial_data or 'old_password' in self.initial_data:
-            if not ('password' in self.initial_data):
-                raise ValidationError({
-                    'password': ['This field is required.']
-                })
+            if self.initial_data['password'] != '' and self.initial_data['old_password'] != '':
+                if not ('password' in self.initial_data) and self.initial_data['password'] != '':
+                    raise ValidationError({
+                        'password': ['This field is required.']
+                    })
 
-            if not ('old_password' in self.initial_data):
-                raise ValidationError({
-                    'old_password': ['This field is required.']
-                })
+                if not ('old_password' in self.initial_data) and self.initial_data['old_password'] != '':
+                    raise ValidationError({
+                        'old_password': ['This field is required.']
+                    })
 
-            password = self.initial_data.get('old_password', '')
-            if not instance.check_password(password):
-                raise ValidationError({
-                    'old_password': ['Entered password is not correct.']
-                })
+                password = self.initial_data.get('old_password', '')
+                if not instance.check_password(password):
+                    raise ValidationError({
+                        'old_password': ['Entered password is not correct.']
+                    })
 
-            if 'password' in validated_data:
-                instance.set_password(validated_data.get('password'))
+                instance.set_password(self.initial_data.get('password'))
+                instance.save()
+                logout(self.context['request'])
+                user = authenticate(email=instance.email, password=self.initial_data.get('password'))
+                if user is not None:
+                    login(self.context['request'], user)
 
-            instance.save()
         return instance
 
 
@@ -244,7 +247,8 @@ class CampaignAddActionSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             if 'ad' in fields:
                 fields['ad'].queryset = \
-                    get_object_or_404(Campaign, pk=self.context['request'].parser_context.get('kwargs').get('pk')).ads.all()
+                    get_object_or_404(Campaign,
+                                      pk=self.context['request'].parser_context.get('kwargs').get('pk')).ads.all()
 
             if 'beacon' in fields:
                 fields['beacon'].queryset = \
