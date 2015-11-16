@@ -314,7 +314,7 @@ class CampaignBeaconView(ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
-        return self.get_campaign().beacons.all()
+        return self.get_campaign().beacons.all().order_by('minor')
 
     def list(self, request, *args, **kwargs):
         '''
@@ -552,8 +552,11 @@ class ShopView(ModelViewSet):
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        return self.request.user.shops.all()
-
+        api_key = self.request.META['HTTP_API_KEY']
+        if 'HTTP_API_KEY' in self.request.META:
+            return get_user_from_api_key(api_key).shops.all()
+        else:
+            return self.request.user.beacons.all()
 
 class CampaignAdView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
