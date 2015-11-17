@@ -49,7 +49,7 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 			$scope.showLoginWarning = false;
 			$scope.loginWarning = "";
 			if(response.status==200){
-				$window.location.href = "/panel/#/beacons";
+				$window.location.href = "/panel/#/campaigns";
 			}
 			$scope.unlock();
 		}, function errorCallback(response){
