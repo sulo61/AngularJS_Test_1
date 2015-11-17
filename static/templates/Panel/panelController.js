@@ -135,7 +135,9 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	}])
 	.factory('CampaignBeaconsGenerate', ['$resource',
 		function($resource){
-			return $resource('../api/campaigns/:campaignID/create_beacons/', {campaignID:'@campaignID'});
+			return $resource('../api/campaigns/:campaignID/create_beacons/', {campaignID:'@campaignID'}, {
+				save: {method:'POST', isArray:true}
+			});
 	}])
 	.factory('CampaignAwards', ['$resource',
 		function($resource){

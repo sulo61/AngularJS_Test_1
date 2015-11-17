@@ -88,7 +88,7 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 			this.lock();
 		}
 
-		CampaignBeaconsGenerate.save({campaignID:this.id}, {pk:this.id, count:this.numberOfNewBeacons}, function(){
+		CampaignBeaconsGenerate.save({campaignID:this.id}, {count:this.numberOfNewBeacons}, function(){
 			this.appInfo.showSuccess();
 			this.unlock();
 			this.getCampaignBeacons(this.beaconsCurrentPage);
