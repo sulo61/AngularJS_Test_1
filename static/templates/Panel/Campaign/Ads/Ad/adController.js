@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('adController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', function($scope, $http, $routeParams, Upload, appInfo){
+angular.module('panelApp').controller('adController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', 'CampaignAds', 'CampaignAd', function($scope, $http, $routeParams, Upload, appInfo, CampaignAds, CampaignAd){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -41,17 +41,15 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 			} else {
 				this.lock();
 			}
-			$http({
-				method: 'GET',
-				url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID
-			}).then(function successCallback(response){
-				this.ad = response.data;
+			CampaignAd.get({campaignID:this.campaignID, adID:this.adID}, function(success){
+				this.ad = success;
 				this.makeCopy();
 				this.unlock();
-			}.bind(this), function errorCallback(response){
-				appInfo.showFail(response);
+			}.bind(this), function(error){
+				this.appInfo.showFail(error);
 				this.unlock();
-			}.bind(this));	
+			}.bind(this));
+
 		}
 	}
 	// patch ad
@@ -60,19 +58,15 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 			return;
 		} else {
 			this.lock();
-		}		
-		$http({
-			method: 'PATCH',
-			url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID,
-			data: this.ad
-		}).then(function successCallback(response){
+		}
+		CampaignAd.patch({campaignID:this.campaignID, adID:this.adID}, this.ad, function(){
 			this.makeCopy();
-			appInfo.showSuccess();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		}.bind(this));			
+		}.bind(this));
 				
 	}
 	// post ad
@@ -82,19 +76,15 @@ angular.module('panelApp').controller('adController', ['$scope', '$http', '$rout
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'POST',
-			url: '/api/campaigns/'+this.campaignID+'/ads/',
-			data: this.ad
-		}).then(function successCallback(response){
-			this.ad = response.data;
-			this.makeCopy();			
-			appInfo.showSuccess();
-			this.unlock();			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		CampaignAds.save({campaignID:this.campaignID}, this.ad,  function(success){
+			this.ad = success;
+			this.makeCopy();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this));			
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
 	}
 	// upload photo	
 	this.uploadFiles = function(file, errFiles) {

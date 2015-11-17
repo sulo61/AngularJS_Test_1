@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('actionController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', function($scope, $http, $routeParams, Upload, appInfo){
+angular.module('panelApp').controller('actionController', ['$scope', '$http', '$routeParams', 'Upload', 'appInfo', 'CampaignActions', 'CampaignAction', 'CampaignBeacons', 'CampaignAds', function($scope, $http, $routeParams, Upload, appInfo, CampaignActions, CampaignAction, CampaignBeacons, CampaignAds){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -129,17 +129,16 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 			} else {
 				this.lock();
 			}
-			$http({
-				method: 'GET',
-				url: '/api/campaigns/'+this.campaignID+"/actions/"+this.actionID
-			}).then(function successCallback(response){
-				this.action = response.data;
+
+			CampaignAction.get({campaignID:this.campaignID, actionID:this.actionID}, function(success){
+				this.action = success;
 				this.makeCopy();
 				this.unlock();
-			}.bind(this), function errorCallback(response){
-				appInfo.showFail(response);
+			}.bind(this), function(error){
+				this.appInfo.showFail(error);
 				this.unlock();
-			}.bind(this));	
+			}.bind(this));
+
 		}
 	}
 	this.getCampaignBeacons = function(){
@@ -148,17 +147,16 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/campaigns/'+this.campaignID+"/beacons/"
-		}).then(function successCallback(response){
+
+		CampaignBeacons.query({campaignID:this.campaignID}, function(success){
 			this.beaconsList = [];
-			this.beaconsList = response.data;			
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.beaconsList = success;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
+
 	}
 	this.getCampaignAds = function(page){
 		if (this.isLock){
@@ -166,43 +164,36 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/campaigns/'+this.campaignID+'/ads/',
-			params: {"page" : page}
-		}).then(function successCallback(response){
+		CampaignAds.get({campaignID:this.campaignID, page:page}, function(success){
 			this.adsList = [];
 			this.adsPages = [];
-			this.adsList = response.data.results;
-			this.numberOfItems = response.data.count;
+			this.adsList = success.results;
+			this.numberOfItems = success.count;
 			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.adsPages.push(i+1);
-		    }
-		    this.adsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+				this.adsPages.push(i+1);
+			}
+			this.adsCurrentPage = page;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
 	};
 	this.patchAction = function(){
 		if (this.isLock){
 			return;
 		} else {
 			this.lock();
-		}		
-		$http({
-			method: 'PATCH',
-			url: '/api/campaigns/'+this.campaignID+"/actions/"+this.actionID,
-			data: this.action
-		}).then(function successCallback(response){
+		}
+
+		CampaignAction.patch({campaignID:this.campaignID, actionID:this.actionID}, this.action, function(){
 			this.makeCopy();
-			appInfo.showSuccess();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		}.bind(this));			
+		}.bind(this));
 				
 	}
 	this.postAction = function(){
@@ -211,20 +202,18 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'POST',
-			url: '/api/campaigns/'+this.campaignID+'/actions/',
-			data: this.action
-		}).then(function successCallback(response){
-			this.action = response.data;
-			this.actionID = this.action.id;
-			this.makeCopy();			
-			appInfo.showSuccess();
-			this.unlock();			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+
+		CampaignActions.save({campaignID:this.campaignID}, this.action,  function(success){
+			this.action = success;
+			this.makeCopy();
+			this.appInfo.showSuccess();
 			this.unlock();
-		}.bind(this));			
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this))
+
+
 	}
 
 	this.getAction();

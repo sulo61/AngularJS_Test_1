@@ -9,11 +9,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 	})
     .config(['$routeProvider', function($routeProvider){
     	$routeProvider
-    		.when("/beacons", {
-					templateUrl: "/dash/beacons",
-				    controller: "dashBeaconsController",
-				    controllerAs: 'beaconsCtrl'
-    		})
     		.when("/profile", {
     				templateUrl: "/dash/profile",
 				    controller: "dashProfileController",
@@ -33,11 +28,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     				templateUrl: "/shop",
 				    controller: "shopController",
 				    controllerAs: 'sc'	
-    		})
-    		.when("/beacons/:id?", {
-    				templateUrl: "/beacon",
-				    controller: "beaconController",
-				    controllerAs: 'beaconCtrl'	
     		})
     		.when("/campaigns/:id?/basic/", {
     				templateUrl: "/campaign/basic",
@@ -156,7 +146,27 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 			return $resource('../api/campaigns/:campaignID/awards/:awardID', {campaignID:'@campaignID', awardID:'@awardID'}, {
 				patch: {method:'PATCH'}
 			});
-		}])
+	}])
+	.factory('CampaignAds', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/ads/', {campaignID:'@campaignID'});
+	}])
+	.factory('CampaignAd', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/ads/:adID', {campaignID:'@campaignID', adID:'@adID'}, {
+				patch: {method:'PATCH'}
+			});
+	}])
+	.factory('CampaignActions', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/actions/', {campaignID:'@campaignID'});
+	}])
+	.factory('CampaignAction', ['$resource',
+		function($resource){
+			return $resource('../api/campaigns/:campaignID/actions/:actionID', {campaignID:'@campaignID', actionID:'@actionID'}, {
+				patch: {method:'PATCH'}
+			});
+	}])
     .factory('appInfo', function() {
     	appInfo = function () {
 	    	this.appInfoShow = false;

@@ -49,7 +49,7 @@ angular.module('panelApp').controller('beaconsController', ['$scope', '$http', '
 			this.beaconsList = success;
 			this.unlock();
 		}.bind(this), function(error){
-			this.appInfo.showFail(response);
+			this.appInfo.showFail(error);
 			this.unlock();
 		}.bind(this));
 
