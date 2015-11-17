@@ -54,6 +54,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				    controller: "beaconsController",
 				    controllerAs: 'beaconsCtrl'	
     		})
+			.when("/campaigns/:id?/promotions/", {
+				templateUrl: "/campaign/promotions",
+				controller: "promotionsController",
+				controllerAs: 'promotionsCtrl'
+			})
     		.when("/campaigns/:campaignID?/awards/:awardID?", {
     				templateUrl: "/campaign/award",
 				    controller: "awardController",
@@ -69,6 +74,12 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 				    controller: "actionController",
 				    controllerAs: 'actionCtrl'	
     		})
+			.when("/campaigns/:campaignID?/promotions/:promotionID?", {
+				templateUrl: "/campaign/promotion",
+				controller: "promotionController",
+				controllerAs: 'promotionCtrl'
+			})
+
     }])
     .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
         GoogleMapApiProviders.configure({

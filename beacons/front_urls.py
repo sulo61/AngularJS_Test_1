@@ -24,6 +24,9 @@ urlpatterns = [
     url(r'^campaign/awards/$', views.campaignAwards, name="campaignAwards"),
     url(r'^campaign/award/$', views.campaignAward, name="campaignAward"),
 
+    url(r'^campaign/promotions/$', views.campaignPromotions, name="campaignPromotions"),
+    url(r'^campaign/promotion/$', views.campaignPromotion, name="campaignPromotion"),
+
     url(r'^campaign/beacons/$', views.campaignBeacons, name="campaignBeacons"),
     
     url(r'^panel/campaign/menu/$', views.campaignMenu, name="campaignMenu"),
