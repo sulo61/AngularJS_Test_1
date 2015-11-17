@@ -47,12 +47,12 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 	};
 	this.beaconsNavNext = function(){
 		if (this.beaconsCurrentPage<this.beaconsPages.length){
-			this.getbeacons(this.beaconsCurrentPage+1);
+			this.getCampaignBeacons(this.beaconsCurrentPage+1);
 		}
 	};
 	this.beaconsNavPrev = function(){
 		if (this.beaconsCurrentPage>1){
-			this.getbeacons(this.beaconsCurrentPage-1);	
+			this.getCampaignBeacons(this.beaconsCurrentPage-1);
 		}
 	};
 	this.adsNavActive = function(page){
@@ -64,12 +64,12 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 	};
 	this.adsNavNext = function(){
 		if (this.adsCurrentPage<this.adsPages.length){
-			this.getAds(this.adsCurrentPage+1);
+			this.getCampaignAds(this.adsCurrentPage+1);
 		}
 	};
 	this.adsNavPrev = function(){
 		if (this.adsCurrentPage>1){
-			this.getAds(this.adsCurrentPage-1);	
+			this.getCampaignAds(this.adsCurrentPage-1);
 		}
 	};
 	// beacons
@@ -141,16 +141,22 @@ angular.module('panelApp').controller('actionController', ['$scope', '$http', '$
 
 		}
 	}
-	this.getCampaignBeacons = function(){
+	this.getCampaignBeacons = function(page){
 		if (this.isLock){
 			return;
 		} else {
 			this.lock();
 		}
 
-		CampaignBeacons.query({campaignID:this.campaignID}, function(success){
+		CampaignBeacons.get({campaignID:this.campaignID, pagination:true, page:page}, function(success){
 			this.beaconsList = [];
-			this.beaconsList = success;
+			this.beaconsPages = [];
+			this.beaconsList = success.results;
+			this.numberOfItems = success.count;
+			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
+				this.beaconsPages.push(i+1);
+			}
+			this.beaconsCurrentPage = page;
 			this.unlock();
 		}.bind(this), function(error){
 			this.appInfo.showFail(error);
