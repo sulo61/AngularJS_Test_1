@@ -39,7 +39,7 @@
 			<tr ng-repeat="action in actionsCtrl.actionsList">
 				<th scope="row">{{  $index + (actionsCtrl.actionsCurrentPage * 5) - 4 }}</th>
 				<td>{{action.beacon}}</td>
-				<td>{{action.ad.id}}</td>
+				<td>{{action.ad}}</td>
 				<td>{{action.points}}</td>
 				<td>{{action.time_limit}}</td>
 				<td>
