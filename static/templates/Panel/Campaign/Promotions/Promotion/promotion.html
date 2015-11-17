@@ -1,9 +1,9 @@
 {%verbatim%} 
 <!-- TOP -->
 <div style="text-align:right;">
-	<a href={{"#/campaigns/"+adCtrl.campaignID+"/ads"}} class="btn btn-primary" role="button">CLOSE EDIT</a>	
-	<button class="btn btn-danger" ng-click="adCtrl.dismiss()">DISMISS</button>
-	<button class="btn btn-success" ng-click="adCtrl.save()">SAVE</button>
+	<a href={{"#/campaigns/"+promotionCtrl.campaignID+"/promotions"}} class="btn btn-primary" role="button">CLOSE EDIT</a>
+	<button class="btn btn-danger" ng-click="promotionCtrl.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="promotionCtrl.save()">SAVE</button>
 	<hr><br><br>
 </div>
 
@@ -11,24 +11,22 @@
 <!-- LEFT -->
 <div class="leftColumn"  style="width:50%">
 	<label>Title: </label>
-	<input type="text" class="form-control" placeholder="Title" ng-model="adCtrl.ad.title">
+	<input type="text" class="form-control" placeholder="Title" ng-model="promotionCtrl.promotion.title">
 	<br>
 	<label>Description: </label>
-	<input type="text" class="form-control" placeholder="Description" ng-model="adCtrl.ad.description">
+	<input type="text" class="form-control" placeholder="Description" ng-model="promotionCtrl.promotion.description">
 	<br>	
-	<label>Type: </label>
-	<input type="text" class="form-control" placeholder="Type 0 or 1 or 2" ng-model="adCtrl.ad.type">
+	<label>Points: </label>
+	<input type="text" class="form-control" placeholder="Points" ng-model="promotionCtrl.promotion.points">
 	<br>
 </div>
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:50%">
-	<div style="text-align:center;" ng-show="adCtrl.ad.id>0">
-		<img ng-src="{{adCtrl.ad.image}}" alt="No image" style="width:100%"/>
+	<div style="text-align:center;" ng-show="promotionCtrl.promotion.id>0">
+		<img ng-src="{{promotionCtrl.promotion.image}}" alt="No image" style="width:100%"/>
 		<br><br>
-		<button class="btn btn-info" type="file" ngf-select="adCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD IMAGE</button>
+		<button class="btn btn-info" type="file" ngf-select="promotionCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD IMAGE</button>
 	</div>
 </div>
-
-
 {%endverbatim%}

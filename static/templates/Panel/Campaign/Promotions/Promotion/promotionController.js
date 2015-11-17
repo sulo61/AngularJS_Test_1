@@ -12,37 +12,37 @@ angular.module('panelApp').controller('promotionController', ['$scope', '$http',
 	// award params
 	this.campaignID = $routeParams.campaignID;
 	this.campaignNAME = $routeParams.campaignNAME;
-	this.adID = $routeParams.adID;
-	this.adNAME = $routeParams.adNAME;
+	this.promotionID = $routeParams.promotionID;
+	this.promotionNAME = $routeParams.promotionNAME;
 	// model
-	this.ad = { id:0 };
-	this.adCOPY = {};
+	this.promotion = { id:0 };
+	this.promotionCOPY = {};
 	
 	this.dismiss = function(){
-		this.ad = angular.copy(this.adCOPY);
+		this.promotion = angular.copy(this.promotionCOPY);
 	}
 	this.save = function(){
-		if (this.adID>0){
-			this.patchAd();
+		if (this.promotionID>0){
+			this.patchPromotion();
 		} else {
-			this.postAd();
+			this.postPromotion();
 		}
 	}
 	this.makeCopy = function(){
-		this.adCOPY = angular.copy(this.ad);
-		this.adID = this.ad.id;
-		this.adNAME = this.ad.title;
+		this.promotionCOPY = angular.copy(this.promotion);
+		this.promotionID = this.promotion.id;
+		this.promotionNAME = this.promotion.title;
 	}
-	// get ad
-	this.getAd = function(){
-		if (this.adID>0){
+	// get promotion
+	this.getPromotion = function(){
+		if (this.promotionID>0){
 			if (this.isLock){
 				return;
 			} else {
 				this.lock();
 			}
-			CampaignAd.get({campaignID:this.campaignID, adID:this.adID}, function(success){
-				this.ad = success;
+			CampaignPromotion.get({campaignID:this.campaignID, promotionID:this.promotionID}, function(success){
+				this.promotion = success;
 				this.makeCopy();
 				this.unlock();
 			}.bind(this), function(error){
@@ -52,14 +52,14 @@ angular.module('panelApp').controller('promotionController', ['$scope', '$http',
 
 		}
 	}
-	// patch ad
-	this.patchAd = function(){
+	// patch promotion
+	this.patchPromotion = function(){
 		if (this.isLock){
 			return;
 		} else {
 			this.lock();
 		}
-		CampaignAd.patch({campaignID:this.campaignID, adID:this.adID}, this.ad, function(){
+		CampaignPromotion.patch({campaignID:this.campaignID, promotionID:this.promotionID}, this.promotion, function(){
 			this.makeCopy();
 			this.appInfo.showSuccess();
 			this.unlock();
@@ -69,15 +69,15 @@ angular.module('panelApp').controller('promotionController', ['$scope', '$http',
 		}.bind(this));
 				
 	}
-	// post ad
-	this.postAd = function(){
+	// post promotion
+	this.postPromotion = function(){
 		if (this.isLock){
 			return;
 		} else {
 			this.lock();
 		}
-		CampaignAds.save({campaignID:this.campaignID}, this.ad,  function(success){
-			this.ad = success;
+		CampaignPromotions.save({campaignID:this.campaignID}, this.promotion,  function(success){
+			this.promotion = success;
 			this.makeCopy();
 			this.appInfo.showSuccess();
 			this.unlock();
@@ -86,29 +86,29 @@ angular.module('panelApp').controller('promotionController', ['$scope', '$http',
 			this.unlock();
 		}.bind(this));
 	}
-	// upload photo	
+	// uplopromotion photo	
 	this.uploadFiles = function(file, errFiles) {
-        $scope.f = file;
-        $scope.errFile = errFiles && errFiles[0];
-        if (file) {
-            file.upload = Upload.upload({
-                url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID+"/image",
-                data: {image: file}
-            });
-            file.upload.then(function (response) {
-            	this.ad.image = angular.copy(response.data.image);
-            	appInfo.showSuccess();
-                // $timeout(function () {                	
-                //     appInfo.showFail(response.data);
-                // });
-            }.bind(this), function (response) {
-            	if (response.status > 0)
-                	appInfo.showFail(response.status + ': ' + response.data);
-            }, function (evt) {                
-            });
-        }   
-    }
+		$scope.f = file;
+		$scope.errFile = errFiles && errFiles[0];
+		if (file) {
+			file.upload = Upload.upload({
+				url: '/api/campaigns/'+this.campaignID+"/promotions/"+this.promotionID+"/image/",
+				data: {image: file}
+			});
+			file.upload.then(function (response) {
+				this.promotion.image = angular.copy(response.data.image);
+				appInfo.showSuccess();
+				// $timeout(function () {
+				//     appInfo.showFail(response.data);
+				// });
+			}.bind(this), function (response) {
+				if (response.status > 0)
+					appInfo.showFail(response.status + ': ' + response.data);
+			}, function (evt) {
+			});
+		}
+	}
 
 
-	this.getAd(this.adID);
+	this.getPromotion(this.promotionID);
 }]);
