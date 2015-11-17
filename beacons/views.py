@@ -1,6 +1,6 @@
 import json
+from rest_framework.exceptions import ValidationError
 from beacons.utils import get_api_key, get_user_from_api_key
-
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -24,12 +24,11 @@ from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerial
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
 from beacons.serializers import UserSerializer, UserProfileSerializer
-from django.contrib.auth import get_user_model, login, authenticate
+from django.contrib.auth import get_user_model, login, authenticate, update_session_auth_hash
 
 User = get_user_model()
 
 from django.contrib.auth import logout
-
 from rest_framework import permissions
 
 
@@ -185,6 +184,11 @@ class UserProfileCRUD(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
 
+    def perform_update(self, serializer):
+        super(UserProfileCRUD, self).perform_update(serializer)
+
+        # if 'password' in serializer.initial_data and 'old_password' in serializer.initial_data:
+
 
 class UserProfile(APIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication)
@@ -279,7 +283,6 @@ class CampaignRetrieveView(ModelViewSet):
 class CampaignBeaconView(ModelViewSet):
     serializer_class = BeaconSerializer
     permission_classes = (IsAuthenticated, IsCampaignOwner, IsOperator)
-    pagination_class = None
 
     def get_campaign(self):
         campaign = get_object_or_404(Campaign, pk=self.kwargs['pk'])
@@ -299,7 +302,28 @@ class CampaignBeaconView(ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
-        return self.get_campaign().beacons.all()
+        return self.get_campaign().beacons.all().order_by('minor')
+
+    def list(self, request, *args, **kwargs):
+        '''
+        ---
+        parameters:
+            - name: pagination
+              description: Turning on / off pagination. Default false.
+              required: false
+              type: string
+              paramType: query
+        '''
+        if request.query_params.get('pagination', 'false') == 'true':
+            pass
+        elif request.query_params.get('pagination', 'false') == 'false':
+            self.pagination_class = None
+        else:
+            raise ValidationError({
+                'pagination': ['Pagination value should be true or false.']
+            })
+
+        return super(CampaignBeaconView, self).list(request, *args, **kwargs)
 
 
 @api_view(('Post',))
@@ -337,18 +361,20 @@ def create_beacons(request, pk, format=None):
     '''
     campaign = get_object_or_404(Campaign, pk=pk)
     count = request.data.get('count', 0)
-    beacons = []
-    for x in xrange(int(count)):
-        create = Beacon.objects.create(campaign=campaign)
-        create.minor = x
-        create.major = request.user.pk
-        create.save()
-        beacons.append({
-            'id': create.pk,
-            'minor': create.minor,
-            'major': create.major,
-        })
-    return Response(json.dumps(list(beacons)))
+    count_beacons = len(campaign.beacons.all())
+    if count_beacons < count:
+        for x in xrange(count_beacons, int(count)):
+            create = Beacon.objects.create(campaign=campaign)
+            create.minor = x
+            create.major = request.user.pk
+            create.save()
+
+    elif count_beacons > count:
+        for beacon in campaign.beacons.all().order_by('minor').reverse()[:(count_beacons - count)]:
+            beacon.delete()
+
+    serializer = BeaconSerializer(instance=campaign.beacons.all(), many=True)
+    return Response(serializer.data, status.HTTP_200_OK)
 
 
 class BeaconCampaignActionView(ModelViewSet):
@@ -514,8 +540,11 @@ class ShopView(ModelViewSet):
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        return self.request.user.shops.all()
-
+        api_key = self.request.META['HTTP_API_KEY']
+        if 'HTTP_API_KEY' in self.request.META:
+            return get_user_from_api_key(api_key).shops.all()
+        else:
+            return self.request.user.beacons.all()
 
 class CampaignAdView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -539,6 +568,26 @@ class CampaignAdView(ModelViewSet):
     def get_queryset(self):
         return self.get_campaign().ads.all()
 
+    def list(self, request, *args, **kwargs):
+        '''
+        ---
+        parameters:
+            - name: pagination
+              description: Turning on / off pagination. Default true.
+              required: false
+              type: string
+              paramType: query
+        '''
+        if request.query_params.get('pagination', 'true') == 'true':
+            pass
+        elif request.query_params.get('pagination', 'true') == 'false':
+            self.pagination_class = None
+        else:
+            raise ValidationError({
+                'pagination': ['Pagination value should be true or false.']
+            })
+        return super(CampaignAdView, self).list(request, *args, **kwargs)
+
 
 class CampaignAddAction(ModelViewSet):
     serializer_class = CampaignAddActionSerializer
@@ -554,6 +603,27 @@ class CampaignAddAction(ModelViewSet):
 
     def get_queryset(self):
         return self.get_object().actions.all()
+
+    def list(self, request, *args, **kwargs):
+        '''
+        ---
+        parameters:
+            - name: pagination
+              description: Turning on / off pagination. Default true.
+              required: false
+              type: string
+              paramType: query
+        '''
+        if request.query_params.get('pagination', 'true') == 'true':
+            pass
+        elif request.query_params.get('pagination', 'true') == 'false':
+            self.pagination_class = None
+        else:
+            raise ValidationError({
+                'pagination': ['Pagination value should be one of true or false.']
+            })
+
+        return super(CampaignAddAction, self).list(request, *args, **kwargs)
 
 
 class ActionView(ModelViewSet):

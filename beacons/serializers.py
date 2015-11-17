@@ -1,16 +1,16 @@
 import time
-import datetime
-from django.http import Http404
 
+from django.contrib.auth import authenticate, logout, login
+from django.http import Http404
 from django.shortcuts import get_object_or_404
-from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
-    UserAwards
-from django.utils.dateparse import parse_datetime
-from rest_framework.exceptions import ValidationError
-from rest_framework.serializers import ModelSerializer, IntegerField
-from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
+from rest_framework.exceptions import ValidationError
+from rest_framework.relations import PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer, IntegerField
+
+from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
+    UserAwards
 
 
 class TokenSerializer(serializers.Serializer):
@@ -81,26 +81,31 @@ class UserProfileSerializer(serializers.ModelSerializer):
         super(UserProfileSerializer, self).update(instance, validated_data)
 
         if 'password' in self.initial_data or 'old_password' in self.initial_data:
-            if not ('password' in self.initial_data):
-                raise ValidationError({
-                    'password': ['This field is required.']
-                })
+            if self.initial_data['password'] != '' and self.initial_data['old_password'] != '':
+                if not ('password' in self.initial_data) and self.initial_data['password'] != '':
+                    raise ValidationError({
+                        'password': ['This field is required.']
+                    })
 
-            if not ('old_password' in self.initial_data):
-                raise ValidationError({
-                    'old_password': ['This field is required.']
-                })
+                if not ('old_password' in self.initial_data) and self.initial_data['old_password'] != '':
+                    raise ValidationError({
+                        'old_password': ['This field is required.']
+                    })
 
-            password = self.initial_data.get('old_password', '')
-            if not instance.check_password(password):
-                raise ValidationError({
-                    'old_password': ['Entered password is not correct.']
-                })
+                password = self.initial_data.get('old_password', '')
+                if not instance.check_password(password):
+                    raise ValidationError({
+                        'old_password': ['Entered password is not correct.']
+                    })
 
-            if 'password' in validated_data:
-                instance.set_password(validated_data.get('password'))
+                instance.set_password(self.initial_data.get('password'))
+                instance.save()
+                if 'request' in self.context:
+                    logout(self.context['request'])
+                    user = authenticate(email=instance.email, password=self.initial_data.get('password'))
+                    if user is not None:
+                        login(self.context['request'], user)
 
-            instance.save()
         return instance
 
 
@@ -114,7 +119,7 @@ class CountSerializer(serializers.Serializer):
 class BeaconSerializer(serializers.ModelSerializer):
     class Meta:
         model = Beacon
-        fields = ('id', 'title', 'minor', 'major')
+        fields = ('id', 'title', 'minor', 'major', 'UUID')
 
 
 class CampaignSerializer(serializers.ModelSerializer):
@@ -238,7 +243,26 @@ class AdSerializerCreate(serializers.ModelSerializer):
 
 
 class CampaignAddActionSerializer(serializers.ModelSerializer):
-    ad = AdSerializerCreate(many=False, read_only=True)
+    def get_fields(self):
+        fields = super(CampaignAddActionSerializer, self).get_fields()
+        if 'request' in self.context:
+            if 'ad' in fields:
+                fields['ad'].queryset = \
+                    get_object_or_404(Campaign,
+                                      pk=self.context['request'].parser_context.get('kwargs').get('pk')).ads.all()
+
+            if 'beacon' in fields:
+                fields['beacon'].queryset = \
+                    get_object_or_404(Campaign,
+                                      pk=self.context['request'].parser_context.get('kwargs').get('pk')).beacons.all()
+        return fields
+
+    def create(self, validated_data):
+        if 'ad' in self.initial_data:
+            validated_data['ad'] = get_object_or_404(Ad, pk=self.initial_data['ad'])
+        return super(CampaignAddActionSerializer, self).create(validated_data)
+
+    ad = PrimaryKeyRelatedField(many=False, queryset=Beacon.objects.all())
 
     class Meta:
         model = ActionBeacon
@@ -284,15 +308,17 @@ class AwardSerializerGet(serializers.ModelSerializer):
 
     def favourite_method(self, obj):
         try:
-            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
-            return user_award.favorite
+            if 'request' in self.context:
+                user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+                return user_award.favorite
         except Http404:
             return False
 
     def bought_method(self, obj):
         try:
-            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
-            return user_award.bought
+            if 'request' in self.context:
+                user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+                return user_award.bought
         except Http404:
             return False
 
@@ -304,14 +330,15 @@ class AwardSerializerGet(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance = super(AwardSerializerGet, self).update(instance, validated_data)
-        award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
-        if 'favorite' in self.initial_data:
-            award_favourite.favorite = self.initial_data.get('favorite')
+        if 'request' in self.context:
+            award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+            if 'favorite' in self.initial_data:
+                award_favourite.favorite = self.initial_data.get('favorite')
 
-        if 'bought' in self.initial_data:
-            award_favourite.bought = self.initial_data.get('bought')
+            if 'bought' in self.initial_data:
+                award_favourite.bought = self.initial_data.get('bought')
 
-        award_favourite.save()
+            award_favourite.save()
         return instance
 
 
@@ -322,15 +349,17 @@ class UserAwardDetail(serializers.ModelSerializer):
 
     def favourite_method(self, obj):
         try:
-            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
-            return user_award.favorite
+            if 'request' in self.context:
+                user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+                return user_award.favorite
         except Http404:
             return False
 
     def bought_method(self, obj):
         try:
-            user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
-            return user_award.bought
+            if 'request' in self.context:
+                user_award = get_object_or_404(self.context['request'].user.user_awards.all(), award=obj)
+                return user_award.bought
         except Http404:
             return False
 
@@ -341,14 +370,15 @@ class UserAwardDetail(serializers.ModelSerializer):
         return representation
 
     def update(self, instance, validated_data):
-        award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
-        if 'favorite' in self.initial_data:
-            award_favourite.favorite = self.initial_data.get('favorite')
+        if 'request' in self.context:
+            award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+            if 'favorite' in self.initial_data:
+                award_favourite.favorite = self.initial_data.get('favorite')
 
-        if 'bought' in self.initial_data:
-            award_favourite.bought = self.initial_data.get('bought')
+            if 'bought' in self.initial_data:
+                award_favourite.bought = self.initial_data.get('bought')
 
-        award_favourite.save()
+            award_favourite.save()
         return instance
 
 
