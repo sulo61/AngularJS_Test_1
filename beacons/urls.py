@@ -67,6 +67,8 @@ urlpatterns = [
     url(r'campaigns/(?P<pk>[0-9]+)/promotions/$', views.PromotionView.as_view(methods), name='promotions'),
     url(r'campaigns/(?P<pk>[0-9]+)/promotions/(?P<promotion_pk>[0-9]+)/$', views.PromotionCreateView.as_view(retrieve),
         name='promotions_crud'),
+    url(r'campaigns/(?P<pk>[0-9]+)/promotions/(?P<promotion_pk>[0-9]+)/image/$',
+        views.PromotionImageUpdater.as_view(get_retrieve), name='promotions_image'),
 
     url(r'campaigns/(?P<pk>[0-9]+)/awards/$', views.AwardView.as_view(methods), name='promotions'),
     url(r'campaigns/(?P<pk>[0-9]+)/awards/(?P<award_pk>[0-9]+)/$', views.AwardCreateView.as_view(retrieve),

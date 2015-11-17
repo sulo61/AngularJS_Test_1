@@ -18,8 +18,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from beacons.models import Campaign, Beacon, Shop, Ad, Award, UserCampaign
-from beacons.serializers import TokenSerializer, UserAwardDetail
+from beacons.models import Campaign, Beacon, Shop, Ad, Award, UserCampaign, Promotion
+from beacons.serializers import TokenSerializer, UserAwardDetail, PromotionImageSerializer
 from beacons.serializers import BeaconSerializer, CampaignSerializer, ShopSerializer, AdSerializerCreate, \
     CampaignAddActionSerializer, ActionSerializer, PromotionsSerializer, PromotionSerializerGet, AwardSerializerGet, \
     AwardSerializer, ShopImageSerializer, AwardImageSerializer, AdImageSerializer
@@ -546,6 +546,7 @@ class ShopView(ModelViewSet):
         else:
             return self.request.user.shops.all()
 
+
 class CampaignAdView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = AdSerializerCreate
@@ -868,3 +869,24 @@ class CampaignCopyBeacons(APIView):
             serializer = BeaconSerializer(instance=campaign.beacons.all(), many=True)
             return Response(status=status.HTTP_201_CREATED, data=serializer.data)
         return Response(status=status.HTTP_400_BAD_REQUEST, data={'non_field_error': ['campaign has beacons already']})
+
+
+class PromotionImageUpdater(ModelViewSet):
+    permission_classes = (IsAuthenticated, IsOperator,)
+
+    serializer_class = PromotionImageSerializer
+
+    def get_queryset(self):
+        return get_object_or_404(Campaign, pk=self.kwargs.get('pk')).promotions.all()
+
+    def create(self, request, *args, **kwargs):
+        if 'image' in request.FILES:
+
+            promotion = get_object_or_404(Promotion, pk=kwargs.get('promotion_pk'))
+            upload = request.FILES['image']
+
+            promotion.image.delete()
+            promotion.image.save(upload.name, upload)
+            return Response(status=status.HTTP_200_OK, data={'image': promotion.image.url})
+        else:
+            return super(PromotionImageUpdater, self).create(request, *args, **kwargs)
