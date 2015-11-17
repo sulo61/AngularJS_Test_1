@@ -5,40 +5,66 @@
 <head>
 	<!-- CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="{% static "global.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'global.css' %}">
 	<!-- SCRIPTS -->
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-	<script type="text/javascript" src="https://code.angularjs.org/1.3.14/angular-route.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
-	<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-	<script type="text/javascript" src="{% static "ui-bootstrap-tpls-0.14.3.js" %}"></script>
-	<script type="text/javascript" src="{% static "angular-google-maps.js" %}"></script>
-	<script type="text/javascript" src="{% static "lodash.js" %}"></script>
-	<script type="text/javascript" src="{% static "angular-simple-logger.js" %}"></script>	
+	<script type="text/javascript" src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js'></script>
+	<script type="text/javascript" src='https://code.angularjs.org/1.3.14/angular-route.js'></script>
+	<script type="text/javascript" src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js'></script>
+	<script type="text/javascript" src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+	<script type="text/javascript" src="{% static 'ui-bootstrap-tpls-0.14.3.js' %}"></script>
+	<script type="text/javascript" src="{% static 'angular-google-maps.js' %}"></script>
+	<script type="text/javascript" src="{% static 'lodash.js' %}"></script>
+	<script type="text/javascript" src="{% static 'angular-simple-logger.js' %}"></script>	
+	<script type="text/javascript" src="{% static 'ng-file-upload-shim.js' %}"></script>
+	<script type="text/javascript" src="{% static 'ng-file-upload.js' %}"></script>
+	<script type="text/javascript" src="{% static 'angular-resource.js' %}"></script>
 	<!-- CONTROLLERS -->
-	<script src={% static "templates/Panel/panelController.js" %}></script>
-	<script src={% static "templates/Panel/Dashboard/dashProfileController.js" %}></script>
-	<script src={% static "templates/Panel/Dashboard/dashShopsController.js" %}></script>
-	<script src={% static "templates/Panel/Dashboard/dashCampaignsController.js" %}></script>
-	<script src={% static "templates/Panel/Shop/shopController.js" %}></script>
+	<script src="{% static 'templates/Panel/panelController.js' %}"></script>
+	<script src="{% static 'templates/Panel/apiModule.js' %}"></script>
+	<!-- DASH -->
+	<script src="{% static 'templates/Panel/Dashboard/dashProfileController.js' %}"></script>
+	<script src="{% static 'templates/Panel/Dashboard/dashShopsController.js' %}"></script>
+	<script src="{% static 'templates/Panel/Dashboard/dashCampaignsController.js' %}"></script>
+	<script src="{% static 'templates/Panel/Dashboard/dashBeaconsController.js' %}"></script>
+	<!-- SHOP -->
+	<script src="{% static 'templates/Panel/Shop/shopController.js' %}"></script>
+	<!-- CAMPAIGN -->
+	<!-- CAMPAIGN BASIC -->
+	<script src="{% static 'templates/Panel/Campaign/Basic/basicController.js' %}"></script>
+	<!-- CAMPAIGN BEACONS -->
+	<script src="{% static 'templates/Panel/Campaign/Beacons/beaconsController.js' %}"></script>
+	<!-- CAMPAIGN ADS -->
+	<script src="{% static 'templates/Panel/Campaign/Ads/adsController.js' %}"></script>
+	<script src="{% static 'templates/Panel/Campaign/Ads/Ad/adController.js' %}"></script>
+	<!-- CAMPAIGN ACTIONS -->
+	<script src="{% static 'templates/Panel/Campaign/Actions/actionsController.js' %}"></script>
+	<script src="{% static 'templates/Panel/Campaign/Actions/Action/actionController.js' %}"></script>
+	<!-- CAMPAIGN AWARDS -->
+	<script src="{% static 'templates/Panel/Campaign/Awards/awardsController.js' %}"></script>
+	<script src="{% static 'templates/Panel/Campaign/Awards/Award/awardController.js' %}"></script>
+
 </head>
 
 <body ng-app="panelApp" ng-controller="panelController as pc" >
-
 	<!-- HEADER -->
-	<button class="btn btn-warning" style="float: right;" ng-click="pc.logout()">LOGOUT</button>
 	{%verbatim%}
-	<h1>{{pc.appInfo.currentPath}}</h1>
+	<div style="float: right;">
+		{{pc.email}}
+	</div><br><br>
 	{%endverbatim%}
+	<button class="btn btn-warning" style="float: right;" ng-click="pc.logout()">LOGOUT</button>
+	<!-- {%verbatim%}
+	<h1>{{pc.appInfo.currentPath}}</h1>
+	{%endverbatim%} -->
 	<br><br>
 
 	<!-- TABS -->
-	<uib-tabset justified="true">
-		<uib-tab heading="Beacons" select="pc.showBeacons()"></uib-tab>
-		<uib-tab heading="Campaigns" select="pc.showCampaigns()"></uib-tab>
-		<uib-tab heading="Profile" select="pc.showProfile()"></uib-tab>
-		<uib-tab heading="Shops" select="pc.showShops()"></uib-tab>
-	</uib-tabset>
+	<ul class="nav nav-tabs">
+		<!--<li role="presentation"><a href="#/beacons" check-if-active>Beacons</a></li>-->
+		<li role="presentation"><a href="#/campaigns" check-if-active>Campaigns</a></li>
+		<li role="presentation"><a href="#/profile" check-if-active>Profile</a></li>
+		<li role="presentation"><a href="#/shops" check-if-active>Shops</a></li>
+	</ul>
 
 	<!-- CONTENT -->
 	<div class="container" ng-view></div>

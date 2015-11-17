@@ -4,19 +4,19 @@
 		<thead>
 			<tr>
 				<th width="10%">#</th>
-				<th width="40%">Name</th>
+				<th width="30%">Name</th>
 				<th width="40%">From - To</th>
-				<th width="10%">Options<th>
+				<th width="20%">Options<th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="campaign in dcc.campaignsList">
-				<th scope="row">{{campaign.id}}</th>
+				<th scope="row">{{  $index + (dcc.campaignsCurrentPage * 5) - 4 }}</th>
 				<td>{{campaign.name}}</td>
 				<td>{{campaign.start_date}} - {{campaign.end_date}} </td>
 				<td>
-					<button type="button" class="btn btn-info  btn-sm" ng-click="">EDIT</button>
-					<button type="button" class="btn btn-danger btn-sm" ng-click="">REMOVE</button>
+					<a href={{"#/campaigns/"+campaign.id+"/basic/"}} class="btn btn-info btn-sm" role="button">EDIT</a>
+					<button type="button" class="btn btn-danger btn-sm" ng-click="dcc.deleteCampaign(campaign.id, $index)">REMOVE</button>
 				</td>
 			</tr>		
 		</tbody>
@@ -34,6 +34,7 @@
 	    
 	  </ul>
 	</nav>
+	<a href="#/campaigns/0/basic/" style="float:right;" class="btn btn-success" role="button">ADD CAMPAIGN</a>
 
 </div>
 {%endverbatim%}

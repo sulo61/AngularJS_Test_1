@@ -1,8 +1,10 @@
+import datetime
 from django.contrib.postgres.fields import ArrayField
 
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.utils import timezone
 
 
 class BeaconUserUserManager(BaseUserManager):
@@ -29,6 +31,7 @@ class BeaconUserUserManager(BaseUserManager):
 
 
 class BeaconUser(AbstractBaseUser, PermissionsMixin):
+    image = models.ImageField(upload_to='images/user', blank=True, null=True)
     email = models.EmailField(max_length=254, unique=True, db_index=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -73,14 +76,20 @@ class Campaign(models.Model, TimestampMixin):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='campaigns')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+    def is_active_campaign(self):
+        return self.is_active and self.start_date < timezone.now() < self.end_date
 
 
 class Beacon(models.Model):
     title = models.CharField(max_length=100, blank=False)
     campaign = models.ForeignKey('Campaign', related_name='beacons', blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='beacons', blank=True, null=True)
+    shop = models.ForeignKey('Shop', related_name='beacons', blank=True, null=True)
     minor = models.IntegerField(default=1)
     major = models.IntegerField(default=1)
     UUID = models.CharField(max_length=36, default='00000000-0000-0000-0000-000000000000')
@@ -170,7 +179,20 @@ class UserAwards(models.Model):
 
 
 class ActionBeacon(models.Model):
-    campaign = models.ForeignKey('Campaign', related_name='actions')
-    beacon = models.OneToOneField(Beacon, blank=True, null=True, related_name='action')
-    ad = models.OneToOneField(Ad, blank=True, null=True, related_name='action')
+    campaign = models.ForeignKey('Campaign', related_name='actions', blank=True, null=True)
+    beacon = models.ForeignKey('Beacon', blank=True, null=True, related_name='actions')
+    ad = models.ForeignKey('Ad', blank=True, null=True, related_name='actions')
     points = models.IntegerField(default=0)
+    time_limit = models.BigIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('beacon', 'ad', 'campaign')
+
+
+class UserCampaign(models.Model, TimestampMixin):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_campaign')
+    campaign = models.ForeignKey('Campaign', related_name='user_details')
+    user_points = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('campaign', 'user',)

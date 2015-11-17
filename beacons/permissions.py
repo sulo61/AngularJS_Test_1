@@ -1,4 +1,5 @@
 from beacons.models import Campaign
+from beacons.utils import get_user_from_api_key, get_api_key_from_request
 from rest_framework import permissions
 
 __author__ = 'Mateusz'
@@ -33,3 +34,9 @@ class IsActionOwner(permissions.BasePermission):
 class IsOperator(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user is not None and request.user.has_perm('beacons.is_operator')
+
+
+class SdkPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        api_key = get_api_key_from_request(request)
+        return api_key is not None and get_user_from_api_key(api_key) is not None

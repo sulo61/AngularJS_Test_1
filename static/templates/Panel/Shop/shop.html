@@ -1,7 +1,7 @@
 {%verbatim%} 
 <!-- TOP -->
 <div style="text-align:right;">
-	<button class="btn btn-primary" ng-click="pc.showShops()">CLOSE EDIT</button>
+	<a href="#/shops"class="btn btn-primary" role="button">CLOSE EDIT</a>
 	<button class="btn btn-danger" ng-click="sc.dismiss()">DISMISS</button>
 	<button class="btn btn-success" ng-click="sc.save()">SAVE</button>
 	<hr><br><br>
@@ -57,10 +57,12 @@
 
 <!-- RIGHT -->
 <div class="rightColumn"  style="width:50%">
-	<div style="text-align:center;">
-		<img src="/static/templates/Panel/Shop/imageholder.jpg" alt="Imageholder"/>
+	<div style="text-align:center;" ng-show="sc.id>0" >
+		<img ng-src="{{sc.shop.image}}" alt="No image" style="width:100%"/>
+		<br><br>
+		<button class="btn btn-info" type="file" ngf-select="sc.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD IMAGE</button>		                   	
 	</div>
-    <br>
+	<hr>
 	<ui-gmap-google-map center='sc.map.center' zoom='sc.map.zoom'>
 		<ui-gmap-marker coords="sc.marker.coords" options="sc.marker.options" events="sc.marker.events" idkey="sc.marker.id"></ui-gmap-marker>
 	</ui-gmap-google-map>

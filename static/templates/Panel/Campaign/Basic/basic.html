@@ -1,0 +1,46 @@
+
+<!-- TOP -->
+<!-- <div ng-include src="'campaign/header'"></div>	 -->
+<div style="text-align:right;">
+	<a href="#/campaigns"class="btn btn-primary" role="button">CLOSE EDIT</a>
+	<button class="btn btn-danger" ng-click="bc.dismiss()">DISMISS</button>
+	<button class="btn btn-success" ng-click="bc.save()">SAVE</button>
+	<hr><br><br>
+</div>
+
+<!-- LEFT -->
+<!-- <div ng-include src="'campaign/menu'"></div> -->
+<div class="leftColumn"  style="width:25%">
+	{%verbatim%}
+	<a href={{"#/campaigns/"+bc.id+"/basic/"}} class="btn btn-primary" style="width:100%" role="button">Basic informations</a>
+	<br><br>
+	<a href={{"#/campaigns/"+bc.id+"/ads/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Advertisements</a>
+	<br><br>
+	<a href={{"#/campaigns/"+bc.id+"/actions/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Actions</a>
+	<br><br>
+	<a href={{"#/campaigns/"+bc.id+"/awards/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Awards</a>
+	<br><br>
+	<a href={{"#/campaigns/"+bc.id+"/beacons/"}} ng-show="bc.id>0" class="btn btn-default" style="width:100%" role="button">Beacons</a>
+	<br><br>
+	{%endverbatim%}
+</div>
+
+<!-- RIGHT -->
+<div class="rightColumn"  style="width:75%">
+	<!-- BASIC -->
+	<div>
+	<form style="margin-left:auto; margin-right:auto;">
+		<label>Name:</label>
+		<input type="text" class="form-control" placeholder="Name" ng-model="bc.basic.name">
+		<br>
+		<label>Start date:</label>
+		<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="bc.basic.start_date">
+		<br>
+		<label>End date:</label>
+		<input type="text" class="form-control" placeholder="YYYY-MM-DDThh:mm" ng-model="bc.basic.end_date">
+		<br>
+		<label>Active:</label>
+		<input type="checkbox" ng-model="bc.basic.is_active" >
+	</form>
+	</div>
+</div>

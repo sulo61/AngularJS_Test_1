@@ -1,4 +1,12 @@
-angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'appInfo', 'Shop', 'Shops', 'GoogleCoords', function($scope, $http, $routeParams, $timeout, Upload, appInfo, Shop, Shops, GoogleCoords){
+	// lock
+	this.isLock = false;
+	this.lock = function(){
+		this.isLock = true;
+	}
+	this.unlock = function(){
+		this.isLock = false;
+	}
 	// api info
 	this.appInfo = appInfo;
 	// shop id
@@ -72,72 +80,99 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 	// get shop
 	this.getShop = function(){
 		if (this.id>0){
-			$http({
-				method: 'GET',
-				url: '/shops/'+this.id+"/"
-			}).then(function successCallback(response){
-				this.shop = response.data;
+			if (this.isLock){
+				return;
+			} else {
+				this.lock();
+			}
+			Shop.get({shopID:this.id}, function(success){
+				this.shop = success;
 				this.updateMap();
 				this.makeCopy();
-			}.bind(this), function errorCallback(response){
-				appInfo.showFail(response);
-			}.bind(this));	
+				this.unlock();
+			}.bind(this), function(error){
+				this.appInfo.showFail(error);
+				this.unlock();
+			}.bind(this));
 		}
 	}
 	// patch shop
-	this.patchShop = function(){		
-		$http({
-			method: 'PATCH',
-			url: '/shops/'+this.id+"/",
-			data: this.shop
-		}).then(function successCallback(response){
+	this.patchShop = function(){
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
+		Shop.patch({shopID:this.id}, this.shop, function(){
 			appInfo.showSuccess();
-			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
 			this.makeCopy();
 			this.updateMap();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
-		}.bind(this));			
+			this.unlock();
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
 				
 	}
 	// post shop
 	this.postShop = function(){
-		$http({
-			method: 'POST',
-			url: '/shops/',
-			data: this.shop
-		}).then(function successCallback(response){
-			appInfo.showSuccess();
-			appInfo.setCurrentPath("Dashboard/Shop/"+this.shop.name);
+		if (this.isLock){
+			return;
+		} else {
+			this.lock();
+		}
+
+		Shops.save(this.shop, function(success){
+			this.appInfo.showSuccess();
+			this.shop = success;
+			this.id = this.shop.id;
 			this.makeCopy();
 			this.updateMap();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
-		}.bind(this));			
+			this.unlock();
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
+
 	}
 	// get lat long
 	this.getCoords = function(){
-		$http({
-			method: 'GET',
-			url: 'http://maps.google.com/maps/api/geocode/json',
-			params: {"address" : this.shop.address, "sensor": false}
-		}).then(function successCallback(response){
-			if (response.data.results.length>0){
-				this.shop.latitude = response.data.results[0].geometry.location.lat;
-				this.shop.longitude = response.data.results[0].geometry.location.lng;
+		GoogleCoords.get({"address" : this.shop.address, "sensor": false}, function(success){
+			if (success.results.length>0){
+				this.shop.latitude = success.results[0].geometry.location.lat;
+				this.shop.longitude = success.results[0].geometry.location.lng;
 			}
-			if (this.id<0){
+			if (this.id>0){
 				this.patchShop();
 			} else {
 				this.postShop();
 			}
-			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
-		}.bind(this));	
+		}.bind(this), function (error) {
+			this.appInfo.showFail(error);
+		}.bind(this));
 	}
-
-
+	// upload photo	
+	this.uploadFiles = function(file, errFiles) {
+        $scope.f = file;
+        $scope.errFile = errFiles && errFiles[0];
+        if (file) {
+            file.upload = Upload.upload({
+                url: '/api/shops/'+this.shop.id+'/image/',
+                data: {image: file}
+            });
+            file.upload.then(function (response) {
+            	this.shop.image = angular.copy(response.data.image);
+            	appInfo.showSuccess();
+                // $timeout(function () {                	
+                //     appInfo.showFail(response.data);
+                // });
+            }.bind(this), function (response) {
+            	if (response.status > 0)
+                	appInfo.showFail(response.status + ': ' + response.data);
+            }, function (evt) {                
+            });
+        }   
+    }
 
 	this.getShop(this.id);
 }]);

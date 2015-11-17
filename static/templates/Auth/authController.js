@@ -1,4 +1,5 @@
 angular.module('authApp', []).controller('authController', function($scope, $http, $window) {
+	$scope.isLock = false;
 	// nav
 	$scope.welcomeVisible = true;
 	$scope.loginVisible = false;
@@ -28,11 +29,17 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	$scope.showWelcome();
 	// login
 	$scope.login = {};
-	$scope.login.email = "sulo612@gmail.com";
+	$scope.login.email = "sulo612+2@gmail.com";
 	$scope.login.password = "123";
 	$scope.showLoginWarning = false;
 	$scope.loginWarning = "";
 	$scope.signin = function(){
+		if ($scope.isLock){
+			return;
+		} else {
+			$scope.lock();
+		}
+		$scope.lock();
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
@@ -42,11 +49,13 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 			$scope.showLoginWarning = false;
 			$scope.loginWarning = "";
 			if(response.status==200){
-				$window.location.href = "/panel";
+				$window.location.href = "/panel/#/beacons";
 			}
+			$scope.unlock();
 		}, function errorCallback(response){
 			$scope.showLoginWarning = true;
 			$scope.loginWarning = response;
+			$scope.unlock();
 		});	
 	};
 	// register
@@ -58,20 +67,34 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	$scope.showRegisterWarning = false;
 	$scope.registerWarning = "";
 	$scope.signup = function(){
+		if ($scope.isLock){
+			return;
+		} else {
+			$scope.lock();
+		}
 		$scope.showWarning = false
 		$http({
 			method: 'POST',
-			url: '/operator/register/',
+			url: '/api/operator/register/',
 			data: $scope.register
 		}).then(function successCallback(response){
 			$scope.showRegisterWarning = false;
 			$scope.registerWarning = "";
 			$scope.showLoginWithEmail(response.data.email);
+			$scope.unlock();
 		}, function errorCallback(response){
 			$scope.showRegisterWarning = true;
 			$scope.registerWarning = response;
+			$scope.unlock();
 		});	
 	};	
+
+	$scope.lock = function(){
+		$scope.isLock = true;
+	}
+	$scope.unlock = function(){
+		$scope.isLock = false;
+	}
 });
 
 

@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'storages',
     'beacons',
+    'itsdangerous',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -129,6 +130,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     )
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'main_cache_table',
+    }
 }
 
 #
