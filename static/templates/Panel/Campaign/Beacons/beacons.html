@@ -50,7 +50,7 @@
 	<nav>
 	  <ul class="pagination" ng-show="beaconsCtrl.beaconsPages.length>0">
 	  	<li ng-click="beaconsCtrl.beaconsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-	  	<li ng-repeat="number in beaconsCtrl.beaconsPages" class="{{beaconsCtrl.beaconsNavActive(number)}}" id="beaconsCtrl.beaconsNav{{number}}" ng-click="beaconsCtrl.getBeacons(number)">
+	  	<li ng-repeat="number in beaconsCtrl.beaconsPages" class="{{beaconsCtrl.beaconsNavActive(number)}}" id="beaconsCtrl.beaconsNav{{number}}" ng-click="beaconsCtrl.getCampaignBeacons(number)">
 	  		<a>{{number}}</a>
 	  	</li>
 	  	<li ng-click="beaconsCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>	    
