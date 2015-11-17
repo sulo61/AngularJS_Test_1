@@ -5,7 +5,7 @@ angular.module('panelApp')
             headers['Authorization'] = ('Basic ' + btoa(data.username + ':' + data.password));
         }
     })
-    
+
     .factory('User', ['$resource',
         function($resource){
             return $resource('../api/user/:userID', {userID: '@id'}, {
