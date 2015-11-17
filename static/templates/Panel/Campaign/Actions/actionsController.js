@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('actionsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('actionsController', ['$scope', '$http', '$routeParams', 'appInfo', 'CampaignActions', 'CampaignAction', function($scope, $http, $routeParams, appInfo, CampaignActions, CampaignAction){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -41,24 +41,25 @@ angular.module('panelApp').controller('actionsController', ['$scope', '$http', '
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/campaigns/'+this.campaignID+'/actions',
-			params: {"page" : page}
-		}).then(function successCallback(response){
+
+
+		CampaignActions.get({campaignID:this.campaignID, page:page}, function(success){
 			this.actionsList = [];
 			this.actionsPages = [];
-			this.actionsList = response.data.results;
-			this.numberOfItems = response.data.count;
+			this.actionsList = success.results;
+			this.numberOfItems = success.count;
 			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.actionsPages.push(i+1);
-		    }
-		    this.actionsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+				this.actionsPages.push(i+1);
+			}
+			this.actionsCurrentPage = page;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
+
+
+
 	};
 	this.deleteAction = function(actionID, index){
 		if (this.isLock){
@@ -66,21 +67,20 @@ angular.module('panelApp').controller('actionsController', ['$scope', '$http', '
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'DELETE',
-			url: '/api/campaigns/'+this.campaignID+'/actions/'+actionID
-		}).then(function successCallback(response){
-			appInfo.showSuccess();
+
+		CampaignAction.delete({campaignID:this.campaignID, actionID:actionID}, function(){
+			this.appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.actionsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
 				this.actionsCurrentPage = this.actionsCurrentPage - 1;
 			}
 			this.unlock();
-			this.getActions(this.actionsCurrentPage);			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.getAds(this.actionsCurrentPage);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		});	
+		}.bind(this));
+
 	}
 
 	this.getActions(1);

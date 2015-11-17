@@ -41,8 +41,7 @@ angular.module('panelApp').controller('awardsController', ['$scope', '$http', '$
 		} else {
 			this.lock();
 		}
-
-		CampaignAwards.get({campaignID:this.id}, {page:page}, function(success){
+		CampaignAwards.get({campaignID:this.id, page:page}, function(success){
 			this.awardsList = [];
 			this.awardsPages = [];
 			this.awardsList = success.results;

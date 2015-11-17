@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('adsController', ['$scope', '$http', '$routeParams', 'appInfo', function($scope, $http, $routeParams, appInfo){
+angular.module('panelApp').controller('adsController', ['$scope', '$http', '$routeParams', 'appInfo', 'CampaignAds', 'CampaignAd',  function($scope, $http, $routeParams, appInfo, CampaignAds, CampaignAd){
 	// lock
 	this.isLock = false;
 	this.lock = function(){
@@ -41,24 +41,23 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'GET',
-			url: '/api/campaigns/'+this.id+'/ads',
-			params: {"page" : page}
-		}).then(function successCallback(response){
+
+
+		CampaignAds.get({campaignID:this.id, page:page}, function(success){
 			this.adsList = [];
 			this.adsPages = [];
-			this.adsList = response.data.results;
-			this.numberOfItems = response.data.count;
+			this.adsList = success.results;
+			this.numberOfItems = success.count;
 			for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
-		    	this.adsPages.push(i+1);
-		    }
-		    this.adsCurrentPage = page;
-		    this.unlock();
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+				this.adsPages.push(i+1);
+			}
+			this.adsCurrentPage = page;
 			this.unlock();
-		});	
+		}.bind(this), function(error){
+			appInfo.showFail(error);
+			this.unlock();
+		}.bind(this));
+
 	};
 	this.deleteAd = function(adID, index){
 		if (this.isLock){
@@ -66,21 +65,19 @@ angular.module('panelApp').controller('adsController', ['$scope', '$http', '$rou
 		} else {
 			this.lock();
 		}
-		$http({
-			method: 'DELETE',
-			url: '/api/campaigns/'+this.id+'/ads/'+adID
-		}).then(function successCallback(response){
-			appInfo.showSuccess();
+
+		CampaignAd.delete({campaignID:this.id, adID:adID}, function(){
+			this.appInfo.showSuccess();
 			this.numberOfItems = this.numberOfItems - 1;
 			if ( (this.numberOfItems <= (this.adsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
 				this.adsCurrentPage = this.adsCurrentPage - 1;
 			}
 			this.unlock();
-			this.getAds(this.adsCurrentPage);			
-		}.bind(this), function errorCallback(response){
-			appInfo.showFail(response);
+			this.getAds(this.adsCurrentPage);
+		}.bind(this), function(error){
+			this.appInfo.showFail(error);
 			this.unlock();
-		});	
+		}.bind(this));
 	}
 
 	this.getAds(1);

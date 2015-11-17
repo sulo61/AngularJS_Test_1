@@ -56,7 +56,7 @@
 			<nav>
 			  <ul class="pagination" ng-show="actionCtrl.beaconsPages.length>0">
 			  	<li ng-click="actionCtrl.beaconsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-			  	<li ng-repeat="number in actionCtrl.beaconsPages" class="{{actionCtrl.beaconsNavActive(number)}}" id="actionCtrl.beaconsNav{{number}}" ng-click="actionCtrl.getBeacons(number)">
+			  	<li ng-repeat="number in actionCtrl.beaconsPages" class="{{actionCtrl.beaconsNavActive(number)}}" id="actionCtrl.beaconsNav{{number}}" ng-click="actionCtrl.getCampaignBeacons(number)">
 			  		<a>{{number}}</a>
 			  	</li>
 			  	<li ng-click="actionCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>	    
@@ -106,7 +106,7 @@
 			<nav>
 			  <ul class="pagination" ng-show="actionCtrl.adsPages.length>0">
 			  	<li ng-click="actionCtrl.adsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-			  	<li ng-repeat="number in actionCtrl.adsPages" class="{{actionCtrl.adsNavActive(number)}}" id="actionCtrl.adsNav{{number}}" ng-click="actionCtrl.getAds(number)">
+			  	<li ng-repeat="number in actionCtrl.adsPages" class="{{actionCtrl.adsNavActive(number)}}" id="actionCtrl.adsNav{{number}}" ng-click="actionCtrl.getCampaignAds(number)">
 			  		<a>{{number}}</a>
 			  	</li>
 			  	<li ng-click="actionCtrl.adsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>

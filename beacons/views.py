@@ -60,12 +60,6 @@ def dashProfile(request):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def dashBeacons(request):
-    return render(request, 'Panel/Dashboard/beacons.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
 def panel(request):
     return render(request, 'Panel/panel.html', {})
 
@@ -74,12 +68,6 @@ def panel(request):
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def shop(request):
     return render(request, 'Panel/Shop/shop.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def beacon(request):
-    return render(request, 'Panel/Beacon/beacon.html', {})
 
 
 @api_view(('GET',))
@@ -145,7 +133,7 @@ def campaignAction(request):
 @api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/panel/#/beacons')
+        return redirect('/panel/#/campaigns')
     else:
         return render(request, 'Auth/auth.html', {})
 
