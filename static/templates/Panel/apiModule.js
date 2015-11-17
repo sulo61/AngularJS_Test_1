@@ -94,3 +94,13 @@ angular.module('panelApp')
                 patch: {method:'PATCH'}
             });
         }])
+    .factory('CampaignPromotions', ['$resource',
+        function($resource){
+            return $resource('../api/campaigns/:campaignID/promotions/', {campaignID:'@campaignID'});
+        }])
+    .factory('CampaignPromotion', ['$resource',
+        function($resource){
+            return $resource('../api/campaigns/:campaignID/promotions/:promotionID', {campaignID:'@campaignID', promotionID:'@promotionID'}, {
+                patch: {method:'PATCH'}
+            });
+        }])

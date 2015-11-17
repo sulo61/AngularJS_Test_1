@@ -111,6 +111,11 @@ def campaignAwards(request):
 def campaignBeacons(request):
     return render(request, 'Panel/Campaign/Beacons/beacons.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignPromotions(request):
+    return render(request, 'Panel/Campaign/Promotions/promotions.html', {})
+
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
@@ -128,6 +133,11 @@ def campaignAd(request):
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAction(request):
     return render(request, 'Panel/Campaign/Actions/Action/action.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignPromotion(request):
+    return render(request, 'Panel/Campaign/Promotions/Promotion/promotion.html', {})
 
 
 @api_view(('GET',))
