@@ -165,22 +165,3 @@ class UserAwardsDetails(TestCase):
                                      }, json='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
-class BeaconsUserTest(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        register_login_user(self)
-
-    def test_list_beacons(self):
-        response = self.client.get('/api/beacons/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_create_beacons(self):
-        beacons_data = {
-            'minor': '1',
-            'major': '1',
-            'title': 'Title',
-        }
-        response = self.client.post('/api/beacons/', beacons_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

@@ -552,11 +552,11 @@ class ShopView(ModelViewSet):
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        api_key = self.request.META['HTTP_API_KEY']
         if 'HTTP_API_KEY' in self.request.META:
+            api_key = self.request.META['HTTP_API_KEY']
             return get_user_from_api_key(api_key).shops.all()
         else:
-            return self.request.user.beacons.all()
+            return self.request.user.shops.all()
 
 class CampaignAdView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -815,17 +815,6 @@ class AwardImageUpdater(ModelViewSet):
             return Response(status=status.HTTP_200_OK, data={'image': shop.image.url})
         else:
             return super(AwardImageUpdater, self).create(request, *args, **kwargs)
-
-
-class UserBeaconsView(ModelViewSet):
-    serializer_class = BeaconSerializer
-    permission_classes = (IsAuthenticated, IsOperator)
-
-    def get_queryset(self):
-        return self.request.user.beacons.all()
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
 
 class ShopBeacons(ModelViewSet):

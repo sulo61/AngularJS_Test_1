@@ -1,8 +1,7 @@
+from beacons import views
+from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView, ShopBeacons
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from beacons import views
-from beacons.views import CreateViewUser, ObtainToken, UserProfileCRUD, LogoutView, CreateViewOperator, UserBeaconsView, \
-    ShopBeacons
 
 __author__ = 'Mateusz'
 
@@ -31,11 +30,6 @@ urlpatterns = [
 
     url(r'^user/$', views.get_user, name='user'),
     url(r'^user/(?P<pk>[0-9]+)/$', UserProfileCRUD.as_view(retrieve), name='user'),
-    url(r'^beacons/$', UserBeaconsView.as_view(methods), name='beacons'),
-    url(r'^beacons/(?P<pk>[0-9]+)/$', UserBeaconsView.as_view(retrieve), name='beacons_details'),
-
-    url(r'campaigns/(?P<pk>[0-9]+)/beacons$', views.BeaconCampaignView.as_view(retrieve),
-        name="beacons"),
 
     url(r'campaigns/(?P<pk>[0-9]+)/$', views.CampaignRetrieveView.as_view(retrieve),
         name="campaign"),
