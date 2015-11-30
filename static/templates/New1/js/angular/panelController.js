@@ -32,10 +32,13 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     }])
     .factory('currentPath', function() {
         currentPath = function () {
-            this.path = "";
+            this.path = "Current path";
 
             this.setPath = function(path){
                 this.path = path;
+            }
+            this.getPath = function(){
+                return this.path;
             }
         }
         return new currentPath();
@@ -55,8 +58,13 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             }
         };
     })
-    .controller("panelController", function($scope, $window, $http, $location, Logout, User){
-        this.user = {};
+    .controller("panelController", function($scope, $window, $http, $location, currentPath, Logout, User){
+        this.currentPath = currentPath;
+        this.user = {
+            first_name: "",
+            last_name: "",
+            email: ""
+        };
 
         this.logout = function () {
             if (this.lock){
@@ -73,9 +81,12 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
                 }
             )};
 
+        this.getFullName = function(){
+            return this.user.first_name + " " + this.user.last_name;
+        }
+
         User.get(function(user) {
-            this.user = user.email;
-        }.bind(this), function(error){
-            this.email = "?"
+            this.user = user;
+        }.bind(this), function(){
         });
     })

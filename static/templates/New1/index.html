@@ -42,16 +42,13 @@
                 <li class="nav-header">
                     <div class="dropdown profile-element">
                         <a href="#/profile">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">FirstName LastName</strong>
-                             </span> <span class="text-muted text-xs block">Title</span> </span>
+                            {%verbatim%}
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{panelCtrl.getFullName()}}</strong>
+                             </span> <span class="text-muted text-xs block">{{panelCtrl.user.email}}</span> </span>
+                            {%endverbatim%}
                         </a>
-
-                    </div>
-                    <div class="logo-element">
-                        IN+
                     </div>
                 </li>
-                <!--<li class="active">-->
                 <li>
                     <a check-if-active href="#/campaigns"><i class="fa fa-th-large"></i> <span class="nav-label">Campaigns</span></a>
                 </li>
@@ -72,13 +69,15 @@
                 <ul class="nav navbar-top-links navbar-left">
                     <li>
                         <a href="#">
-                            CURRENT PATH
+                            {%verbatim%}
+                            {{panelCtrl.currentPath.getPath()}}
+                            {%endverbatim%}
                         </a>
                     </li>
                 </ul>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <a href="#">
+                        <a href="#" ng-click="panelCtrl.logout()">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
