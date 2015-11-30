@@ -43,7 +43,8 @@ class LogoutView(views.APIView):
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashCampaigns(request):
-    return render(request, 'Panel/Dashboard/campaigns.html', {})
+    # return render(request, 'Panel/Dashboard/campaigns.html', {})    
+    return render(request, 'New1/index.html', {})
 
 
 @api_view(('GET',))
@@ -144,8 +145,10 @@ def campaignPromotion(request):
 def index(request):
     if request.user.is_authenticated():
         return redirect('/panel/#/campaigns')
+        # return redirect('New1/index.html')
     else:
-        return render(request, 'Auth/auth.html', {})
+        # return render(request, 'Auth/auth.html', {})
+        return render(request, 'New1/index.html', {})
 
 
 class CreateViewUser(ModelViewSet):
