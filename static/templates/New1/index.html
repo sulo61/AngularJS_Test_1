@@ -27,6 +27,7 @@
     <script type="text/javascript" src="{% static 'templates/New1/js/angular-resource.js' %}"></script>
     <!--ANGULAR-->
     <script type="text/javascript" src="{% static 'templates/New1/js/angular/panelController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'templates/New1/js/angular/apiModule.js' %}"></script>
 
 
 </head>
@@ -40,7 +41,7 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <a href="#">
+                        <a href="#/profile">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">FirstName LastName</strong>
                              </span> <span class="text-muted text-xs block">Title</span> </span>
                         </a>
@@ -68,6 +69,13 @@
     <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <ul class="nav navbar-top-links navbar-left">
+                    <li>
+                        <a href="#">
+                            CURRENT PATH
+                        </a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <a href="#">
