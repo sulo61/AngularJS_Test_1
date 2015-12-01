@@ -67,7 +67,6 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
         }
 
         Campaign.delete({campaignID:id}, function(){
-            this.appInfo.showSuccess();
             this.numberOfItems = this.numberOfItems - 1;
             if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * this.perPage) && this.numberOfItems>=this.perPage){
                 this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
