@@ -134,6 +134,10 @@ class LogoutView(views.APIView):
 # def campaignPromotion(request):
 #     return render(request, 'Panel/Campaign/Promotions/Promotion/promotion.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashShops(request):
+    return render(request, 'New1/views/dashboard/shops.html', {})        
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))

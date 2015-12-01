@@ -26,8 +26,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             })
             .when("/shops", {
                 templateUrl: "/dash/shops",
-                controller: "panelController",
-                controllerAs: 'panelCtrl'
+                controller: "shopsController",
+                controllerAs: 'shopsCtrl'
             })
     }])
     .factory('currentPath', function() {
