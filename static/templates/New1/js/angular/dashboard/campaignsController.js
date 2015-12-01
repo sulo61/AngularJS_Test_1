@@ -1,5 +1,5 @@
 angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', function(currentPath, Campaigns, Campaign){
-// lock
+    // lock
     this.isLock = false;
     this.lock = function(){
         this.isLock = true;
