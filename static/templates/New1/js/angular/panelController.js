@@ -21,8 +21,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             })
             .when("/campaigns", {
                 templateUrl: "/dash/campaigns",
-                controller: "panelController",
-                controllerAs: 'panelCtrl'
+                controller: "campaignsController",
+                controllerAs: 'campaignsCtrl'
             })
             .when("/shops", {
                 templateUrl: "/dash/shops",
@@ -33,12 +33,19 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     .factory('currentPath', function() {
         currentPath = function () {
             this.path = "Current path";
+            this.page = "Current page";
 
             this.setPath = function(path){
                 this.path = path;
             }
             this.getPath = function(){
                 return this.path;
+            }
+            this.setPage = function (page) {
+                this.page = page;
+            }
+            this.getPage = function(){
+                return this.page;
             }
         }
         return new currentPath();
@@ -58,7 +65,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             }
         };
     })
-    .controller("panelController", function($scope, $window, $http, $location, currentPath, Logout, User){
+    .controller("panelController", function($window, currentPath, Logout, User){
         this.currentPath = currentPath;
         this.user = {
             first_name: "",

@@ -42,12 +42,6 @@ class LogoutView(views.APIView):
 
 # @api_view(('GET',))
 # @authentication_classes((SessionAuthentication, BaseAuthentication))
-# def dashCampaigns(request):
-#     return render(request, 'Panel/Dashboard/campaigns.html', {})        
-
-
-# @api_view(('GET',))
-# @authentication_classes((SessionAuthentication, BaseAuthentication))
 # def dashShops(request):
 #     return render(request, 'Panel/Dashboard/shops.html', {})
 
@@ -143,8 +137,12 @@ class LogoutView(views.APIView):
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashCampaigns(request):
+    return render(request, 'New1/views/dashboard/campaigns.html', {})        
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
 def panel(request):
-    # return render(request, 'Panel/panel.html', {})
     return render(request, 'New1/index.html', {})
 
 @api_view(('GET',))
