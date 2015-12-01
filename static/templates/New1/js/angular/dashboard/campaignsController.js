@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', function(currentPath, Campaigns, Campaign){
+angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', 'toast', function(currentPath, Campaigns, Campaign, toast){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -9,6 +9,7 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
     }
     // api info
     this.currentPath = currentPath;
+    this.toast = toast;
     // models
     this.campaignsList = [];
     // nav
@@ -53,6 +54,7 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             this.campaignsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
+            this.toast.showError(error.status)
             this.unlock();
         }.bind(this));
 
@@ -72,7 +74,9 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             }
             this.unlock();
             this.getCampaigns(this.campaignsCurrentPage);
+            this.toast.showSuccess()
         }.bind(this), function(error){
+            this.toast.showError(error.status);
             this.unlock();
         }.bind(this));
 

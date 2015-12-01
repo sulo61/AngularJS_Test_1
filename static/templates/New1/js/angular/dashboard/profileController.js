@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('profileController', ['currentPath', 'User', function(currentPath, User){
+angular.module('panelApp').controller('profileController', ['currentPath', 'User', 'toast', function(currentPath, User, toast){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -9,6 +9,7 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
     }
     // api info
     this.currentPath = currentPath;
+    this.toast = toast;
     // model user
     this.user = {};
     this.first_name = "";
@@ -23,6 +24,7 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
     // api
     // get user
     this.getUser = function(){
+
         if (this.isLock){
             return;
         } else {
@@ -33,6 +35,7 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
             this.userBackup = angular.copy(user);
             this.unlock();
         }.bind(this), function(error){
+            this.toast.showError(error.status);
             this.unlock();
         });
     };
@@ -46,13 +49,17 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
         }
 
         User.patch({userID:this.user.id}, this.user, function(){
+            debugger
             this.user.password = "";
             this.user.old_password = "";
             this.userBackup = angular.copy(this.user);
             this.unlock();
+            this.toast.showSuccess();
         }.bind(this), function(error){
+            debugger
             this.user = angular.copy(this.userBackup);
             this.unlock();
+            this.toast.showError(error.status);
         }.bind(this));
 
     };

@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload', 'ngResource'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate'])
     // django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -50,6 +50,29 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
         }
         return new currentPath();
     })
+    .factory('toast', function(toaster){
+        toast = function () {
+            this.showSuccess = function () {
+                toaster.pop({
+                    type: 'success',
+                    title: 'Success',
+                    body: '',
+                    showCloseButton: true,
+                    timeout: 2000
+                });
+            }
+            this.showError = function(error){
+                toaster.pop({
+                    type: 'error',
+                    title: 'Error',
+                    body: error,
+                    showCloseButton: true,
+                    timeout: 2000
+                });
+            }
+        }
+        return new toast();
+    })
     .directive("checkIfActive", function() {
         return {
             link: function(scope, el, attrs) {
@@ -65,8 +88,10 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
             }
         };
     })
-    .controller("panelController", function($window, currentPath, Logout, User){
+    .controller("panelController", function($window, currentPath, Logout, User, toast){
         this.currentPath = currentPath;
+        this.toast = toast;
+
         this.user = {
             first_name: "",
             last_name: "",
@@ -94,6 +119,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
 
         User.get(function(user) {
             this.user = user;
-        }.bind(this), function(){
+        }.bind(this), function(error){
+            this.toast.showError(error)
         });
     })

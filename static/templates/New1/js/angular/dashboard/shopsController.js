@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops', 'Shop', function(currentPath, Shops, Shop){
+angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops', 'Shop', 'toast', function(currentPath, Shops, Shop, toast){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -8,6 +8,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
         this.isLock = false;
     }
     // api info
+    this.toast = toast;
     this.currentPath = currentPath;
     // models
     this.shopsList = [];
@@ -53,6 +54,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             this.shopsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
+            this.toast.showError(error.status);
             this.unlock();
         }.bind(this));
 
@@ -72,7 +74,9 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             }
             this.unlock();
             this.getShops(this.shopsCurrentPage);
+            this.toast.showSuccess();
         }.bind(this), function(error){
+            this.toast.showError(error.status);
             this.unlock();
         }.bind(this));
 
