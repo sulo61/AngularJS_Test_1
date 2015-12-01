@@ -6,7 +6,7 @@ __author__ = 'Mateusz'
 
 urlpatterns = [
     url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
-    # url(r'^dash/profile/$', views.dashProfile, name="dashProfile"),
+    url(r'^dash/profile/$', views.dashProfile, name="dashProfile"),
     url(r'^dash/shops/$', views.dashShops, name="dashShops"),
     url(r'^dash/campaigns/$', views.dashCampaigns, name="dashCampaigns"),
     url(r'^panel/$', views.panel, name="panel"),

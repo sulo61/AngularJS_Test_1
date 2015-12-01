@@ -16,8 +16,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
         $routeProvider
             .when("/profile", {
                 templateUrl: "/dash/profile",
-                controller: "panelController",
-                controllerAs: 'panelCtrl'
+                controller: "profileController",
+                controllerAs: 'profileCtrl'
             })
             .when("/campaigns", {
                 templateUrl: "/dash/campaigns",
