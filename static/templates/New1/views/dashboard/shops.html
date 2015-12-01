@@ -19,9 +19,9 @@
                         <tbody>
                         <tr ng-repeat="shop in shopsCtrl.shopsList">
                             <td>{{shop.name}}</td>
-                            <td>{{shop.location}} </td>
+                            <td>{{shop.address}} </td>
                             <td>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/shops/"+shop.id+"/basic/"}}><i class="fa fa-wrench"></i></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/shops/"+shop.id+"/"}}><i class="fa fa-wrench"></i></a>
                                 <a class="close-link" ng-click="shopsCtrl.deleteShop(shop.id)"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>

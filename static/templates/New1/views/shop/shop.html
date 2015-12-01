@@ -1,0 +1,26 @@
+{%verbatim%}
+<div class="row" jstcache="0">
+    <div class="col-md-12" jstcache="0">
+        <div class="ibox " jstcache="0">
+            <div class="ibox-title">
+                <h5>Street View (if available)</h5>
+            </div>
+            <div class="ibox-content" jstcache="0">
+                <ng-map zoom="20" center={{shopCtrl.getCoordsArray()}}>
+                    <marker position={{shopCtrl.getCoordsArray()}}></marker>
+                    <street-view-panorama
+                            click-to-go="false"
+                            disable-default-u-i="false"
+                            disable-double-click-zoom="false"
+                            position={{shopCtrl.getCoordsArray()}}
+                            pov="{heading:90, pitch: 0}"
+                            scrollwheel="false"
+                            enable-close-button="true"
+                            visible="true">
+                    </street-view-panorama>
+                </ng-map>
+            </div>
+        </div>
+    </div>
+</div>
+{%endverbatim%}

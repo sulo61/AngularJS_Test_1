@@ -42,19 +42,6 @@ class LogoutView(views.APIView):
 
 # @api_view(('GET',))
 # @authentication_classes((SessionAuthentication, BaseAuthentication))
-# def panel(request):
-#     return render(request, 'Panel/panel.html', {})
-#     return render(request, 'New1/index.html', {})
-
-
-# @api_view(('GET',))
-# @authentication_classes((SessionAuthentication, BaseAuthentication))
-# def shop(request):
-#     return render(request, 'Panel/Shop/shop.html', {})
-
-
-# @api_view(('GET',))
-# @authentication_classes((SessionAuthentication, BaseAuthentication))
 # def campaignMenu(request):
 #     return render(request, 'Panel/Campaign/Menu/menu.html', {})
 
@@ -122,6 +109,13 @@ class LogoutView(views.APIView):
 # def campaignPromotion(request):
 #     return render(request, 'Panel/Campaign/Promotions/Promotion/promotion.html', {})
 
+# SHOP
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def shop(request):
+    return render(request, 'New1/views/shop/shop.html', {})
+
+# DASH
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def dashProfile(request):
@@ -137,6 +131,7 @@ def dashShops(request):
 def dashCampaigns(request):
     return render(request, 'New1/views/dashboard/campaigns.html', {})        
 
+# MAIN
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def panel(request):

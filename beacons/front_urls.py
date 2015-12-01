@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^dash/campaigns/$', views.dashCampaigns, name="dashCampaigns"),
     url(r'^panel/$', views.panel, name="panel"),
 
-    # url(r'^shop/$', views.shop, name="shop"),
+    url(r'^shop/$', views.shop, name="shop"),
     # url(r'^campaign/$', views.campaign, name="campaign"),
     # url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
 

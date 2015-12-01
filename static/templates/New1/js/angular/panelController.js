@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate', 'ngMap'])
     // django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -7,13 +7,9 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
     .config(function($resourceProvider) {
         $resourceProvider.defaults.stripTrailingSlashes = false;
     })
-    .config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
-        GoogleMapApiProviders.configure({
-            china: false
-        });
-    }])
     .config(['$routeProvider', function($routeProvider){
         $routeProvider
+            // DASH
             .when("/profile", {
                 templateUrl: "/dash/profile",
                 controller: "profileController",
@@ -28,6 +24,12 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'uiGmapgoogle-maps', 'ngF
                 templateUrl: "/dash/shops",
                 controller: "shopsController",
                 controllerAs: 'shopsCtrl'
+            })
+            // SHOP
+            .when("/shops/:id?", {
+                templateUrl: "/shop",
+                controller: "shopController",
+                controllerAs: 'shopCtrl'
             })
     }])
     .factory('currentPath', function() {
