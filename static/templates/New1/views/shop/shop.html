@@ -46,10 +46,24 @@
             <div class="ibox-content" ng-repeat="openHour in shopCtrl.shop.opening_hours">
                 <form class="form-horizontal">
                     <div class="form-group"><label class="col-sm-2 control-label">Open</label>
-                        <div class="col-sm-10"><input type="text" class="form-control" ng-model="openHour.open_time"></div>
+                        <div class="col-sm-10">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" class="form-control" ng-model="openHour.open_time">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Close</label>
-                        <div class="col-sm-10"><input type="text" class="form-control" ng-model="openHour.close_time"></div>
+                        <div class="col-sm-10">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" class="form-control" ng-model="openHour.close_time">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Days</label>
                         <div class="col-sm-10"><input type="text" class="form-control" ng-model="openHour.days"></div>
@@ -57,15 +71,32 @@
                     <br>
                     <button style="float:right;" class="btn btn-danger" ng-click="shopCtrl.removeHours($index)">REMOVE</button>
                     <br><br>
+                    <script type="text/javascript">
+                        $('.clockpicker').clockpicker();
+                    </script>
                 </form>
             </div>
             <div class="ibox-content" ng-show="shopCtrl.sendNewHourVisible">
                 <form class="form-horizontal">
                     <div class="form-group"><label class="col-sm-2 control-label">Open</label>
-                        <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.newOpenHour"></div>
+                        <div class="col-sm-10">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" class="form-control" ng-model="shopCtrl.newOpenHour">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Close</label>
-                        <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.newCloseHour"></div>
+                        <div class="col-sm-10">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" class="form-control" ng-model="shopCtrl.newCloseHour">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Days</label>
                         <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.newDays"></div>
@@ -73,6 +104,9 @@
                     <br>
                     <button ng-show="shopCtrl.sendNewHourVisible" class="btn btn-success" style="float:right;" ng-click="shopCtrl.postNewHours()">CONFIRM</button>
                     <br><br>
+                    <script type="text/javascript">
+                        $('.clockpicker').clockpicker();
+                    </script>
                 </form>
             </div>
             <div class="ibox-content" ng-hide="shopCtrl.sendNewHourVisible" >
@@ -94,5 +128,6 @@
         </div>
     </div>
 </div>
+
 
 {%endverbatim%}

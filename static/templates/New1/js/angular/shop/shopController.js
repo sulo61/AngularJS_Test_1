@@ -84,6 +84,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         } else {
             this.lock();
         }
+
         Shop.patch({shopID:this.id}, this.shop, function(){
             this.makeCopy();
             this.unlock();
