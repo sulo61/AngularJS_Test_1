@@ -30,7 +30,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         this.addNewHourVisible = true;
         this.sendNewHourVisible = false;
 
-        this.shop.opening_hours.push( {days: this.newDays.split(",").map(Number), open_time: this.newOpenHour, close_time: this.newCloseHour} );
+        this.shop.opening_hours.push( {days: this.newDays, open_time: this.newOpenHour, close_time: this.newCloseHour} );
 
         this.newOpenHour = "";
         this.newCloseHour = "";
@@ -84,6 +84,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         } else {
             this.lock();
         }
+        debugger
 
         Shop.patch({shopID:this.id}, this.shop, function(){
             this.makeCopy();

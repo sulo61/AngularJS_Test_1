@@ -2,6 +2,7 @@ import json
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+from tests import test_utils
 from tests.test_utils import register_login_user
 
 __author__ = 'Mateusz'
@@ -17,7 +18,7 @@ def register(client):
     return json.loads(response.content).get('id')
 
 
-def create_campaign(self):
+def create_campaign(self, active=False):
     client = APIClient()
     data = {
         'email': 'operator@gmail.com',
@@ -28,9 +29,9 @@ def create_campaign(self):
 
     data = {
         'name': 'Name',
-        "start_date": "2015-10-23T08:00:00Z",
-        "end_date": "2015-10-31T09:00:00Z",
-        u'is_active': False,
+        "start_date": "2010-10-23T08:00:00Z",
+        "end_date": "2020-10-31T09:00:00Z",
+        u'is_active': active,
     }
     response = client.post('/api/campaigns/', data)
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -47,9 +48,9 @@ def create_campaign(self):
             {
                 "id": id,
                 "name": "Name",
-                'start_date': "2015-10-23T08:00:00Z",
-                "end_date": "2015-10-31T09:00:00Z",
-                u'is_active': False,
+                'start_date': "2010-10-23T08:00:00Z",
+                "end_date": "2020-10-31T09:00:00Z",
+                u'is_active': active,
             }]})
     return id, client
 
@@ -162,25 +163,32 @@ class UserAwardsDetails(TestCase):
                                      data={
                                          'favorite': True,
                                          'bought': True
-                                     }, json='json')
+                                     }, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class BeaconsUserTest(TestCase):
+class SdkUserPermission(TestCase):
     def setUp(self):
-        self.client = APIClient()
-        register_login_user(self)
+        super(SdkUserPermission, self).setUp()
+        self.operator_client = test_utils.register_login_operator_return(self)
+        response = self.operator_client.get('/api/user/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNotNone(response.content, 'User data are unavailable')
+        response_data = json.loads(response.content)
+        self.assertTrue('api_key' in response_data)
+        self.api_key = response_data['api_key']
 
-    def test_list_beacons(self):
-        response = self.client.get('/api/beacons/', format='json')
+        test_utils.register_login_user(self)
+        self.campaign_id = test_utils.create_campaign(self, self.operator_client)
+
+    def test_check_active_campaign_without_api_key(self):
+        response = self.client.get('/api/campaigns/active/', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_create_beacons(self):
-        beacons_data = {
-            'minor': '1',
-            'major': '1',
-            'title': 'Title',
-        }
-        response = self.client.post('/api/beacons/', beacons_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    def test_get_active_campaign_with_sdk(self):
+        response = self.client.get('/api/campaigns/active/', format='json', **{'HTTP_API_KEY': self.api_key})
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_active_campaign(self):
+        create_campaign(self, active=True)

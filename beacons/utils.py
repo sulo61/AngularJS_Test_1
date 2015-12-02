@@ -24,5 +24,6 @@ def get_user_from_api_key(api_key):
         raise NotFound()
     return get_object_or_404(User, pk=pk[0], email=pk[1])
 
+
 def get_api_key_from_request(request):
     return request.META.get('HTTP_API_KEY', None)
