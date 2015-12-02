@@ -60,6 +60,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
 
     };
     this.deleteShop = function(id){
+        debugger
         if (this.isLock){
             return;
         } else {
@@ -67,8 +68,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
         }
 
         Shop.delete({shopID:id}, function(){
-            this.appInfo.showSuccess();
-            this.numberOfItems = this.numberOfItems - 1;
+           this.numberOfItems = this.numberOfItems - 1;
             if ( (this.numberOfItems <= (this.shopsCurrentPage-1) * this.perPage) && this.numberOfItems>=this.perPage){
                 this.shopsCurrentPage = this.shopsCurrentPage - 1;
             }

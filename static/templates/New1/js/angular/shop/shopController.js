@@ -49,9 +49,11 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         this.copy = angular.copy(this.shop);
     }
     this.getCoordsArray = function () {
-        this.shop.longitude = 40.740;
-        this.shop.latitude = -74.18;
-        return [this.shop.longitude, this.shop.latitude]
+        return [this.shop.latitude, this.shop.longitude];
+    }
+    this.updatePath = function () {
+        this.currentPath.setPath("Shops / "+this.shop.name);
+        this.currentPath.setPage(this.shop.name);
     }
     // get shop
     this.getShop = function(){
@@ -65,9 +67,14 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
                 this.shop = success;
                 this.makeCopy();
                 this.unlock();
+                this.updatePath();
             }.bind(this), function(error){
                 this.unlock();
+                this.toast.showError(error);
             }.bind(this));
+        } else {
+            this.currentPath.setPath("Shops / New shop");
+            this.currentPath.setPage("New shop");
         }
     }
     // patch shop
@@ -80,8 +87,11 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         Shop.patch({shopID:this.id}, this.shop, function(){
             this.makeCopy();
             this.unlock();
+            this.updatePath();
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
+            this.toast.showError(error);
         }.bind(this));
 
     }
@@ -97,10 +107,12 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             this.shop = success;
             this.id = this.shop.id;
             this.makeCopy();
-            this.updateMap();
             this.unlock();
+            this.updatePath();
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
+            this.toast.showError(error);
         }.bind(this));
 
     }
@@ -117,25 +129,8 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
                 this.postShop();
             }
         }.bind(this), function (error) {
+            this.toast.showError(error);
         }.bind(this));
-    }
-    // upload photo
-    this.uploadFiles = function(file, errFiles) {
-        $scope.f = file;
-        $scope.errFile = errFiles && errFiles[0];
-        if (file) {
-            file.upload = Upload.upload({
-                url: '/api/shops/'+this.shop.id+'/image/',
-                data: {image: file}
-            });
-            file.upload.then(function (response) {
-                this.shop.image = angular.copy(response.data.image);
-                // $timeout(function () {
-                // });
-            }.bind(this), function (response) {
-            }, function (evt) {
-            });
-        }
     }
 
     this.getShop(this.id);
