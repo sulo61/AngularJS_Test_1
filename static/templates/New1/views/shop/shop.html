@@ -35,7 +35,7 @@
             <div class="ibox-content">
                 <form class="form-horizontal" style="text-align: right">
                     <button class="btn btn-warning" ng-click="shopCtrl.dismiss()">DISMISS</button>
-                    <button class="btn btn-success" ng-click="shopCtrl.save()">SAVE</button>
+                    <button class="btn btn-primary" ng-click="shopCtrl.save()">SAVE</button>
                 </form>
             </div>
         </div>
@@ -66,15 +66,10 @@
                         </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Days</label>
-
-
-
-
-
                         <div class="col-sm-10"><input type="text" class="form-control" ng-model="openHour.days"></div>
                     </div>
                     <br>
-                    <button style="float:right;" class="btn btn-danger" ng-click="shopCtrl.removeHours($index)">REMOVE</button>
+                    <button style="float:right;" class="btn btn-sm btn-danger" ng-click="shopCtrl.removeHours($index)">REMOVE</button>
                     <br><br>
                     <script type="text/javascript">
                         $('.clockpicker').clockpicker();
@@ -107,7 +102,7 @@
                         <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.newDays"></div>
                     </div>
                     <br>
-                    <button ng-show="shopCtrl.sendNewHourVisible" class="btn btn-success" style="float:right;" ng-click="shopCtrl.postNewHours()">CONFIRM</button>
+                    <button ng-show="shopCtrl.sendNewHourVisible" class="btn btn-sm btn-primary" style="float:right;" ng-click="shopCtrl.postNewHours()">CONFIRM</button>
                     <br><br>
                     <script type="text/javascript">
                         $('.clockpicker').clockpicker();
@@ -115,7 +110,7 @@
                 </form>
             </div>
             <div class="ibox-content" ng-hide="shopCtrl.sendNewHourVisible" >
-                <button ng-show="shopCtrl.addNewHourVisible" class="btn btn-primary" style="float:right;" ng-click="shopCtrl.showAddNewHours()">ADD</button>
+                <button ng-show="shopCtrl.addNewHourVisible" class="btn btn-sm btn-success" style="float:right;" ng-click="shopCtrl.showAddNewHours()">ADD</button>
                 <br><br>
             </div>
         </div>
