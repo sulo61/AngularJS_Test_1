@@ -37,6 +37,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "campaignBasicController",
                 controllerAs: 'cBasicCtrl'
             })
+            .when("/campaigns/:id?/ads/", {
+                templateUrl: "/campaign/ads",
+                controller: "campaignAbsController",
+                controllerAs: 'cAbsCtrl'
+            })
     }])
     .factory('currentPath', function() {
         currentPath = function () {
@@ -109,7 +114,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         return {
             link: function(scope, el, attrs) {
                 scope.$on('$locationChangeSuccess', function(event, newURL, oldURL) {
-                    if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("abs") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promos") !== -1) {
+                    if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("ads") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promos") !== -1) {
                         el.parent().removeClass("collapse");
                     } else {
                         el.parent().addClass("collapse");

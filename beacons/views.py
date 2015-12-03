@@ -115,6 +115,11 @@ class LogoutView(views.APIView):
 def campaignBasic(request):
     return render(request, 'New1/views/campaign/basic.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAbs(request):
+    return render(request, 'New1/views/campaign/abs.html', {})
+
 # SHOP
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
