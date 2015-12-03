@@ -31,6 +31,12 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "shopController",
                 controllerAs: 'shopCtrl'
             })
+            // CAMPAIGN
+            .when("/campaigns/:id?/basic/", {
+                templateUrl: "/campaign/basic",
+                controller: "campaignBasicController",
+                controllerAs: 'cBasicCtrl'
+            })
     }])
     .factory('currentPath', function() {
         currentPath = function () {
@@ -85,6 +91,19 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                         el.parent().addClass("active");
                     } else {
                         el.parent().removeClass("active");
+                    }
+                })
+            }
+        };
+    })
+    .directive("checkIfCampaign", function() {
+        return {
+            link: function(scope, el, attrs) {
+                scope.$on('$locationChangeSuccess', function(event, newURL) {
+                    if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("abs") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promos") !== -1) {
+                        el.parent().removeClass("collapse");
+                    } else {
+                        el.parent().addClass("collapse");
                     }
                 })
             }

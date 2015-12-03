@@ -43,6 +43,10 @@
     <script type="text/javascript" src="{% static 'templates/New1/js/angular/dashboard/profileController.js' %}"></script>
     <!--shop-->
     <script type="text/javascript" src="{% static 'templates/New1/js/angular/shop/shopController.js' %}"></script>
+    <!--campaign-->
+    <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignBasicController.js' %}"></script>
+
+
 
 
 </head>
@@ -68,12 +72,12 @@
                 <li>
                     <a check-if-active href="#/campaigns"><i class="fa fa-globe"></i> <span class="nav-label">Campaigns</span></a>
                     <ul class="nav nav-second-level" >
-                        <li><a href="">Basic</a></li>
-                        <li><a href="">Advertisements</a></li>
-                        <li><a href="">Actions</a></li>
-                        <li><a href="">Awards</a></li>
-                        <li><a href="">Beacons</a></li>
-                        <li><a href="">Promotions</a></li>
+                        <li><a check-if-active check-if-campaign href="#/campaigns/0/basic">Basic</a></li>
+                        <li><a check-if-active check-if-campaign href="#/campaigns/0/abs">Advertisements</a></li>
+                        <li><a check-if-active check-if-campaign href="#/campaigns/0/actions">Actions</a></li>
+                        <li><a check-if-active check-if-campaign href="#/campaigns/0/awards">Awards</a></li>
+                        <li><a check-if-active check-if-campaign href="#/campaigns/0/beacons">Beacons</a></li>
+                        <li><a check-if-active check-if-campaign href="#/campaigns/0/promos">Promotions</a></li>
                     </ul>
                 </li>
                 <li>
