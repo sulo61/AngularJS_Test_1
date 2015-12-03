@@ -124,7 +124,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     }
 
                     el.parent().removeClass("active");
-                    
+
                     if ( (newURL.search("basic") !== -1) && elementPath.search("basic") !== -1){
                         el.parent().addClass("active");
                     }
@@ -143,7 +143,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     if ( (newURL.search("promos") !== -1) && elementPath.search("promos") !== -1){
                         el.parent().addClass("active");
                     }
-
 
                 })
             }

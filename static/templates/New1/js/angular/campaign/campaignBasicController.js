@@ -19,6 +19,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     this.basicCopy = {};
     // save
     this.save = function(){
+        debugger
         this.saveBasic();
     }
     // dismiss
@@ -30,6 +31,10 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         this.basicCopy = angular.copy(this.basic);
         this.id = this.basic.id;
         this.name = this.basic.name;
+    }
+    this.updatePath = function () {
+        this.currentPath.setPath("Campaign / "+this.basic.name);
+        this.currentPath.setPage(this.basic.name);
     }
     // api
     this.getBasic = function(){
@@ -44,9 +49,14 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
                 this.basic.beacons = [];
                 this.basicCopy = angular.copy(this.basic);
                 this.unlock();
+                this.updatePath();
             }.bind(this), function(error){
+                this.toast.showError(error);
                 this.unlock();
             }.bind(this));
+        } else {
+            this.currentPath.setPath("Campaign / New campaign");
+            this.currentPath.setPage("New campaign");
         }
     }
     this.patchBasic = function(){
@@ -58,8 +68,11 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         Campaign.patch({campaignID:this.id}, this.basic, function(){
             this.makeCopy();
             this.unlock();
+            this.updatePath();
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
+            this.toast.showError(error);
         }.bind(this));
     }
 
@@ -74,8 +87,11 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
             this.basic = success;
             this.makeCopy();
             this.unlock();
+            this.updatePath();
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
+            this.toast.showError(error);
         }.bind(this))
 
     }
