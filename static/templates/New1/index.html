@@ -72,12 +72,14 @@
                 <li>
                     <a check-if-active href="#/campaigns"><i class="fa fa-globe"></i> <span class="nav-label">Campaigns</span></a>
                     <ul class="nav nav-second-level" >
-                        <li><a check-if-active check-if-campaign href="#/campaigns/0/basic">Basic</a></li>
-                        <li><a check-if-active check-if-campaign href="#/campaigns/0/abs">Advertisements</a></li>
-                        <li><a check-if-active check-if-campaign href="#/campaigns/0/actions">Actions</a></li>
-                        <li><a check-if-active check-if-campaign href="#/campaigns/0/awards">Awards</a></li>
-                        <li><a check-if-active check-if-campaign href="#/campaigns/0/beacons">Beacons</a></li>
-                        <li><a check-if-active check-if-campaign href="#/campaigns/0/promos">Promotions</a></li>
+                        {%verbatim%}
+                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/basic'}}">Basic</a></li>
+                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/abs'}}">Advertisements</a></li>
+                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/actions'}}">Actions</a></li>
+                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/awards'}}">Awards</a></li>
+                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/beacons'}}">Beacons</a></li>
+                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/promos'}}">Promotions</a></li>
+                        {%endverbatim%}
                     </ul>
                 </li>
                 <li>

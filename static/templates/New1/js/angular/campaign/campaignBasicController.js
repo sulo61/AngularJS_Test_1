@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', function($routeParams, Campaign, Campaigns, currentPath, toast){
+angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaign', function($routeParams, Campaign, Campaigns, currentPath, toast, campaign){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -12,6 +12,8 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     this.toast = toast;
     // campaign params
     this.id = $routeParams.id;
+    this.campaign = campaign;
+    this.campaign.setID(this.id>0?this.id:0);
     // model
     this.basic = {id:"", name:"", start_date:"", end_date:"", is_active:false};
     this.basicCopy = {};

@@ -81,6 +81,15 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         }
         return new toast();
     })
+    .factory('campaign', function(){
+        campaign = function () {
+            this.id = 0;
+            this.setID = function(id){
+                this.id = id;
+            }
+        }
+        return new campaign();
+    })
     .directive("checkIfActive", function() {
         return {
             link: function(scope, el, attrs) {
@@ -99,7 +108,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
     .directive("checkIfCampaign", function() {
         return {
             link: function(scope, el, attrs) {
-                scope.$on('$locationChangeSuccess', function(event, newURL) {
+                scope.$on('$locationChangeSuccess', function(event, newURL, oldURL) {
                     if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("abs") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promos") !== -1) {
                         el.parent().removeClass("collapse");
                     } else {
@@ -109,9 +118,10 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
             }
         };
     })
-    .controller("panelController", function($window, currentPath, Logout, User, toast){
+    .controller("panelController", function($window, currentPath, Logout, User, toast, campaign){
         this.currentPath = currentPath;
         this.toast = toast;
+        this.campaign = campaign;
 
         this.user = {
             first_name: "",
