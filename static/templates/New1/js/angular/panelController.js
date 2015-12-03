@@ -113,12 +113,38 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
     .directive("checkIfCampaign", function() {
         return {
             link: function(scope, el, attrs) {
-                scope.$on('$locationChangeSuccess', function(event, newURL, oldURL) {
+                var elementPath;
+                elementPath = attrs.href;
+
+                scope.$on('$locationChangeSuccess', function(event, newURL) {
                     if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("ads") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promos") !== -1) {
                         el.parent().removeClass("collapse");
                     } else {
                         el.parent().addClass("collapse");
                     }
+
+                    el.parent().removeClass("active");
+                    
+                    if ( (newURL.search("basic") !== -1) && elementPath.search("basic") !== -1){
+                        el.parent().addClass("active");
+                    }
+                    if ( (newURL.search("ads") !== -1) && elementPath.search("ads") !== -1){
+                        el.parent().addClass("active");
+                    }
+                    if ( (newURL.search("actions") !== -1) && elementPath.search("actions") !== -1){
+                        el.parent().addClass("active");
+                    }
+                    if ( (newURL.search("awards") !== -1) && elementPath.search("awards") !== -1){
+                        el.parent().addClass("active");
+                    }
+                    if ( (newURL.search("beacons") !== -1) && elementPath.search("beacons") !== -1){
+                        el.parent().addClass("active");
+                    }
+                    if ( (newURL.search("promos") !== -1) && elementPath.search("promos") !== -1){
+                        el.parent().addClass("active");
+                    }
+
+
                 })
             }
         };

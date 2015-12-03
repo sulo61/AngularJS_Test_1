@@ -73,12 +73,12 @@
                     <a check-if-active href="#/campaigns"><i class="fa fa-globe"></i> <span class="nav-label">Campaigns</span></a>
                     <ul class="nav nav-second-level" >
                         {%verbatim%}
-                        <li><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/basic'}}">Basic</a></li>
-                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/ads'}}">Advertisements</a></li>
-                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/actions'}}">Actions</a></li>
-                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/awards'}}">Awards</a></li>
-                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/beacons'}}">Beacons</a></li>
-                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-active check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/promos'}}">Promotions</a></li>
+                        <li><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/basic'}}">Basic</a></li>
+                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/ads'}}">Advertisements</a></li>
+                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/actions'}}">Actions</a></li>
+                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/awards'}}">Awards</a></li>
+                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/beacons'}}">Beacons</a></li>
+                        <li ng-show="panelCtrl.campaign.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaign.id+'/promos'}}">Promotions</a></li>
                         {%endverbatim%}
                     </ul>
                 </li>
