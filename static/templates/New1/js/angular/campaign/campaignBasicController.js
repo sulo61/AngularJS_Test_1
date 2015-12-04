@@ -44,18 +44,20 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         startD = new Date(this.basic.start_date);
         endD = new Date(this.basic.end_date);
 
-        this.startDate = ((startD.getDay()<10)?("0"+startD.getDay()):startD.getDay())+"/"+startD.getMonth()+1+"/"+startD.getFullYear();
-        this.endDate = ((endD.getDay()<10)?("0"+endD.getDay()):endD.getDay())+"/"+endD.getMonth()+1+"/"+endD.getFullYear();
-        this.startHour = startD.getHours()+":"+ (startD.getMinutes()<10 ? ("0"+startD.getMinutes()) : (startD.getMinutes()))
-        this.endHour = endD.getHours()+":"+ (endD.getMinutes()<10 ? ("0"+endD.getMinutes()) : (endD.getMinutes()))
+
+        this.startDate = ((startD.getUTCDate()<10)?("0"+startD.getUTCDate()):startD.getUTCDate())+"/"+startD.getUTCMonth()+1+"/"+startD.getUTCFullYear();
+        this.endDate = ((endD.getUTCDate()<10)?("0"+endD.getUTCDate()):endD.getUTCDate())+"/"+endD.getUTCMonth()+1+"/"+endD.getUTCFullYear();
+        this.startHour = startD.getUTCHours()+":"+ (startD.getUTCMinutes()<10 ? ("0"+startD.getUTCMinutes()) : (startD.getUTCMinutes()))
+        this.endHour = endD.getUTCHours()+":"+ (endD.getUTCMinutes()<10 ? ("0"+endD.getUTCMinutes()) : (endD.getUTCMinutes()))
 
     }
     this.setDates = function(){
         startD = new Date(this.startDate);
         endD = new Date(this.endDate);
 
-        //this.basic.start_date = (((startD.getDay()<10)?("0"+startD.getDay()):startD.getDay())+"-"+(((startD.getMonth()+1)<10)?("0"+(startD.getMonth()+1)):(startD.getMonth()+1))+"-"+startD.getFullYear())+"T"+this.startHour+":00Z";
-        //this.basic.end_date = (((endD.getDay()<10)?("0"+endD.getDay()):endD.getDay())+"-"+(((endD.getMonth()+1)<10)?("0"+(endD.getMonth()+1)):(endD.getMonth()+1))+"-"+endD.getFullYear())+"T"+this.endHour+":00Z";
+        this.basic.start_date = startD.getFullYear() + "-" + (startD.getMonth()<10?("0"+(startD.getMonth()+1)):(startD.getMonth()+1)) + "-" + (startD.getDate()<10?("0"+startD.getDate()):startD.getDate()) + "T" + this.startHour+":00Z";
+        this.basic.end_date = endD.getFullYear() + "-" + (endD.getMonth()<10?("0"+(endD.getMonth()+1)):(endD.getMonth()+1)) + "-" + (endD.getDate()<10?("0"+endD.getDate()):endD.getDate()) + "T" + this.endHour+":00Z";
+
     }
     // api
     this.getBasic = function(){
@@ -72,7 +74,6 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
                 this.unlock();
                 this.updatePath();
                 this.getDates();
-                alert(this.basic.start_date)
             }.bind(this), function(error){
                 this.toast.showError(error);
                 this.unlock();
