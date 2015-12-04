@@ -12,8 +12,8 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     this.toast = toast;
     // campaign params
     this.id = $routeParams.id;
-    this.campaign = campaign;
-    this.campaign.setID(this.id>0?this.id:0);
+    this.campaignMENU = campaign;
+    this.campaignMENU.setID(this.id>0?this.id:0);
     // model
     this.basic = {id:"", name:"", start_date:"", end_date:"", is_active:false};
     this.basicCopy = {};
@@ -114,6 +114,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
             this.unlock();
             this.updatePath();
             this.toast.showSuccess();
+            this.campaignMENU.setID(this.basic.id);
         }.bind(this), function(error){
             this.unlock();
             this.toast.showError(error);
