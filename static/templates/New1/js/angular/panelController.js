@@ -86,14 +86,14 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         }
         return new toast();
     })
-    .factory('campaign', function(){
-        campaign = function () {
+    .factory('campaignMENU', function(){
+        campaignMENU = function () {
             this.id = 0;
             this.setID = function(id){
                 this.id = id;
             }
         }
-        return new campaign();
+        return new campaignMENU();
     })
     .directive("checkIfActive", function() {
         return {
@@ -148,10 +148,10 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
             }
         };
     })
-    .controller("panelController", function($window, currentPath, Logout, User, toast, campaign){
+    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU){
         this.currentPath = currentPath;
         this.toast = toast;
-        this.campaign = campaign;
+        this.campaignM = campaignMENU;
 
         this.user = {
             first_name: "",

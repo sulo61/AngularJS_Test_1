@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaign', function($routeParams, Campaign, Campaigns, currentPath, toast, campaign){
+angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -12,8 +12,8 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     this.toast = toast;
     // campaign params
     this.id = $routeParams.id;
-    this.campaignMENU = campaign;
-    this.campaignMENU.setID(this.id>0?this.id:0);
+    this.campaignM = campaignMENU;
+    this.campaignM.setID(this.id>0?this.id:0);
     // model
     this.basic = {id:"", name:"", start_date:"", end_date:"", is_active:false};
     this.basicCopy = {};
@@ -114,7 +114,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
             this.unlock();
             this.updatePath();
             this.toast.showSuccess();
-            this.campaignMENU.setID(this.basic.id);
+            this.campaignM.setID(this.basic.id);
         }.bind(this), function(error){
             this.unlock();
             this.toast.showError(error);

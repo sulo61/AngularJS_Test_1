@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast',  function($routeParams, CampaignAds, CampaignAd, currentPath, toast){
+angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -12,11 +12,14 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
     this.toast = toast;
     // campaign params
     this.id = $routeParams.id;
+    this.campaignM = campaignMENU;
+    this.campaignM.setID(this.id>0?this.id:0);
     // models
     this.adsList = [];
     this.adsPages = [];	// numbers
     this.adsCurrentPage = 1;
     this.numberOfItems = 0;
+    this.perPage = 5;
     // nav
     this.adsNavActive = function(page){
         if (page==this.adsCurrentPage){
@@ -49,7 +52,7 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
             this.adsPages = [];
             this.adsList = success.results;
             this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/5)); i++) {
+            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
                 this.adsPages.push(i+1);
             }
             this.adsCurrentPage = page;
@@ -60,7 +63,7 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
         }.bind(this));
 
     };
-    this.deleteAd = function(adID, index){
+    this.deleteAd = function(adID){
         if (this.isLock){
             return;
         } else {
@@ -69,7 +72,7 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
 
         CampaignAd.delete({campaignID:this.id, adID:adID}, function(){
             this.numberOfItems = this.numberOfItems - 1;
-            if ( (this.numberOfItems <= (this.adsCurrentPage-1) * 5) && this.numberOfItems>=5 ){
+            if ( (this.numberOfItems <= (this.adsCurrentPage-1) * this.perPage) && this.numberOfItems>=this.perPage ){
                 this.adsCurrentPage = this.adsCurrentPage - 1;
             }
             this.unlock();
