@@ -17,9 +17,12 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     // model
     this.basic = {id:"", name:"", start_date:"", end_date:"", is_active:false};
     this.basicCopy = {};
+    this.startDate = "01/01/1900";
+    this.endDate = "01/01/1900";
+    this.startHour = "01:00"
+    this.endHour = "01:00"
     // save
     this.save = function(){
-        debugger
         this.saveBasic();
     }
     // dismiss
@@ -36,6 +39,24 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         this.currentPath.setPath("Campaign / "+this.basic.name);
         this.currentPath.setPage(this.basic.name);
     }
+    // dates
+    this.getDates = function(){
+        startD = new Date(this.basic.start_date);
+        endD = new Date(this.basic.end_date);
+
+        this.startDate = ((startD.getDay()<10)?("0"+startD.getDay()):startD.getDay())+"/"+startD.getMonth()+1+"/"+startD.getFullYear();
+        this.endDate = ((endD.getDay()<10)?("0"+endD.getDay()):endD.getDay())+"/"+endD.getMonth()+1+"/"+endD.getFullYear();
+        this.startHour = startD.getHours()+":"+ (startD.getMinutes()<10 ? ("0"+startD.getMinutes()) : (startD.getMinutes()))
+        this.endHour = endD.getHours()+":"+ (endD.getMinutes()<10 ? ("0"+endD.getMinutes()) : (endD.getMinutes()))
+
+    }
+    this.setDates = function(){
+        startD = new Date(this.startDate);
+        endD = new Date(this.endDate);
+
+        //this.basic.start_date = (((startD.getDay()<10)?("0"+startD.getDay()):startD.getDay())+"-"+(((startD.getMonth()+1)<10)?("0"+(startD.getMonth()+1)):(startD.getMonth()+1))+"-"+startD.getFullYear())+"T"+this.startHour+":00Z";
+        //this.basic.end_date = (((endD.getDay()<10)?("0"+endD.getDay()):endD.getDay())+"-"+(((endD.getMonth()+1)<10)?("0"+(endD.getMonth()+1)):(endD.getMonth()+1))+"-"+endD.getFullYear())+"T"+this.endHour+":00Z";
+    }
     // api
     this.getBasic = function(){
         if (this.id>0){
@@ -50,6 +71,8 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
                 this.basicCopy = angular.copy(this.basic);
                 this.unlock();
                 this.updatePath();
+                this.getDates();
+                alert(this.basic.start_date)
             }.bind(this), function(error){
                 this.toast.showError(error);
                 this.unlock();
@@ -65,6 +88,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         } else {
             this.lock();
         }
+        this.setDates()
         Campaign.patch({campaignID:this.id}, this.basic, function(){
             this.makeCopy();
             this.unlock();
@@ -82,7 +106,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         } else {
             this.lock();
         }
-
+        this.setDates()
         Campaigns.save(this.basic, function(success){
             this.basic = success;
             this.makeCopy();
