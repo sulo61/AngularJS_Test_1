@@ -45,8 +45,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
     }])
     .factory('currentPath', function() {
         currentPath = function () {
-            this.path = "Current path";
-            this.page = "Current page";
+            this.path = "";
+            this.page = "";
 
             this.setPath = function(path){
                 this.path = path;
