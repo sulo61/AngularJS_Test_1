@@ -48,6 +48,9 @@
     <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignBasicController.js' %}"></script>
     <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignAbsController.js' %}"></script>
     <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignActionsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignAwardsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignBeaconsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'templates/New1/js/angular/campaign/campaignPromotionsController.js' %}"></script>
 
 
 
@@ -80,7 +83,7 @@
                         <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/actions'}}">Actions</a></li>
                         <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/awards'}}">Awards</a></li>
                         <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/beacons'}}">Beacons</a></li>
-                        <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/promos'}}">Promotions</a></li>
+                        <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/promotions'}}">Promotions</a></li>
                         {%endverbatim%}
                     </ul>
                 </li>

@@ -16,6 +16,10 @@ urlpatterns = [
     url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
     url(r'^campaign/ads/$', views.campaignAbs, name="campaignAbs"),
     url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
+    url(r'^campaign/awards/$', views.campaignAwards, name="campaignAwards"),
+
+    url(r'^campaign/beacons/$', views.campaignBeacons, name="campaignBeacons"),
+    url(r'^campaign/promotions/$', views.campaignPromotions, name="campaignPromotions"),
     
     # url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
     # url(r'^campaign/action/$', views.campaignAction, name="campaignAction"),

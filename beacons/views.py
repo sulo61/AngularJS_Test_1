@@ -125,6 +125,21 @@ def campaignAbs(request):
 def campaignActions(request):
     return render(request, 'New1/views/campaign/actions.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAwards(request):
+    return render(request, 'New1/views/campaign/awards.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignBeacons(request):
+    return render(request, 'New1/views/campaign/beacons.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignPromotions(request):
+    return render(request, 'New1/views/campaign/promotions.html', {})
+
 # SHOP
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))

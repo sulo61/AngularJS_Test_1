@@ -47,6 +47,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "campaignActionsController",
                 controllerAs: 'cActionsCtrl'
             })
+            .when("/campaigns/:id?/awards/", {
+                templateUrl: "/campaign/awards",
+                controller: "campaignAwardsController",
+                controllerAs: 'cAwardsCtrl'
+            })
+
+            .when("/campaigns/:id?/beacons/", {
+                templateUrl: "/campaign/beacons",
+                controller: "campaignBeaconsController",
+                controllerAs: 'cBeaconsCtrl'
+            })
+            .when("/campaigns/:id?/promotions/", {
+                templateUrl: "/campaign/promotions",
+                controller: "campaignPromotionsController",
+                controllerAs: 'cPromotionsCtrl'
+            })
     }])
     .factory('currentPath', function() {
         currentPath = function () {
@@ -122,7 +138,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 elementPath = attrs.href;
 
                 scope.$on('$locationChangeSuccess', function(event, newURL) {
-                    if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("ads") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promos") !== -1) {
+                    if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("ads") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promotions") !== -1) {
                         el.parent().removeClass("collapse");
                     } else {
                         el.parent().addClass("collapse");
@@ -145,7 +161,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     if ( (newURL.search("beacons") !== -1) && elementPath.search("beacons") !== -1){
                         el.parent().addClass("active");
                     }
-                    if ( (newURL.search("promos") !== -1) && elementPath.search("promos") !== -1){
+                    if ( (newURL.search("promotions") !== -1) && elementPath.search("promotions") !== -1){
                         el.parent().addClass("active");
                     }
 
