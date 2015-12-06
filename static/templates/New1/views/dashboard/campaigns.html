@@ -32,7 +32,8 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            Showing {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage-campaignsCtrl.perPage+1}} to {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage>campaignsCtrl.numberOfItems?campaignsCtrl.numberOfItems:campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage}} of {{campaignsCtrl.numberOfItems}} entries</div>
+                            <span ng-show="campaignsCtrl.numberOfItems>0">Showing {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage-campaignsCtrl.perPage+1}} to {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage>campaignsCtrl.numberOfItems?campaignsCtrl.numberOfItems:campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage}} of {{campaignsCtrl.numberOfItems}} entries</div></span>
+                            <span ng-hide="campaignsCtrl.numberOfItems>0">There are no any Campaigns</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="campaignsCtrl.campaignsPages.length>0">
                                 <li ng-click="campaignsCtrl.campaignsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
