@@ -38,6 +38,10 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
             this.getActions(this.actionsCurrentPage-1);
         }
     };
+    this.updatePath = function () {
+        this.currentPath.setPath("Campaign / " + this.panelCache.getCampaignName() + " / Actions");
+        this.currentPath.setPage("Actions");
+    }
     // api
     this.getActions = function(page){
         if (this.isLock){
@@ -83,5 +87,6 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
     }
 
     this.getActions(1);
+    this.updatePath();
 
 }]);

@@ -38,6 +38,11 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             this.getPromotions(this.promotionsCurrentPage-1);
         }
     };
+
+    this.updatePath = function () {
+        this.currentPath.setPath("Campaign / " + this.panelCache.getCampaignName() + " / Promotions");
+        this.currentPath.setPage("Promotions");
+    }
     // api
     this.getPromotions = function(page){
         if (this.isLock){
@@ -83,5 +88,6 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
     }
 
     this.getPromotions(1);
+    this.updatePath();
 
 }]);

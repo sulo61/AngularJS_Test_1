@@ -38,6 +38,11 @@ angular.module('panelApp').controller('campaignAwardsController', ['$routeParams
             this.getAwards(this.awardsCurrentPage-1);
         }
     };
+
+    this.updatePath = function () {
+        this.currentPath.setPath("Campaign / " + this.panelCache.getCampaignName() + " / Awards");
+        this.currentPath.setPage("Awards");
+    }
     // api
     this.getAwards = function(page){
         if (this.isLock){
@@ -83,5 +88,6 @@ angular.module('panelApp').controller('campaignAwardsController', ['$routeParams
     }
 
     this.getAwards(1);
+    this.updatePath();
 
 }]);

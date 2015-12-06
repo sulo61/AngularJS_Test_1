@@ -38,6 +38,11 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.getBeacons(this.beaconsCurrentPage-1);
         }
     };
+
+    this.updatePath = function () {
+        this.currentPath.setPath("Campaign / " + this.panelCache.getCampaignName() + " / Beacons");
+        this.currentPath.setPage("Beacons");
+    }
     // api
     this.getBeacons = function(page){
         if (this.isLock){
@@ -83,5 +88,6 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     }
 
     this.getBeacons(1);
+    this.updatePath();
 
 }]);

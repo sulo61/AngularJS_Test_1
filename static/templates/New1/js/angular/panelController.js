@@ -116,6 +116,19 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         }
         return new campaignMENU();
     })
+    .factory('panelCache', function($cacheFactory){
+        panelCache = function () {
+            cache = $cacheFactory('panelCache');
+
+            this.setCampaignName = function(name){
+                cache.put("campaign",name);
+            }
+            this.getCampaignName = function() {
+                return cache.get("campaign")
+            }
+        }
+        return new panelCache();
+    })
     .directive("checkIfActive", function() {
         return {
             link: function(scope, el, attrs) {
@@ -169,10 +182,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
             }
         };
     })
-    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU){
+    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU, panelCache){
         this.currentPath = currentPath;
         this.toast = toast;
         this.campaignM = campaignMENU;
+        this.panelCache = panelCache;
 
         this.user = {
             first_name: "",
