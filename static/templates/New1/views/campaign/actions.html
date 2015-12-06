@@ -34,7 +34,8 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            Showing {{cActionsCtrl.actionsCurrentPage*cActionsCtrl.perPage-cActionsCtrl.perPage+1}} to {{cActionsCtrl.actionsCurrentPage*cActionsCtrl.perPage>cActionsCtrl.numberOfItems?cActionsCtrl.numberOfItems:cActionsCtrl.actionsCurrentPage*cActionsCtrl.perPage}} of {{cActionsCtrl.numberOfItems}} entries</div>
+                            <span ng-show="cActionsCtrl.numberOfItems>0">Showing {{cActionsCtrl.actionsCurrentPage*cActionsCtrl.perPage-cActionsCtrl.perPage+1}} to {{cActionsCtrl.actionsCurrentPage*cActionsCtrl.perPage>cActionsCtrl.numberOfItems?cActionsCtrl.numberOfItems:cActionsCtrl.actionsCurrentPage*cActionsCtrl.perPage}} of {{cActionsCtrl.numberOfItems}} entries</div></span>
+                            <span ng-hide="cActionsCtrl.numberOfItems>0">There are no any Actions</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="cActionsCtrl.actionsPages.length>0">
                                 <li ng-click="cActionsCtrl.actionsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>

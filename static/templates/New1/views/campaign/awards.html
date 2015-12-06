@@ -32,7 +32,8 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            Showing {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage-cAwardsCtrl.perPage+1}} to {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage>cAwardsCtrl.numberOfItems?cAwardsCtrl.numberOfItems:cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage}} of {{cAwardsCtrl.numberOfItems}} entries</div>
+                            <span ng-show="cAwardsCtrl.numberOfItems>0">Showing {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage-cAwardsCtrl.perPage+1}} to {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage>cAwardsCtrl.numberOfItems?cAwardsCtrl.numberOfItems:cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage}} of {{cAwardsCtrl.numberOfItems}} entries</div></span>
+                            <span ng-hide="cAwardsCtrl.numberOfItems>0">There are no any Awards</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="cAwardsCtrl.awardsPages.length>0">
                                 <li ng-click="cAwardsCtrl.awardsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>

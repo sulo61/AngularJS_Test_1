@@ -47,7 +47,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
         }
 
 
-        CampaignBeacons.get({campaignID:this.id, page:page}, function(success){
+        CampaignBeacons.get({campaignID:this.id, page:page, pagination:true}, function(success){
             this.beaconsList = [];
             this.beaconsPages = [];
             this.beaconsList = success.results;
