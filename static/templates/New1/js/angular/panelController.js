@@ -42,6 +42,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "campaignAbsController",
                 controllerAs: 'cAbsCtrl'
             })
+            .when("/campaigns/:id?/actions/", {
+                templateUrl: "/campaign/actions",
+                controller: "campaignActionsController",
+                controllerAs: 'cActionsCtrl'
+            })
     }])
     .factory('currentPath', function() {
         currentPath = function () {

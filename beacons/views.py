@@ -120,6 +120,11 @@ def campaignBasic(request):
 def campaignAbs(request):
     return render(request, 'New1/views/campaign/abs.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignActions(request):
+    return render(request, 'New1/views/campaign/actions.html', {})
+
 # SHOP
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
