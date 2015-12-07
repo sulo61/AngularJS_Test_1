@@ -63,7 +63,7 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
             this.actionsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            appInfo.showFail(error);
+            this.toast.showError(error);
             this.unlock();
         }.bind(this));
 
@@ -82,8 +82,10 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
             }
             this.unlock();
             this.getActions(this.actionsCurrentPage);
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
+            this.toast.showError(error);
         }.bind(this));
     }
 

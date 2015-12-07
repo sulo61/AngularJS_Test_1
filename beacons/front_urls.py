@@ -6,20 +6,23 @@ __author__ = 'Mateusz'
 
 urlpatterns = [
     url(r'^api_docs/', include('rest_framework_swagger.urls'), name="docs"),
+    url(r'^panel/$', views.panel, name="panel"),
     url(r'^dash/profile/$', views.dashProfile, name="dashProfile"),
     url(r'^dash/shops/$', views.dashShops, name="dashShops"),
     url(r'^dash/campaigns/$', views.dashCampaigns, name="dashCampaigns"),
-    url(r'^panel/$', views.panel, name="panel"),
 
+    # SHOP
     url(r'^shop/$', views.shop, name="shop"),
-    # url(r'^campaign/$', views.campaign, name="campaign"),
+    
+    # CAMPAIGN    
     url(r'^campaign/basic/$', views.campaignBasic, name="campaignBasic"),
     url(r'^campaign/ads/$', views.campaignAbs, name="campaignAbs"),
     url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
     url(r'^campaign/awards/$', views.campaignAwards, name="campaignAwards"),
-
     url(r'^campaign/beacons/$', views.campaignBeacons, name="campaignBeacons"),
     url(r'^campaign/promotions/$', views.campaignPromotions, name="campaignPromotions"),
+    # single
+    url(r'^campaign/ad/$', views.campaignAb, name="campaignAb"),
     
     # url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
     # url(r'^campaign/action/$', views.campaignAction, name="campaignAction"),

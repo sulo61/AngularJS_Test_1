@@ -64,7 +64,7 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             this.promotionsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            appInfo.showFail(error);
+            this.toast.showError(error);
             this.unlock();
         }.bind(this));
 
@@ -83,7 +83,9 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             }
             this.unlock();
             this.getPromotions(this.promotionsCurrentPage);
+            this.toast.showSuccess();
         }.bind(this), function(error){
+            this.toast.showError(error);
             this.unlock();
         }.bind(this));
     }

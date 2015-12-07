@@ -64,7 +64,8 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
             this.adsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            appInfo.showFail(error);
+            this.toast.showError(error);
+            this.toast.show
             this.unlock();
         }.bind(this));
 
@@ -83,8 +84,10 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
             }
             this.unlock();
             this.getAds(this.adsCurrentPage);
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
+            this.toast.showError(error);
         }.bind(this));
     }
 

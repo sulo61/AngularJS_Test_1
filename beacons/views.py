@@ -140,6 +140,12 @@ def campaignBeacons(request):
 def campaignPromotions(request):
     return render(request, 'New1/views/campaign/promotions.html', {})
 
+#single
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAb(request):
+    return render(request, 'New1/views/campaign/single/ab.html', {})
+
 # SHOP
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
