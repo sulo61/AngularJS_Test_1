@@ -175,6 +175,8 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 elementPath = attrs.href;
 
                 scope.$on('$locationChangeSuccess', function(event, newURL) {
+                    // lol fix
+                    newURL = newURL.substring(15, newURL.length);
                     if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("ads") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promotions") !== -1) {
                         el.parent().removeClass("collapse");
                     } else {
