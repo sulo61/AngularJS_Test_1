@@ -33,7 +33,14 @@
                     <h5>Photo</h5>
                 </div>
                 <div class="ibox-content">
-                    PHOTO
+
+                    <div style="text-align:center;" ng-show="cAbCtrl.ad.id>0" >
+                        <img ng-src="{{cAbCtrl.ad.image}}" alt="No image" style="width:100%"/>
+                        <br><br><br><br>
+                        <button class="btn btn-primary" type="file" ngf-select="cAbCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
+                    </div>
+
+
                 </div>
             </div>
         </div>

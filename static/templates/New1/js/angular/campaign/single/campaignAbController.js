@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache){
+angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -100,8 +100,8 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
     }
     // upload photo
     this.uploadFiles = function(file, errFiles) {
-        $scope.f = file;
-        $scope.errFile = errFiles && errFiles[0];
+        this.f = file;
+        this.errFile = errFiles && errFiles[0];
         if (file) {
             file.upload = Upload.upload({
                 url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID+"/image",
