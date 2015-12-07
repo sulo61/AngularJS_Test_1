@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate', 'ngMap'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate', 'ngMap', 'ngStorage'])
     // django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -116,6 +116,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         }
         return new campaignMENU();
     })
+    .factory('panelCache', function($localStorage){
+        panelCache = function () {
+            this.setCampaignName = function(name, id){
+                $localStorage.campaignName = name;
+                $localStorage.campaignID = id;
+            }
+            this.getCampaignName = function (id) {
+                if ($localStorage.campaignID == id){
+                    return $localStorage.campaignName;
+                } else {
+                    return "unknown";
+                }
+            }
+        }
+        return new panelCache();
+    })
     .directive("checkIfActive", function() {
         return {
             link: function(scope, el, attrs) {
@@ -169,10 +185,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
             }
         };
     })
-    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU){
+    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU, panelCache){
         this.currentPath = currentPath;
         this.toast = toast;
         this.campaignM = campaignMENU;
+        this.cache = panelCache;
 
         this.user = {
             first_name: "",

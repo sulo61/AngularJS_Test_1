@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBeaconsController', ['$routeParams', 'CampaignBeacons', 'CampaignBeacon', 'currentPath', 'toast', 'campaignMENU', function($routeParams, CampaignBeacons, CampaignBeacon, currentPath, toast, campaignMENU){
+angular.module('panelApp').controller('campaignBeaconsController', ['$routeParams', 'CampaignBeacons', 'CampaignBeacon', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, CampaignBeacons, CampaignBeacon, currentPath, toast, campaignMENU, panelCache){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -10,6 +10,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     // api info
     this.currentPath = currentPath;
     this.toast = toast;
+    this.cache = panelCache;
     // campaign params
     this.id = $routeParams.id;
     this.campaignM = campaignMENU;
@@ -40,7 +41,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     };
 
     this.updatePath = function () {
-        this.currentPath.setPath("Campaign / " + "TMP" + " / Beacons");
+        this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.id) + " / Beacons");
         this.currentPath.setPage("Beacons");
     }
     // api

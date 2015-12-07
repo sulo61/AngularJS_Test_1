@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignActionsController', ['$routeParams', 'CampaignActions', 'CampaignAction', 'currentPath', 'toast', 'campaignMENU', function($routeParams, CampaignActions, CampaignAction, currentPath, toast, campaignMENU){
+angular.module('panelApp').controller('campaignActionsController', ['$routeParams', 'CampaignActions', 'CampaignAction', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, CampaignActions, CampaignAction, currentPath, toast, campaignMENU, panelCache){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -10,6 +10,7 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
     // api info
     this.currentPath = currentPath;
     this.toast = toast;
+    this.cache = panelCache;
     // campaign params
     this.id = $routeParams.id;
     this.campaignM = campaignMENU;
@@ -39,7 +40,7 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
         }
     };
     this.updatePath = function () {
-        this.currentPath.setPath("Campaign / " +"TMP" + " / Actions");
+        this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.id) + " / Actions");
         this.currentPath.setPage("Actions");
     }
     // api
