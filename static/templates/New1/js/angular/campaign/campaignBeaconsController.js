@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBeaconsController', ['$routeParams', 'CampaignBeacons', 'CampaignBeacon', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, CampaignBeacons, CampaignBeacon, currentPath, toast, campaignMENU, panelCache){
+angular.module('panelApp').controller('campaignBeaconsController', ['$routeParams', 'CampaignBeacons', 'CampaignBeacon', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignBeaconsGenerate', function($routeParams, CampaignBeacons, CampaignBeacon, currentPath, toast, campaignMENU, panelCache, CampaignBeaconsGenerate){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -21,6 +21,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     this.beaconsCurrentPage = 1;
     this.numberOfItems = 0;
     this.perPage = 5;
+    this.numberOfNewBeacons = 0;
     // nav
     this.beaconsNavActive = function(page){
         if (page==this.beaconsCurrentPage){
@@ -88,6 +89,24 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.unlock();
             this.toast.showError(error);
         }.bind(this));
+    }
+
+    this.generateBeacons = function(){
+        if (this.isLock){
+            return;
+        } else {
+            this.lock();
+        }
+
+        CampaignBeaconsGenerate.save({campaignID:this.id}, {count:this.numberOfNewBeacons}, function(){
+            this.unlock();
+            this.getBeacons(this.beaconsCurrentPage);
+            this.toast.showSuccess();
+        }.bind(this), function(error){
+            this.unlock();
+            this.toast.showError(error);
+        }.bind(this))
+
     }
 
     this.getBeacons(1);

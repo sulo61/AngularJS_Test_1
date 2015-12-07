@@ -151,6 +151,11 @@ def campaignAb(request):
 def campaignAward(request):
     return render(request, 'New1/views/campaign/single/award.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignPromotion(request):
+    return render(request, 'New1/views/campaign/single/promotion.html', {})
+
 # SHOP
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
