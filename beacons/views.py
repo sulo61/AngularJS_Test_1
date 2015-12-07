@@ -40,112 +40,93 @@ class LogoutView(views.APIView):
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def dashCampaigns(request):
-    return render(request, 'Panel/Dashboard/campaigns.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def dashShops(request):
-    return render(request, 'Panel/Dashboard/shops.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def dashProfile(request):
-    return render(request, 'Panel/Dashboard/profile.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def panel(request):
-    return render(request, 'Panel/panel.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def shop(request):
-    return render(request, 'Panel/Shop/shop.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignMenu(request):
-    return render(request, 'Panel/Campaign/Menu/menu.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaign(request):
-    return render(request, 'Panel/Campaign/campaign.html', {})
-
-
+# CAMPAIGN
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignBasic(request):
-    return render(request, 'Panel/Campaign/Basic/basic.html', {})
-
+    return render(request, 'Panel/views/campaign/basic.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignAds(request):
-    return render(request, 'Panel/Campaign/Ads/ads.html', {})
-
+def campaignAbs(request):
+    return render(request, 'Panel/views/campaign/abs.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignActions(request):
-    return render(request, 'Panel/Campaign/Actions/actions.html', {})
-
+    return render(request, 'Panel/views/campaign/actions.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAwards(request):
-    return render(request, 'Panel/Campaign/Awards/awards.html', {})
-
+    return render(request, 'Panel/views/campaign/awards.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignBeacons(request):
-    return render(request, 'Panel/Campaign/Beacons/beacons.html', {})
+    return render(request, 'Panel/views/campaign/beacons.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignPromotions(request):
-    return render(request, 'Panel/Campaign/Promotions/promotions.html', {})
+    return render(request, 'Panel/views/campaign/promotions.html', {})
 
+#single
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAb(request):
+    return render(request, 'Panel/views/campaign/single/ab.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignAward(request):
-    return render(request, 'Panel/Campaign/Awards/Award/award.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignAd(request):
-    return render(request, 'Panel/Campaign/Ads/Ad/ad.html', {})
-
-
-@api_view(('GET',))
-@authentication_classes((SessionAuthentication, BaseAuthentication))
-def campaignAction(request):
-    return render(request, 'Panel/Campaign/Actions/Action/action.html', {})
+    return render(request, 'Panel/views/campaign/single/award.html', {})
 
 @api_view(('GET',))
 @authentication_classes((SessionAuthentication, BaseAuthentication))
 def campaignPromotion(request):
-    return render(request, 'Panel/Campaign/Promotions/Promotion/promotion.html', {})
+    return render(request, 'Panel/views/campaign/single/promotion.html', {})
 
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def campaignAction(request):
+    return render(request, 'Panel/views/campaign/single/action.html', {})
+
+# SHOP
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def shop(request):
+    return render(request, 'Panel/views/shop/shop.html', {})
+
+# DASH
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashProfile(request):
+    return render(request, 'Panel/views/dashboard/profile.html', {})
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashShops(request):
+    return render(request, 'Panel/views/dashboard/shops.html', {})        
+
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def dashCampaigns(request):
+    return render(request, 'Panel/views/dashboard/campaigns.html', {})        
+
+# MAIN
+@api_view(('GET',))
+@authentication_classes((SessionAuthentication, BaseAuthentication))
+def panel(request):
+    return render(request, 'Panel/index.html', {})
 
 @api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/panel/#/campaigns')
+        return redirect('/panel/#/campaigns')        
     else:
         return render(request, 'Auth/auth.html', {})
+        
 
 
 class CreateViewUser(ModelViewSet):
@@ -557,7 +538,6 @@ class ShopView(ModelViewSet):
             return get_user_from_api_key(api_key).shops.all()
         else:
             return self.request.user.shops.all()
-
 
 class CampaignAdView(ModelViewSet):
     permission_classes = (IsAuthenticated,)

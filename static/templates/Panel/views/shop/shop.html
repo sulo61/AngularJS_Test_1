@@ -1,0 +1,134 @@
+{%verbatim%}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row" jstcache="0">
+        <div class="col-md-12" jstcache="0">
+            <div class="ibox " jstcache="0">
+                <div class="ibox-title">
+                    <h5>Street View</h5>
+                </div>
+                <div class="ibox-content" jstcache="0">
+                    <div style="width:100%; height:400px" id="street-view">
+                        <ng-map street-view="StreetViewPanorama(document.querySelector('#street-view'), {position:new google.maps.LatLng({{shopCtrl.shop.latitude}},{{shopCtrl.shop.longitude}})})">
+                            <marker position={{shopCtrl.shop.latitude+","+shopCtrl.shop.longitude}}></marker>
+                        </ng-map>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Basic informations</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal">
+                        <div class="form-group"><label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.shop.name"></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Address</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.shop.address"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" style="text-align: right">
+                        <button class="btn btn-warning" ng-click="shopCtrl.dismiss()">DISMISS</button>
+                        <button class="btn btn-primary" ng-click="shopCtrl.save()">SAVE</button>
+                    </form>
+                </div>
+            </div>
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Opening hours</h5>
+                </div>
+                <div class="ibox-content" ng-repeat="openHour in shopCtrl.shop.opening_hours">
+                    <form class="form-horizontal">
+                        <div class="form-group"><label class="col-sm-2 control-label">Open</label>
+                            <div class="col-sm-10">
+                                <div class="input-group clockpicker" data-autoclose="true">
+                                    <input type="text" class="form-control" ng-model="openHour.open_time">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-clock-o"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Close</label>
+                            <div class="col-sm-10">
+                                <div class="input-group clockpicker" data-autoclose="true">
+                                    <input type="text" class="form-control" ng-model="openHour.close_time">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-clock-o"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Days</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="openHour.days"></div>
+                        </div>
+                        <br>
+                        <button style="float:right;" class="btn btn-sm btn-danger" ng-click="shopCtrl.removeHours($index)">REMOVE</button>
+                        <br><br>
+                        <script type="text/javascript">
+                            $('.clockpicker').clockpicker();
+                        </script>
+                    </form>
+                </div>
+                <div class="ibox-content" ng-show="shopCtrl.sendNewHourVisible">
+                    <form class="form-horizontal">
+                        <div class="form-group"><label class="col-sm-2 control-label">Open</label>
+                            <div class="col-sm-10">
+                                <div class="input-group clockpicker" data-autoclose="true">
+                                    <input type="text" class="form-control" ng-model="shopCtrl.newOpenHour">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-clock-o"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Close</label>
+                            <div class="col-sm-10">
+                                <div class="input-group clockpicker" data-autoclose="true">
+                                    <input type="text" class="form-control" ng-model="shopCtrl.newCloseHour">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-clock-o"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Days</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.newDays"></div>
+                        </div>
+                        <br>
+                        <button ng-show="shopCtrl.sendNewHourVisible" class="btn btn-sm btn-primary" style="float:right;" ng-click="shopCtrl.postNewHours()">CONFIRM</button>
+                        <br><br>
+                        <script type="text/javascript">
+                            $('.clockpicker').clockpicker();
+                        </script>
+                    </form>
+                </div>
+                <div class="ibox-content" ng-hide="shopCtrl.sendNewHourVisible" >
+                    <button ng-show="shopCtrl.addNewHourVisible" class="btn btn-sm btn-success" style="float:right;" ng-click="shopCtrl.showAddNewHours()">ADD</button>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Road map</h5>
+                </div>
+                <div class="ibox-content">
+                    <ng-map center={{shopCtrl.getCoordsArray()}} zoom="16">
+                        <marker position={{shopCtrl.getCoordsArray()}} title={{shopCtrl.shop.name}}></marker>
+                    </ng-map>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endverbatim%}

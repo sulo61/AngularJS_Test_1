@@ -1,0 +1,79 @@
+{%verbatim%}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form method="get" class="form-horizontal">
+                        <div class="form-group"><label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="cBasicCtrl.basic.name"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Start date</label>
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" ng-model="cBasicCtrl.startDate">
+                                </div>
+                                <br>
+                                <div class="input-group clockpicker" data-autoclose="true">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-clock-o"></span>
+                                    </span>
+                                    <input type="text" class="form-control" ng-model="cBasicCtrl.startHour">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">End date</label>
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" ng-model="cBasicCtrl.endDate">
+                                </div>
+                                <br>
+                                <div class="input-group clockpicker" data-autoclose="true">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-clock-o"></span>
+                                    </span>
+                                    <input type="text" class="form-control" ng-model="cBasicCtrl.endHour">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" style="text-align: left!important;"><label class="col-sm-2 control-label">Active</label>
+                            <div class="col-sm-10"><div class="checkbox checkbox-warning">
+                                <input id="checkbox" type="checkbox" ng-model="cBasicCtrl.basic.is_active">
+                                <label for="checkbox"/>
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+                            $('.clockpicker').clockpicker();
+                        </script>
+
+                        <script type="text/javascript">
+                            $('.input-group.date').datepicker({
+                                todayBtn: "linked",
+                                keyboardNavigation: false,
+                                forceParse: false,
+                                calendarWeeks: true,
+                                autoclose: true
+                            });
+                        </script>
+
+                        <br><br><br><br>
+                        <div class="form-group">
+                            <div style="float: right; margin-right: 50px;">
+                                <button class="btn btn-white" ng-click="cBasicCtrl.dismiss()">Cancel</button>
+                                <button class="btn btn-primary" ng-click="cBasicCtrl.save()">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endverbatim%}
