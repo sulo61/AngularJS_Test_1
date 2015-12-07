@@ -60,6 +60,9 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
                 this.unlock();
             }.bind(this));
 
+        }  else {
+            this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.campaignID) + " / Advertisements / " + "New promotion");
+            this.currentPath.setPage("New promotion");
         }
     }
     // patch promotion

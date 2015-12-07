@@ -60,6 +60,9 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
                 this.unlock();
             }.bind(this));
 
+        } else {
+            this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.campaignID) + " / Advertisements / " + "New advertisement");
+            this.currentPath.setPage("New advertisement");
         }
     }
     // patch ad

@@ -60,6 +60,9 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
                 this.unlock();
             }.bind(this));
 
+        }  else {
+            this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.campaignID) + " / Advertisements / " + "New award");
+            this.currentPath.setPage("New award");
         }
     }
     // patch award

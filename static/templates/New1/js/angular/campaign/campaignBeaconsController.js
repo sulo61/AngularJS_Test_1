@@ -75,7 +75,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             return;
         } else {
             this.lock();
-        }
+        };
 
         CampaignBeacon.delete({campaignID:this.id, beaconID:beaconID}, function(){
             this.numberOfItems = this.numberOfItems - 1;
