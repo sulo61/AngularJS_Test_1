@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^campaign/promotions/$', views.campaignPromotions, name="campaignPromotions"),
     # single
     url(r'^campaign/ad/$', views.campaignAb, name="campaignAb"),
+    url(r'^campaign/award/$', views.campaignAward, name="campaignAward"),
     
     # url(r'^campaign/actions/$', views.campaignActions, name="campaignActions"),
     # url(r'^campaign/action/$', views.campaignAction, name="campaignAction"),
