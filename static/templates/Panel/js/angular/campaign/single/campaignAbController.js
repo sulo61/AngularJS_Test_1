@@ -107,7 +107,7 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
         this.errFile = errFiles && errFiles[0];
         if (file) {
             file.upload = Upload.upload({
-                url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID+"/image",
+                url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID+"/image/",
                 data: {image: file}
             });
             file.upload.then(function (response) {

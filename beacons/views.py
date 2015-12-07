@@ -414,7 +414,9 @@ class BeaconCampaignActionView(ModelViewSet):
             - name: major
               type: integer
               paramType: query
-
+            - name: Api-Key
+              type: string
+              paramType: header
         type:
             id:
                 required: true
@@ -442,7 +444,7 @@ class BeaconCampaignActionView(ModelViewSet):
         user_campaign, created = UserCampaign.objects.get_or_create(campaign=self.get_campaign(), user=request.user)
         for action in instance.actions.all():
             limit_key = 'user_action_points_time_limit_user_id_{0}_action_id_{1}'
-            if not cache.get(limit_key.format(request.user.pk, action.pk)):
+            if not (limit_key.format(request.user.pk, action.pk) in cache):
                 user_campaign.user_points += action.points
                 messages.append('You gathered {0} POINTS'.format(action.points))
                 cache.set(limit_key.format(request.user.pk, action.pk), True, action.time_limit)
