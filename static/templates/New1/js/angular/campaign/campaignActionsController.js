@@ -39,7 +39,7 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
         }
     };
     this.updatePath = function () {
-        this.currentPath.setPath("Campaign / " + this.panelCache.getCampaignName() + " / Actions");
+        this.currentPath.setPath("Campaign / " +"TMP" + " / Actions");
         this.currentPath.setPage("Actions");
     }
     // api

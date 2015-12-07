@@ -40,7 +40,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     };
 
     this.updatePath = function () {
-        this.currentPath.setPath("Campaign / " + this.panelCache.getCampaignName() + " / Beacons");
+        this.currentPath.setPath("Campaign / " + "TMP" + " / Beacons");
         this.currentPath.setPage("Beacons");
     }
     // api

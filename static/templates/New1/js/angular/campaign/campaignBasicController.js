@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU, panelCache){
+angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -10,7 +10,6 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     // api info
     this.currentPath = currentPath;
     this.toast = toast;
-    this.cache = panelCache;
     // campaign params
     this.id = $routeParams.id;
     this.campaignM = campaignMENU;
@@ -37,7 +36,6 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         this.name = this.basic.name;
     }
     this.updatePath = function () {
-        this.cache.put("campaign",this.basic.name);
         this.currentPath.setPath("Campaign / " + this.basic.name + " / Basic informations");
         this.currentPath.setPage("Basic informations");
     }
