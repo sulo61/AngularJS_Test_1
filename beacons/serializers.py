@@ -188,8 +188,8 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
             if not (get == 'None' or get == ''):
                 hour_get = str(opening_hour.get('close_time'))
                 if not (hour_get == 'None' or hour_get == ''):
-                    if time.strptime(get, "%H:%M:%S") >= \
-                            time.strptime(hour_get, "%H:%M:%S"):
+                    if time.strptime(get, "%H:%M") >= \
+                            time.strptime(hour_get, "%H:%M"):
                         raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
 
             for day in opening_hour.get('days'):
