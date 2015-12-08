@@ -8,7 +8,7 @@
                 </div>
                 <div class="ibox-content" jstcache="0">
                     <div style="width:100%; height:400px" id="street-view">
-                        <ng-map street-view="StreetViewPanorama(document.querySelector('#street-view'), {position:new google.maps.LatLng({{shopCtrl.shop.latitude}},{{shopCtrl.shop.longitude}})})">
+                        <ng-map street-view="StreetViewPanorama(document.querySelector('#street-view'), {scrollwheel:false, position:new google.maps.LatLng({{shopCtrl.shop.latitude}},{{shopCtrl.shop.longitude}})})">
                             <marker position={{shopCtrl.shop.latitude+","+shopCtrl.shop.longitude}}></marker>
                         </ng-map>
                     </div>
@@ -122,7 +122,7 @@
                     <h5>Road map</h5>
                 </div>
                 <div class="ibox-content">
-                    <ng-map center={{shopCtrl.getCoordsArray()}} zoom="16">
+                    <ng-map center={{shopCtrl.getCoordsArray()}} zoom="16" scrollwheel="false">
                         <marker position={{shopCtrl.getCoordsArray()}} title={{shopCtrl.shop.name}}></marker>
                     </ng-map>
                 </div>
