@@ -47,6 +47,7 @@
                     <table class="table table-striped table-bordered table-hover ">
                         <thead>
                             <tr>
+                                <th>Active</th>
                                 <th>Minor</th>
                                 <th>Major</th>
                                 <th>Options</th>
@@ -54,10 +55,13 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="beacon in cActionCtrl.beaconsList">
+                            <td>
+                                <a class="close-link" ng-show="beacon.id==cActionCtrl.action.beacon"><i class="fa fa-check"></i></a>
+                            </td>
                             <td>{{beacon.minor}}</td>
                             <td>{{beacon.major}}</td>
                             <td>
-                                <a class="close-link" ng-click="cActionCtrl.useNewBeacon(beacon.id)"><i class="fa fa-exchange"></i></a>
+                                <a class="close-link" ng-click="cActionCtrl.useNewBeacon(beacon.id)"><i class="fa fa-plus"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -90,6 +94,7 @@
                     <table class="table table-striped table-bordered table-hover ">
                         <thead>
                         <tr>
+                            <th>Active</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Type</th>
@@ -98,11 +103,14 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="ad in cActionCtrl.adsList">
+                            <td>
+                                <a class="close-link" ng-show="ad.id==cActionCtrl.action.ad"><i class="fa fa-check"></i></a>
+                            </td>
                             <td>{{ad.title}}</td>
                             <td>{{ad.description}}</td>
                             <td>{{ad.type}}</td>
                             <td>
-                                <a class="close-link" ng-click="cActionCtrl.useNewAd(ad.id)"><i class="fa fa-exchange"></i></a>
+                                <a class="close-link" ng-click="cActionCtrl.useNewAd(ad.id)"><i class="fa fa-plus"></i></a>
                             </td>
                         </tr>
                         </tbody>
