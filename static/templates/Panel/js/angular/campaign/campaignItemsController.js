@@ -1,4 +1,8 @@
-angular.module('panelApp').controller('campaignPromotionsController', ['$routeParams', 'CampaignPromotions', 'CampaignPromotion', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, CampaignPromotions, CampaignPromotion, currentPath, toast, campaignMENU, panelCache){
+angular.module('panelApp')
+    .controller('campaignItemsController',
+        ['$routeParams', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignItems', 'CampaignItem',
+        function($routeParams, currentPath, toast, campaignMENU, panelCache, CampaignItems, CampaignItem){
+
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -7,18 +11,21 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
     this.unlock = function(){
         this.isLock = false;
     }
-    // campaign params
-    this.campaignID = $routeParams.id;
+
+    // params
+    this.campaignID = $routeParams.campaignID;
     this.pageName = $routeParams.pageNAME;
     this.pageTitle = this.pageName.charAt(0).toUpperCase() + this.pageName.slice(1);
     campaignMENU.setID(this.campaignID>0?this.campaignID:0);
+
     // models
     this.itemsList = [];
     this.itemsPages = [];
     this.itemsPerPage = 5;
     this.itemsCurrentPage = 1;
     this.numberOfItems = 0;
-    // nav
+
+    // pagination nav
     this.itemsNavActive = function(page){
         if (page==this.itemsCurrentPage){
             return "active"
@@ -36,26 +43,14 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             this.getItems(this.itemsCurrentPage-1);
         }
     };
-    // path
+
+    // current path
     this.updatePath = function () {
         currentPath.setPath("Campaign / " + panelCache.getCampaignName(this.campaignID) + " / " +  this.pageTitle);
         currentPath.setPage(this.pageTitle);
     }
+
     // api
-    this.apiItem = {};
-    this.apiItems = {};
-
-    this.setupApi = function(){
-        switch (this.pageName){
-            case "promotions":
-                this.apiItem = CampaignPromotion;
-                this.apiItems = CampaignPromotions;
-                break;
-        }
-    }
-
-    this.setupApi();
-
     this.getItems = function(page){
         if (this.isLock){
             return;
@@ -63,7 +58,7 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             this.lock();
         }
 
-        this.apiItems.get({campaignID:this.campaignID, page:page}, function(success){
+        CampaignItems.get({campaignID:this.campaignID, pageNAME:this.pageName, page:page}, function(success){
             this.itemsList = [];
             this.itemsPages = [];
             this.itemsList = success.results;
@@ -86,7 +81,7 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             this.lock();
         }
 
-        this.apiItem.delete({campaignID:this.campaignID, itemID:itemID}, function(){
+        CampaignItem.delete({campaignID:this.campaignID, pageNAME:this.pageName, itemID:itemID}, function(){
             this.numberOfItems = this.numberOfItems - 1;
             if ( (this.numberOfItems <= (this.itemsCurrentPage-1) * this.itemsPerPage) && this.numberOfItems>=this.itemsPerPage ){
                 this.itemsCurrentPage = this.itemsCurrentPage - 1;
@@ -100,6 +95,9 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
         }.bind(this));
     }
 
+
+
+    // init
     this.getItems(1);
     this.updatePath();
 }]);

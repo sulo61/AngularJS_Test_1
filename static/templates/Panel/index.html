@@ -49,11 +49,8 @@
     <script type="text/javascript" src="{% static 'templates/Panel/js/angular/shop/shopController.js' %}"></script>
     <!--campaign-->
     <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignBasicController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignAbsController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignActionsController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignAwardsController.js' %}"></script>
     <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignBeaconsController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignPromotionsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/campaignItemsController.js' %}"></script>
     <!--single-->
     <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/single/campaignAbController.js' %}"></script>
     <script type="text/javascript" src="{% static 'templates/Panel/js/angular/campaign/single/campaignAwardController.js' %}"></script>
@@ -86,7 +83,7 @@
                     <a check-if-active href="#/campaigns"><i class="fa fa-globe"></i> <span class="nav-label">Campaigns</span></a>
                     <ul class="nav nav-second-level" >
                         {%verbatim%}
-                        <li><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/basic'}}">Basic</a></li>
+                        <li><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/basic'}}">Basic informations</a></li>
                         <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/ads'}}">Advertisements</a></li>
                         <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/actions'}}">Actions</a></li>
                         <li ng-show="panelCtrl.campaignM.id>0"><a check-if-campaign href="{{'#/campaigns/'+panelCtrl.campaignM.id+'/awards'}}">Awards</a></li>

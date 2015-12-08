@@ -104,3 +104,14 @@ angular.module('panelApp')
                 patch: {method:'PATCH'}
             });
         }])
+
+    .factory('CampaignItems', ['$resource',
+        function($resource){
+            return $resource('../api/campaigns/:campaignID/:pageNAME/', {campaignID:'@campaignID', pageNAME:'@pageNAME'});
+        }])
+    .factory('CampaignItem', ['$resource',
+        function($resource){
+            return $resource('../api/campaigns/:campaignID/:pageNAME/:itemID', {campaignID:'@campaignID', pageNAME:'@pageNAME', itemID:'@itemID'}, {
+                patch: {method:'PATCH'}
+            });
+        }])

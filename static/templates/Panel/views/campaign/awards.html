@@ -5,26 +5,26 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div style="float:left;">
-                        <a href="{{'#/campaigns/'+cAwardsCtrl.id+'/awards/0'}}" class="btn btn-primary ">Add a new award</a>
+                        <a href={{'#/campaigns/'+cItemsCtrl.campaignID+'/'+cItemsCtrl.pageName+'/0'}} class="btn btn-primary ">Add a new {{cItemsCtrl.pageName}}</a>
                     </div>
                     <br><br><br>
                     <table class="table table-striped table-bordered table-hover " id="editable" >
-                        <theaward>
+                        <thead>
                         <tr>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Points</th>
                             <th>Options</th>
                         </tr>
-                        </theaward>
+                        </thead>
                         <tbody>
-                        <tr ng-repeat="award in cAwardsCtrl.awardsList">
-                            <td>{{award.title}}</td>
-                            <td>{{award.description}}</td>
-                            <td>{{award.points}}</td>
+                        <tr ng-repeat="item in cItemsCtrl.itemsList">
+                            <td>{{item.title}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.points}}</td>
                             <td>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/campaigns/"+cAwardsCtrl.id+"/awards/"+award.id}}><i class="fa fa-wrench"></i></a>
-                                <a class="close-link" ng-click="cAwardsCtrl.deleteAward(award.id)"><i class="fa fa-times"></i></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href={{'#/campaigns/'+cItemsCtrl.campaignID+'/'+cItemsCtrl.pageNAME+'/'+item.id}}><i class="fa fa-wrench"></i></a>
+                                <a class="close-link" ng-click="cItemsCtrl.deleteItem(item.id)"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -32,15 +32,16 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
-                            <span ng-show="cAwardsCtrl.numberOfAwardsItems>0">Showing {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage-cAwardsCtrl.perPage+1}} to {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage>cAwardsCtrl.numberOfAwardsItems?cAwardsCtrl.numberOfAwardsItems:cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage}} of {{cAwardsCtrl.numberOfAwardsItems}} entries</div></span>
-                        <span ng-hide="cAwardsCtrl.numberOfAwardsItems>0">There are no any Awards</span>
+                            <div ng-show="cItemsCtrl.numberOfItems>0">Showing {{cItemsCtrl.itemsCurrentPage*cItemsCtrl.itemsPerPage-cItemsCtrl.itemsPerPage+1}} to {{cItemsCtrl.itemsCurrentPage*cItemsCtrl.itemsPerPage>cItemsCtrl.numberOfItems?cItemsCtrl.numberOfItems:cItemsCtrl.itemsCurrentPage*cItemsCtrl.itemsPerPage}} of {{cItemsCtrl.numberOfItems}} entries</div>
+                            <div ng-hide="cItemsCtrl.numberOfItems>0">There are no any {{cItemsCtrl.pageName}}</div>
+                        </div>
                         <nav style="float: right">
-                            <ul class="pagination" ng-show="cAwardsCtrl.awardsPages.length>0">
-                                <li ng-click="cAwardsCtrl.awardsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                <li ng-repeat="number in cAwardsCtrl.awardsPages" class="{{cAwardsCtrl.awardsNavActive(number)}}" id="cAwardsCtrl.awardsNav{{number}}" ng-click="cAwardsCtrl.getAwards(number)">
+                            <ul class="pagination" ng-show="cItemsCtrl.itemsPages.length>0">
+                                <li ng-click="cItemsCtrl.itemsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                                <li ng-repeat="number in cItemsCtrl.itemsPages" class="{{cItemsCtrl.itemsNavActive(number)}}" id="cItemsCtrl.itemsNav{{number}}" ng-click="cItemsCtrl.getItems(number)">
                                     <a>{{number}}</a>
                                 </li>
-                                <li ng-click="cAwardsCtrl.awardsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                                <li ng-click="cItemsCtrl.itemsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
                             </ul>
                         </nav>
                         <br><br><br>

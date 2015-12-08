@@ -32,36 +32,22 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controllerAs: 'shopCtrl'
             })
             // CAMPAIGN
-            .when("/campaigns/:id?/basic/", {
+            .when("/campaigns/:campaignID?/basic/", {
                 templateUrl: "/campaign/basic",
                 controller: "campaignBasicController",
                 controllerAs: 'cBasicCtrl'
             })
-            .when("/campaigns/:id?/ads/", {
-                templateUrl: "/campaign/ads",
-                controller: "campaignAbsController",
-                controllerAs: 'cAbsCtrl'
-            })
-            .when("/campaigns/:id?/actions/", {
-                templateUrl: "/campaign/actions",
-                controller: "campaignActionsController",
-                controllerAs: 'cActionsCtrl'
-            })
-            .when("/campaigns/:id?/awards/", {
-                templateUrl: "/campaign/awards",
-                controller: "campaignAwardsController",
-                controllerAs: 'cAwardsCtrl'
-            })
-
-            .when("/campaigns/:id?/beacons/", {
+            .when("/campaigns/:campaignID?/beacons/", {
                 templateUrl: "/campaign/beacons",
                 controller: "campaignBeaconsController",
                 controllerAs: 'cBeaconsCtrl'
             })
-            .when("/campaigns/:id?/:pageNAME?/", {
-                templateUrl: "/campaign/promotions",
-                controller: "campaignPromotionsController",
-                controllerAs: 'cPromotionsCtrl'
+            .when("/campaigns/:campaignID?/:pageNAME?/", {
+                templateUrl: function(params){
+                    return '/campaign/' + params.pageNAME;
+                },
+                controller: "campaignItemsController",
+                controllerAs: 'cItemsCtrl'
             })
             // single
             .when("/campaigns/:campaignID?/ads/:adID?", {

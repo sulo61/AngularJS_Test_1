@@ -12,7 +12,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     this.toast = toast;
     this.cache = panelCache;
     // campaign params
-    this.id = $routeParams.id;
+    this.id = $routeParams.campaignID;
     this.campaignM = campaignMENU;
     this.campaignM.setID(this.id>0?this.id:0);
     // models

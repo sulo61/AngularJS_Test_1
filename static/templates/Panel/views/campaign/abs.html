@@ -5,7 +5,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div style="float:left;">
-                        <a href="{{'#/campaigns/'+cAbsCtrl.id+'/ads/0'}}" class="btn btn-primary ">Add a new advertisement</a>
+                        <a href={{'#/campaigns/'+cItemsCtrl.campaignID+'/'+cItemsCtrl.pageName+'/0'}} class="btn btn-primary ">Add a new {{cItemsCtrl.pageName}}</a>
                     </div>
                     <br><br><br>
                     <table class="table table-striped table-bordered table-hover " id="editable" >
@@ -18,13 +18,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="ab in cAbsCtrl.adsList">
-                            <td>{{ab.title}}</td>
-                            <td>{{ab.description}}</td>
-                            <td>{{ab.type}}</td>
+                        <tr ng-repeat="item in cItemsCtrl.itemsList">
+                            <td>{{item.title}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.type}}</td>
                             <td>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/campaigns/"+cAbsCtrl.id+"/ads/"+ab.id}}><i class="fa fa-wrench"></i></a>
-                                <a class="close-link" ng-click="cAbsCtrl.deleteAd(ab.id)"><i class="fa fa-times"></i></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href={{'#/campaigns/'+cItemsCtrl.campaignID+'/'+cItemsCtrl.pageNAME+'/'+item.id}}><i class="fa fa-wrench"></i></a>
+                                <a class="close-link" ng-click="cItemsCtrl.deleteItem(item.id)"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -32,15 +32,16 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
-                            <span ng-show="cAbsCtrl.numberOfAdsItems>0">Showing {{cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage-cAbsCtrl.perPage+1}} to {{cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage>cAbsCtrl.numberOfAdsItems?cAbsCtrl.numberOfAdsItems:cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage}} of {{cAbsCtrl.numberOfAdsItems}} entries</div></span>
-                        <span ng-hide="cAbsCtrl.numberOfAdsItems>0">There are no any Ads</span>
+                            <div ng-show="cItemsCtrl.numberOfItems>0">Showing {{cItemsCtrl.itemsCurrentPage*cItemsCtrl.itemsPerPage-cItemsCtrl.itemsPerPage+1}} to {{cItemsCtrl.itemsCurrentPage*cItemsCtrl.itemsPerPage>cItemsCtrl.numberOfItems?cItemsCtrl.numberOfItems:cItemsCtrl.itemsCurrentPage*cItemsCtrl.itemsPerPage}} of {{cItemsCtrl.numberOfItems}} entries</div>
+                            <div ng-hide="cItemsCtrl.numberOfItems>0">There are no any {{cItemsCtrl.pageName}}</div>
+                        </div>
                         <nav style="float: right">
-                            <ul class="pagination" ng-show="cAbsCtrl.adsPages.length>0">
-                                <li ng-click="cAbsCtrl.adsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                <li ng-repeat="number in cAbsCtrl.adsPages" class="{{cAbsCtrl.adsNavActive(number)}}" id="cAbsCtrl.adsNav{{number}}" ng-click="cAbsCtrl.getAds(number)">
+                            <ul class="pagination" ng-show="cItemsCtrl.itemsPages.length>0">
+                                <li ng-click="cItemsCtrl.itemsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                                <li ng-repeat="number in cItemsCtrl.itemsPages" class="{{cItemsCtrl.itemsNavActive(number)}}" id="cItemsCtrl.itemsNav{{number}}" ng-click="cItemsCtrl.getItems(number)">
                                     <a>{{number}}</a>
                                 </li>
-                                <li ng-click="cAbsCtrl.adsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                                <li ng-click="cItemsCtrl.itemsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
                             </ul>
                         </nav>
                         <br><br><br>
