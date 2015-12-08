@@ -58,7 +58,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "campaignBeaconsController",
                 controllerAs: 'cBeaconsCtrl'
             })
-            .when("/campaigns/:id?/promotions/", {
+            .when("/campaigns/:id?/:pageNAME?/", {
                 templateUrl: "/campaign/promotions",
                 controller: "campaignPromotionsController",
                 controllerAs: 'cPromotionsCtrl'
@@ -74,7 +74,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "campaignAwardController",
                 controllerAs: 'cAwardCtrl'
             })
-            .when("/campaigns/:campaignID?/promotions/:itemID?", {
+            .when("/campaigns/:campaignID?/promotions/:promotionID?", {
                 templateUrl: "/campaign/promotion",
                 controller: "campaignPromotionController",
                 controllerAs: 'cPromotionCtrl'

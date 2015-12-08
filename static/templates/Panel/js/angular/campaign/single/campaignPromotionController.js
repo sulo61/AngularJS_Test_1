@@ -16,7 +16,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     this.campaignNAME = $routeParams.campaignNAME;
     this.campaignM = campaignMENU;
     this.campaignM.setID(this.campaignID>0?this.campaignID:0);
-    this.promotionID = $routeParams.promotionID;
+    this.itemID = $routeParams.promotionID;
     this.promotionNAME = $routeParams.promotionNAME;
     // model
     this.promotion = { id:0 };
@@ -26,7 +26,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
         this.promotion = angular.copy(this.promotionCOPY);
     }
     this.save = function(){
-        if (this.promotionID>0){
+        if (this.itemID>0){
             this.patchPromotion();
         } else {
             this.postPromotion();
@@ -34,7 +34,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     }
     this.makeCopy = function(){
         this.promotionCOPY = angular.copy(this.promotion);
-        this.promotionID = this.promotion.id;
+        this.itemID = this.promotion.id;
         this.promotionNAME = this.promotion.title;
     }
 
@@ -44,13 +44,13 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     }
     // get promotion
     this.getPromotion = function(){
-        if (this.promotionID>0){
+        if (this.itemID>0){
             if (this.isLock){
                 return;
             } else {
                 this.lock();
             }
-            CampaignPromotion.get({campaignID:this.campaignID, promotionID:this.promotionID}, function(success){
+            CampaignPromotion.get({campaignID:this.campaignID, itemID:this.itemID}, function(success){
                 this.promotion = success;
                 this.makeCopy();
                 this.unlock();
@@ -61,7 +61,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
             }.bind(this));
 
         }  else {
-            this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.campaignID) + " / Advertisements / " + "New promotion");
+            this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.campaignID) + " / Promotions / " + "New promotion");
             this.currentPath.setPage("New promotion");
         }
     }
@@ -72,7 +72,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
         } else {
             this.lock();
         }
-        CampaignPromotion.patch({campaignID:this.campaignID, promotionID:this.promotionID}, this.promotion, function(){
+        CampaignPromotion.patch({campaignID:this.campaignID, itemID:this.itemID}, this.promotion, function(){
             this.makeCopy();
             this.toast.showSuccess();
             this.unlock();
@@ -107,7 +107,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
         this.errFile = errFiles && errFiles[0];
         if (file) {
             file.upload = Upload.upload({
-                url: '/api/campaigns/'+this.campaignID+"/promotions/"+this.promotionID+"/image/",
+                url: '/api/campaigns/'+this.campaignID+"/promotions/"+this.itemID+"/image/",
                 data: {image: file}
             });
             file.upload.then(function (response) {
@@ -125,5 +125,5 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     }
 
 
-    this.getPromotion(this.promotionID);
+    this.getPromotion(this.itemID);
 }]);
