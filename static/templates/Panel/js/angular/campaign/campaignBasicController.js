@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', 'panelCache', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU, panelCache){
+angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'dateUtils', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU, panelCache, dateUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -46,20 +46,19 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         startD = new Date(this.basic.start_date);
         endD = new Date(this.basic.end_date);
 
+        this.startDate = dateUtils.getDatePickerFromDate(startD);
+        this.endDate = dateUtils.getDatePickerFromDate(endD);
+        this.startHour = dateUtils.getTimePickerFromDate(startD);
+        this.endHour = dateUtils.getTimePickerFromDate(endD);
 
-        this.startDate = ((startD.getUTCDate()<10)?("0"+startD.getUTCDate()):startD.getUTCDate())+"/"+startD.getUTCMonth()+1+"/"+startD.getUTCFullYear();
-        this.endDate = ((endD.getUTCDate()<10)?("0"+endD.getUTCDate()):endD.getUTCDate())+"/"+endD.getUTCMonth()+1+"/"+endD.getUTCFullYear();
-        this.startHour = startD.getUTCHours()+":"+ (startD.getUTCMinutes()<10 ? ("0"+startD.getUTCMinutes()) : (startD.getUTCMinutes()))
-        this.endHour = endD.getUTCHours()+":"+ (endD.getUTCMinutes()<10 ? ("0"+endD.getUTCMinutes()) : (endD.getUTCMinutes()))
 
     }
     this.setDates = function(){
         startD = new Date(this.startDate);
         endD = new Date(this.endDate);
 
-        this.basic.start_date = startD.getFullYear() + "-" + (startD.getMonth()<10?("0"+(startD.getMonth()+1)):(startD.getMonth()+1)) + "-" + (startD.getDate()<10?("0"+startD.getDate()):startD.getDate()) + "T" + this.startHour+":00Z";
-        this.basic.end_date = endD.getFullYear() + "-" + (endD.getMonth()<10?("0"+(endD.getMonth()+1)):(endD.getMonth()+1)) + "-" + (endD.getDate()<10?("0"+endD.getDate()):endD.getDate()) + "T" + this.endHour+":00Z";
-
+        this.basic.start_date = dateUtils.getTimestampFromDateTimePicker(this.startDate, this.startHour);
+        this.basic.end_date = dateUtils.getTimestampFromDateTimePicker(this.endDate, this.endHour);
     }
     // api
     this.getBasic = function(){

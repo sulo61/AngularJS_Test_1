@@ -31,13 +31,13 @@
                     </table>
 
                     <div>
-                        <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            <span ng-show="cAwardsCtrl.numberOfItems>0">Showing {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage-cAwardsCtrl.perPage+1}} to {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage>cAwardsCtrl.numberOfItems?cAwardsCtrl.numberOfItems:cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage}} of {{cAwardsCtrl.numberOfItems}} entries</div></span>
-                            <span ng-hide="cAwardsCtrl.numberOfItems>0">There are no any Awards</span>
+                        <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
+                            <span ng-show="cAwardsCtrl.numberOfAwardsItems>0">Showing {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage-cAwardsCtrl.perPage+1}} to {{cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage>cAwardsCtrl.numberOfAwardsItems?cAwardsCtrl.numberOfAwardsItems:cAwardsCtrl.awardsCurrentPage*cAwardsCtrl.perPage}} of {{cAwardsCtrl.numberOfAwardsItems}} entries</div></span>
+                        <span ng-hide="cAwardsCtrl.numberOfAwardsItems>0">There are no any Awards</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="cAwardsCtrl.awardsPages.length>0">
                                 <li ng-click="cAwardsCtrl.awardsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                <li ng-repeat="number in cAwardsCtrl.awardsPages" class="{{cAwardsCtrl.awardsNavActive(number)}}" id="cAwardsCtrl.awardsNav{{number}}" ng-click="cAwardsCtrl.getAwards(nsumber)">
+                                <li ng-repeat="number in cAwardsCtrl.awardsPages" class="{{cAwardsCtrl.awardsNavActive(number)}}" id="cAwardsCtrl.awardsNav{{number}}" ng-click="cAwardsCtrl.getAwards(number)">
                                     <a>{{number}}</a>
                                 </li>
                                 <li ng-click="cAwardsCtrl.awardsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>

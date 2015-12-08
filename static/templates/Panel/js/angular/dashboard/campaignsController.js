@@ -13,11 +13,12 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
     // models
     this.campaignsList = [];
     // nav
+    this.campaignsList = [];
     this.campaignsPages = [];	// numbers
-    this.campaignsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
-
+    this.campaignsCurrentPage = 1;
+    this.numberOfCampaignsItems = 0;
+    // nav
     this.campaignsNavActive = function(page){
         if (page==this.campaignsCurrentPage){
             return "active"
@@ -47,8 +48,8 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             this.campaignsList = [];
             this.campaignsPages = [];
             this.campaignsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfCampaignsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfCampaignsItems/this.perPage)); i++) {
                 this.campaignsPages.push(i+1);
             }
             this.campaignsCurrentPage = page;

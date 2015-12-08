@@ -18,9 +18,9 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
     // models
     this.adsList = [];
     this.adsPages = [];	// numbers
-    this.adsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
+    this.adsCurrentPage = 1;
+    this.numberOfAdsItems = 0;
     // nav
     this.adsNavActive = function(page){
         if (page==this.adsCurrentPage){
@@ -57,8 +57,8 @@ angular.module('panelApp').controller('campaignAbsController', ['$routeParams', 
             this.adsList = [];
             this.adsPages = [];
             this.adsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfAdsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfAdsItems/this.perPage)); i++) {
                 this.adsPages.push(i+1);
             }
             this.adsCurrentPage = page;

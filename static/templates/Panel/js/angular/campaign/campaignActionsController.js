@@ -18,9 +18,9 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
     // models
     this.actionsList = [];
     this.actionsPages = [];	// numbers
-    this.actionsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
+    this.actionsCurrentPage = 1;
+    this.numberOfActionsItems = 0;
     // nav
     this.actionsNavActive = function(page){
         if (page==this.actionsCurrentPage){
@@ -39,6 +39,7 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
             this.getActions(this.actionsCurrentPage-1);
         }
     };
+    
     this.updatePath = function () {
         this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.id) + " / Actions");
         this.currentPath.setPage("Actions");
@@ -56,8 +57,8 @@ angular.module('panelApp').controller('campaignActionsController', ['$routeParam
             this.actionsList = [];
             this.actionsPages = [];
             this.actionsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfActionsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfActionsItems/this.perPage)); i++) {
                 this.actionsPages.push(i+1);
             }
             this.actionsCurrentPage = page;

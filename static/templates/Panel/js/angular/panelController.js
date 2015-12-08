@@ -159,6 +159,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 var elementPath;
                 elementPath = attrs.href;
                 scope.$on('$locationChangeSuccess', function(event, newURL) {
+
+                    tmp = document.createElement("a");
+                    tmp.href = newURL;
+                    newURL = tmp.hash;
+
                     if (newURL.search(elementPath) !== -1) {
                         el.parent().addClass("active");
                     } else {
@@ -175,8 +180,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 elementPath = attrs.href;
 
                 scope.$on('$locationChangeSuccess', function(event, newURL) {
-                    // lol fix
-                    newURL = newURL.substring(15, newURL.length);
+
+                    tmp = document.createElement("a");
+                    tmp.href = newURL;
+                    newURL = tmp.hash;
+                    
                     if (newURL.search("campaigns") !== -1 && (newURL.search("basic") !== -1) || newURL.search("ads") !== -1 || newURL.search("actions") !== -1 || newURL.search("awards") !== -1 || newURL.search("beacons") !== -1 || newURL.search("promotions") !== -1) {
                         el.parent().removeClass("collapse");
                     } else {

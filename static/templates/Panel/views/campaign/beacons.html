@@ -31,13 +31,13 @@
                     </table>
 
                     <div>
-                        <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            <span ng-show="cBeaconsCtrl.numberOfItems>0">Showing {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage-cBeaconsCtrl.perPage+1}} to {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage>cBeaconsCtrl.numberOfItems?cBeaconsCtrl.numberOfItems:cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage}} of {{cBeaconsCtrl.numberOfItems}} entries</div></span>
-                            <span ng-hide="cBeaconsCtrl.numberOfItems>0">There are no any Beacons</span>
+                        <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
+                            <span ng-show="cBeaconsCtrl.numberOfBeaconsItems>0">Showing {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage-cBeaconsCtrl.perPage+1}} to {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage>cBeaconsCtrl.numberOfBeaconsItems?cBeaconsCtrl.numberOfBeaconsItems:cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage}} of {{cBeaconsCtrl.numberOfBeaconsItems}} entries</div></span>
+                        <span ng-hide="cBeaconsCtrl.numberOfBeaconsItems>0">There are no any Beacons</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="cBeaconsCtrl.beaconsPages.length>0">
                                 <li ng-click="cBeaconsCtrl.beaconsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                <li ng-repeat="number in cBeaconsCtrl.beaconsPages" class="{{cBeaconsCtrl.beaconsNavActive(number)}}" id="cBeaconsCtrl.beaconsNav{{number}}" ng-click="cBeaconsCtrl.getBeacons(nsumber)">
+                                <li ng-repeat="number in cBeaconsCtrl.beaconsPages" class="{{cBeaconsCtrl.beaconsNavActive(number)}}" id="cBeaconsCtrl.beaconsNav{{number}}" ng-click="cBeaconsCtrl.getBeacons(number)">
                                     <a>{{number}}</a>
                                 </li>
                                 <li ng-click="cBeaconsCtrl.beaconsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
