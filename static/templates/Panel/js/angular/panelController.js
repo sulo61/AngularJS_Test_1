@@ -74,7 +74,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 controller: "campaignAwardController",
                 controllerAs: 'cAwardCtrl'
             })
-            .when("/campaigns/:campaignID?/promotions/:promotionID?", {
+            .when("/campaigns/:campaignID?/promotions/:itemID?", {
                 templateUrl: "/campaign/promotion",
                 controller: "campaignPromotionController",
                 controllerAs: 'cPromotionCtrl'

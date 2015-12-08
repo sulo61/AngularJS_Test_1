@@ -100,7 +100,7 @@ angular.module('panelApp')
         }])
     .factory('CampaignPromotion', ['$resource',
         function($resource){
-            return $resource('../api/campaigns/:campaignID/promotions/:promotionID', {campaignID:'@campaignID', promotionID:'@promotionID'}, {
+            return $resource('../api/campaigns/:campaignID/promotions/:itemID', {campaignID:'@campaignID', itemID:'@itemID'}, {
                 patch: {method:'PATCH'}
             });
         }])

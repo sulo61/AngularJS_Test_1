@@ -9,22 +9,22 @@
                     </div>
                     <br><br><br>
                     <table class="table table-striped table-bordered table-hover " id="editable" >
-                        <thepromotion>
+                        <thead>
                         <tr>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Points</th>
                             <th>Options</th>
                         </tr>
-                        </thepromotion>
+                        </thead>
                         <tbody>
-                        <tr ng-repeat="promotion in cPromotionsCtrl.promotionsList">
-                            <td>{{promotion.title}}</td>
-                            <td>{{promotion.description}}</td>
-                            <td>{{promotion.points}}</td>
+                        <tr ng-repeat="item in cPromotionsCtrl.itemsList">
+                            <td>{{item.title}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.points}}</td>
                             <td>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/campaigns/"+cPromotionsCtrl.id+"/promotions/"+promotion.id}}><i class="fa fa-wrench"></i></a>
-                                <a class="close-link" ng-click="cPromotionsCtrl.deletePromotion(promotion.id)"><i class="fa fa-times"></i></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/campaigns/"+cPromotionsCtrl.campaignID+"/promotions/"+item.id}}><i class="fa fa-wrench"></i></a>
+                                <a class="close-link" ng-click="cPromotionsCtrl.deleteItem(item.id)"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -32,15 +32,15 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
-                            <span ng-show="cPromotionsCtrl.numberOfPromotionsItems>0">Showing {{cPromotionsCtrl.promotionsCurrentPage*cPromotionsCtrl.perPage-cPromotionsCtrl.perPage+1}} to {{cPromotionsCtrl.promotionsCurrentPage*cPromotionsCtrl.perPage>cPromotionsCtrl.numberOfPromotionsItems?cPromotionsCtrl.numberOfPromotionsItems:cPromotionsCtrl.promotionsCurrentPage*cPromotionsCtrl.perPage}} of {{cPromotionsCtrl.numberOfPromotionsItems}} entries</div></span>
-                        <span ng-hide="cPromotionsCtrl.numberOfPromotionsItems>0">There are no any Promotions</span>
+                            <span ng-show="cPromotionsCtrl.numberOfItems>0">Showing {{cPromotionsCtrl.itemsCurrentPage*cPromotionsCtrl.itemsPerPage-cPromotionsCtrl.itemsPerPage+1}} to {{cPromotionsCtrl.itemsCurrentPage*cPromotionsCtrl.itemsPerPage>cPromotionsCtrl.numberOfItems?cPromotionsCtrl.numberOfItems:cPromotionsCtrl.itemsCurrentPage*cPromotionsCtrl.itemsPerPage}} of {{cPromotionsCtrl.numberOfItems}} entries</div></span>
+                        <span ng-hide="cPromotionsCtrl.numberOfItems>0">There are no any Promotions</span>
                         <nav style="float: right">
-                            <ul class="pagination" ng-show="cPromotionsCtrl.promotionsPages.length>0">
-                                <li ng-click="cPromotionsCtrl.promotionsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                <li ng-repeat="number in cPromotionsCtrl.promotionsPages" class="{{cPromotionsCtrl.promotionsNavActive(number)}}" id="cPromotionsCtrl.promotionsNav{{number}}" ng-click="cPromotionsCtrl.getPromotions(number)">
+                            <ul class="pagination" ng-show="cPromotionsCtrl.itemsPages.length>0">
+                                <li ng-click="cPromotionsCtrl.itemsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                                <li ng-repeat="number in cPromotionsCtrl.itemsPages" class="{{cPromotionsCtrl.itemsNavActive(number)}}" id="cPromotionsCtrl.itemsNav{{number}}" ng-click="cPromotionsCtrl.getItems(number)">
                                     <a>{{number}}</a>
                                 </li>
-                                <li ng-click="cPromotionsCtrl.promotionsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                                <li ng-click="cPromotionsCtrl.itemsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
                             </ul>
                         </nav>
                         <br><br><br>
