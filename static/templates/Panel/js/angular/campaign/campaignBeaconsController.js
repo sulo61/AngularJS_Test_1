@@ -18,10 +18,9 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
     // models
     this.beaconsList = [];
     this.beaconsPages = [];	// numbers
-    this.beaconsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
-    this.numberOfNewBeacons = 0;
+    this.beaconsCurrentPage = 1;
+    this.numberOfBeaconsItems = 0;
     // nav
     this.beaconsNavActive = function(page){
         if (page==this.beaconsCurrentPage){
@@ -58,8 +57,8 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.beaconsList = [];
             this.beaconsPages = [];
             this.beaconsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfBeaconsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfBeaconsItems/this.perPage)); i++) {
                 this.beaconsPages.push(i+1);
             }
             this.beaconsCurrentPage = page;

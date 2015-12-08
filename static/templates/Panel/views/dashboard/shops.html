@@ -29,9 +29,9 @@
                     </table>
 
                     <div>
-                        <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            <span ng-show="shopsCtrl.numberOfItems>0">Showing {{shopsCtrl.shopsCurrentPage*shopsCtrl.perPage-shopsCtrl.perPage+1}} to {{shopsCtrl.shopsCurrentPage*shopsCtrl.perPage>shopsCtrl.numberOfItems?shopsCtrl.numberOfItems:shopsCtrl.shopsCurrentPage*shopsCtrl.perPage}} of {{shopsCtrl.numberOfItems}} entries</div></span>
-                            <span ng-hide="shopsCtrl.numberOfItems>0">There are no any Shops</span>
+                        <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
+                            <span ng-show="shopsCtrl.numberOfShopsItems>0">Showing {{shopsCtrl.shopsCurrentPage*shopsCtrl.perPage-shopsCtrl.perPage+1}} to {{shopsCtrl.shopsCurrentPage*shopsCtrl.perPage>shopsCtrl.numberOfShopsItems?shopsCtrl.numberOfShopsItems:shopsCtrl.shopsCurrentPage*shopsCtrl.perPage}} of {{shopsCtrl.numberOfShopsItems}} entries</div></span>
+                            <span ng-hide="shopsCtrl.numberOfShopsItems>0">There are no any Shops</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="shopsCtrl.shopsPages.length>0">
                                 <li ng-click="shopsCtrl.shopsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>

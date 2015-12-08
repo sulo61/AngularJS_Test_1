@@ -18,9 +18,9 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
     // models
     this.promotionsList = [];
     this.promotionsPages = [];	// numbers
-    this.promotionsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
+    this.promotionsCurrentPage = 1;
+    this.numberOfPromotionsItems = 0;
     // nav
     this.promotionsNavActive = function(page){
         if (page==this.promotionsCurrentPage){
@@ -57,8 +57,8 @@ angular.module('panelApp').controller('campaignPromotionsController', ['$routePa
             this.promotionsList = [];
             this.promotionsPages = [];
             this.promotionsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfPromotionsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfPromotionsItems/this.perPage)); i++) {
                 this.promotionsPages.push(i+1);
             }
             this.promotionsCurrentPage = page;

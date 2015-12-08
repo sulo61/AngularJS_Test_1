@@ -18,9 +18,9 @@ angular.module('panelApp').controller('campaignAwardsController', ['$routeParams
     // models
     this.awardsList = [];
     this.awardsPages = [];	// numbers
-    this.awardsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
+    this.awardsCurrentPage = 1;
+    this.numberOfAwardsItems = 0;
     // nav
     this.awardsNavActive = function(page){
         if (page==this.awardsCurrentPage){
@@ -57,8 +57,8 @@ angular.module('panelApp').controller('campaignAwardsController', ['$routeParams
             this.awardsList = [];
             this.awardsPages = [];
             this.awardsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfAwardsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfAwardsItems/this.perPage)); i++) {
                 this.awardsPages.push(i+1);
             }
             this.awardsCurrentPage = page;

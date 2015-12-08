@@ -31,13 +31,13 @@
                     </table>
 
                     <div>
-                        <div style="float: left" class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                            <span ng-show="cAbsCtrl.numberOfItems>0">Showing {{cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage-cAbsCtrl.perPage+1}} to {{cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage>cAbsCtrl.numberOfItems?cAbsCtrl.numberOfItems:cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage}} of {{cAbsCtrl.numberOfItems}} entries</div></span>
-                            <span ng-hide="cAbsCtrl.numberOfItems>0">There are no any Ads</span>
+                        <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
+                            <span ng-show="cAbsCtrl.numberOfAdsItems>0">Showing {{cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage-cAbsCtrl.perPage+1}} to {{cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage>cAbsCtrl.numberOfAdsItems?cAbsCtrl.numberOfAdsItems:cAbsCtrl.adsCurrentPage*cAbsCtrl.perPage}} of {{cAbsCtrl.numberOfAdsItems}} entries</div></span>
+                        <span ng-hide="cAbsCtrl.numberOfAdsItems>0">There are no any Ads</span>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="cAbsCtrl.adsPages.length>0">
                                 <li ng-click="cAbsCtrl.adsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                <li ng-repeat="number in cAbsCtrl.adsPages" class="{{cAbsCtrl.adsNavActive(number)}}" id="cAbsCtrl.adsNav{{number}}" ng-click="cAbsCtrl.getAds(nsumber)">
+                                <li ng-repeat="number in cAbsCtrl.adsPages" class="{{cAbsCtrl.adsNavActive(number)}}" id="cAbsCtrl.adsNav{{number}}" ng-click="cAbsCtrl.getAds(number)">
                                     <a>{{number}}</a>
                                 </li>
                                 <li ng-click="cAbsCtrl.adsNavNext()"><a aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>

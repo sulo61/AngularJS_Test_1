@@ -13,10 +13,11 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
     // models
     this.shopsList = [];
     // nav
+    this.shopsList = [];
     this.shopsPages = [];	// numbers
-    this.shopsCurrentPage = 1;
-    this.numberOfItems = 0;
     this.perPage = 5;
+    this.shopsCurrentPage = 1;
+    this.numberOfShopsItems = 0;
 
     this.shopsNavActive = function(page){
         if (page==this.shopsCurrentPage){
@@ -47,8 +48,8 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             this.shopsList = [];
             this.shopsPages = [];
             this.shopsList = success.results;
-            this.numberOfItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfItems/this.perPage)); i++) {
+            this.numberOfShopsItems = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfShopsItems/this.perPage)); i++) {
                 this.shopsPages.push(i+1);
             }
             this.shopsCurrentPage = page;
