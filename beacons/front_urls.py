@@ -27,7 +27,11 @@ urlpatterns = [
     url(r'^campaign/promotion/$', views.campaignPromotion, name="campaignPromotion"),
     url(r'^campaign/action/$', views.campaignAction, name="campaignAction"),
     
-    url(r'^login/', views.login_view, name="login"),
+    url(r'^login/', views.login, name="login"),
+    url(r'^register/', views.register, name="register"),
+    url(r'^auth/', views.login_view, name="login_view"),
+    #url(r'^register/', views.register_view, name="register"),
+
     url(r'^logout', views.LogoutView.as_view(), name="login"),
 
 ]

@@ -120,6 +120,18 @@ def dashCampaigns(request):
 def panel(request):
     return render(request, 'Panel/index.html', {})
 
+
+# AUTH
+@api_view(('GET',))
+def login(request):    
+    return render(request, 'Auth/views/login.html', {})
+
+@api_view(('GET',))
+def register(request):    
+    return render(request, 'Auth/views/register.html', {})
+
+
+
 @api_view(('GET',))
 def index(request):
     if request.user.is_authenticated():
