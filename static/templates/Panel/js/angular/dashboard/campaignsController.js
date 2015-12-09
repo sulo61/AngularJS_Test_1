@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', 'toast', function(currentPath, Campaigns, Campaign, toast){
+angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', 'toast', 'dateUtils', function(currentPath, Campaigns, Campaign, toast, dateUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -10,6 +10,7 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
     // api info
     this.currentPath = currentPath;
     this.toast = toast;
+    this.dateUtils = dateUtils;
     // models
     this.campaignsList = [];
     // nav

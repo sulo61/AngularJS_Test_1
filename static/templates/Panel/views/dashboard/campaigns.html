@@ -20,8 +20,8 @@
                         <tbody>
                         <tr ng-repeat="campaign in campaignsCtrl.campaignsList">
                             <td>{{campaign.name}}</td>
-                            <td>{{campaign.start_date}} </td>
-                            <td>{{campaign.end_date}} </td>
+                            <td>{{campaignsCtrl.dateUtils.getPrettyDateFromTimestamp(campaign.start_date)}} </td>
+                            <td>{{campaignsCtrl.dateUtils.getPrettyDateFromTimestamp(campaign.end_date)}} </td>
                             <td>
                                 <a class="dropdown-toggle" data-toggle="dropdown" href={{"#/campaigns/"+campaign.id+"/basic/"}}><i class="fa fa-wrench"></i></a>
                                 <a class="close-link" ng-click="campaignsCtrl.deleteCampaign(campaign.id)"><i class="fa fa-times"></i></a>

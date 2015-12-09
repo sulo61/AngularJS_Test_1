@@ -24,6 +24,18 @@ angular.module('panelApp')
                 d = (date.split("/"))[1];
                 return ""+y+"-"+m+"-"+d+"T"+time+":00Z";
             }
+            this.getPrettyDateFromTimestamp = function (timestamp) {
+                // FROM: 2015-12-11T20:00:00Z
+                // TO: 2015-12-11 20:00
+                date = new Date(timestamp);
+                return "" +
+                ( ((this.getNumberFromString(date.getUTCMonth())+1)<10)?"0"+(this.getNumberFromString(date.getUTCMonth())+1):(this.getNumberFromString(date.getUTCMonth())+1) ) + "-" +
+                ( ((this.getNumberFromString(date.getUTCDate()))<10)?"0"+(this.getNumberFromString(date.getUTCDate())):(this.getNumberFromString(date.getUTCDate())) ) + "-" +
+                ( date.getUTCFullYear() ) + "  " +
+                ( date.getUTCHours()<10?("0"+date.getUTCHours()):(date.getUTCHours()) ) + ":" +
+                ( date.getUTCMinutes()<10?("0"+date.getUTCMinutes()):(date.getUTCMinutes()) )
+
+            }
             this.getNumberFromString = function(number){
                 return parseInt(number, 10);
             }
