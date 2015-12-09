@@ -49,14 +49,12 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
         }
 
         User.patch({userID:this.user.id}, this.user, function(){
-            debugger
             this.user.password = "";
             this.user.old_password = "";
             this.userBackup = angular.copy(this.user);
             this.unlock();
             this.toast.showSuccess();
         }.bind(this), function(error){
-            debugger
             this.user = angular.copy(this.userBackup);
             this.unlock();
             this.toast.showError(error.status);
