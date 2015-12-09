@@ -1,78 +1,91 @@
-angular.module('panelAuth', [ 'ngRoute'])
-	.config(['$routeProvider', function($routeProvider){
-		$routeProvider
-			.when("/", {
-				templateUrl: "/login",
-				controller: "authController",
-				controllerAs: 'authCtrl'
-			})
-			.when("/auth/login", {
-				templateUrl: "/login",
-				controller: "authController",
-				controllerAs: 'authCtrl'
-			})
-			.when("/auth/register", {
-				templateUrl: "/register",
-				controller: "authController",
-				controllerAs: 'authCtrl'
-			})
-	}])
-	.controller('authController', function($http, $window) {
-		this.isLock = false;
-		this.lock = function(){
-			this.isLock = true;
+angular.module('authApp', []).controller('authController', function($scope, $http, $window) {
+	$scope.isLock = false;
+	// nav
+	$scope.loginVisible = true;
+	$scope.registerVisible = false;
+	$scope.showLogin = function(){
+		$scope.loginVisible = true;
+		$scope.registerVisible = false;
+	}
+	$scope.showLoginWithEmail = function(email){
+		$scope.loginVisible = true;
+		$scope.registerVisible = false;
+		$scope.login.email = email;
+		$scope.login.password = "";
+	}
+	$scope.showRegister = function(){
+		$scope.loginVisible = false;
+		$scope.registerVisible = true;
+	}
+	$scope.showLogin();
+	// login
+	$scope.login = {};
+	$scope.login.email = "sulo612+2@gmail.com";
+	$scope.login.password = "123";
+	$scope.showLoginWarning = false;
+	$scope.loginWarning = "";
+	$scope.signin = function(){
+		if ($scope.isLock){
+			return;
+		} else {
+			$scope.lock();
 		}
-		this.unlock = function(){
-			this.isLock = false;
+		$scope.lock();
+		$scope.showWarning = false
+		$http({
+			method: 'POST',
+			url: '/login/',
+			data: $scope.login
+		}).then(function success5Callback(response){
+			$scope.showLoginWarning = false;
+			$scope.loginWarning = "";
+			if(response.status==200){
+				$window.location.href = "/panel/#/campaigns";
+			}
+			$scope.unlock();
+		}, function errorCallback(response){
+			$scope.showLoginWarning = true;
+			$scope.loginWarning = response;
+			$scope.unlock();
+		});
+	};
+	// register
+	$scope.register = {};
+	$scope.register.first_name = "";
+	$scope.register.last_name = "";
+	$scope.register.email = "";
+	$scope.register.password = "";
+	$scope.showRegisterWarning = false;
+	$scope.registerWarning = "";
+	$scope.signup = function(){
+		if ($scope.isLock){
+			return;
+		} else {
+			$scope.lock();
 		}
+		$scope.showWarning = false
+		$http({
+			method: 'POST',
+			url: '/api/operator/register/',
+			data: $scope.register
+		}).then(function successCallback(response){
+			$scope.showRegisterWarning = false;
+			$scope.registerWarning = "";
+			$scope.showLoginWithEmail(response.data.email);
+			$scope.unlock();
+		}, function errorCallback(response){
+			$scope.showRegisterWarning = true;
+			$scope.registerWarning = response;
+			$scope.unlock();
+		});
+	};
 
-		// login
-		this.login = {};
-		this.login.email = "sulo612+2@gmail.com";
-		this.login.password = "123";
-		this.signin = function(){
-			if (this.isLock){
-				return;
-			} else {
-				this.lock();
-			}
-			$http({
-				method: 'POST',
-				url: '/auth/',
-				data: this.login
-			}).then(function successCallback(response){
-				if(response.status==200){
-					$window.location.href = "/panel/#/campaigns";
-				}
-				this.unlock();
-			}.bind(this), function errorCallback(){
-				this.unlock();
-			}.bind(this));
-		};
-		// register
-		this.register = {};
-		this.register.first_name = "";
-		this.register.last_name = "";
-		this.register.email = "";
-		this.register.password = "";
-		this.signup = function(){
-			if (this.isLock){
-				return;
-			} else {
-				this.lock();
-			}
-			$http({
-				method: 'POST',
-				url: '/api/operator/register/',
-				data: this.register
-			}).then(function successCallback(response){
-				if(response.status==201){
-					$window.location.href = "#/auth/login";
-				}
-				this.unlock();
-			}.bind(this), function errorCallback(){
-				this.unlock();
-			}.bind(this));
-		};
+	$scope.lock = function(){
+		$scope.isLock = true;
+	}
+	$scope.unlock = function(){
+		$scope.isLock = false;
+	}
+});
 
-	});
+
