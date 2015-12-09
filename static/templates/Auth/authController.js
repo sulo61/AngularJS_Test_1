@@ -1,4 +1,4 @@
-angular.module('authApp', []).controller('authController', function($scope, $http, $window) {
+angular.module('authApp', ['toaster', 'ngAnimate']).controller('authController', function($scope, $http, $window, toaster) {
 	$scope.isLock = false;
 	// nav
 	$scope.loginVisible = true;
@@ -22,8 +22,6 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	$scope.login = {};
 	$scope.login.email = "sulo612+2@gmail.com";
 	$scope.login.password = "123";
-	$scope.showLoginWarning = false;
-	$scope.loginWarning = "";
 	$scope.signin = function(){
 		if ($scope.isLock){
 			return;
@@ -37,16 +35,13 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 			url: '/login/',
 			data: $scope.login
 		}).then(function success5Callback(response){
-			$scope.showLoginWarning = false;
-			$scope.loginWarning = "";
 			if(response.status==200){
 				$window.location.href = "/panel/#/campaigns";
 			}
 			$scope.unlock();
 		}, function errorCallback(response){
-			$scope.showLoginWarning = true;
-			$scope.loginWarning = response;
 			$scope.unlock();
+			$scope.showError(response);
 		});
 	};
 	// register
@@ -55,8 +50,6 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	$scope.register.last_name = "";
 	$scope.register.email = "";
 	$scope.register.password = "";
-	$scope.showRegisterWarning = false;
-	$scope.registerWarning = "";
 	$scope.signup = function(){
 		if ($scope.isLock){
 			return;
@@ -69,14 +62,11 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 			url: '/api/operator/register/',
 			data: $scope.register
 		}).then(function successCallback(response){
-			$scope.showRegisterWarning = false;
-			$scope.registerWarning = "";
 			$scope.showLoginWithEmail(response.data.email);
 			$scope.unlock();
 		}, function errorCallback(response){
-			$scope.showRegisterWarning = true;
-			$scope.registerWarning = response;
 			$scope.unlock();
+			$scope.showError(response);
 		});
 	};
 
@@ -85,6 +75,28 @@ angular.module('authApp', []).controller('authController', function($scope, $htt
 	}
 	$scope.unlock = function(){
 		$scope.isLock = false;
+	}
+
+
+
+
+	$scope.showSuccess = function () {
+		toaster.pop({
+			type: 'success',
+			title: 'Success',
+			body: '',
+			showCloseButton: true,
+			timeout: 2000
+		});
+	}
+	$scope.showError = function(error){
+		toaster.pop({
+			type: 'error',
+			title: 'Error',
+			body: error,
+			showCloseButton: true,
+			timeout: 2000
+		});
 	}
 });
 
