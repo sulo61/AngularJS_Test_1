@@ -37,6 +37,8 @@
                     <form class="form-horizontal" style="text-align: right">
                         <button class="btn btn-warning" ng-click="shopCtrl.dismiss()">DISMISS</button>
                         <button class="btn btn-primary" ng-click="shopCtrl.save()">SAVE</button>
+
+
                     </form>
                 </div>
             </div>
@@ -67,7 +69,39 @@
                             </div>
                         </div>
                         <div class="form-group"><label class="col-sm-2 control-label">Days</label>
-                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="openHour.days"></div>
+                            <div class="col-sm-10">
+                                <div style="text-align: left!important;">
+                                    <div class="checkbox checkbox-info">
+                                        <input id="mon" type="checkbox" ng-model="openHour.daysB[0]"/>
+                                        <label for="mon">Mon</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="tue" type="checkbox" ng-model="openHour.daysB[1]"/>
+                                        <label for="tue">Tue</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="wed" type="checkbox" ng-model="openHour.daysB[2]"/>
+                                        <label for="wed">Wed</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="thu" type="checkbox" ng-model="openHour.daysB[3]"/>
+                                        <label for="thu">Thu</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="fri" type="checkbox" ng-model="openHour.daysB[4]"/>
+                                        <label for="fri">Fri</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="sat" type="checkbox" ng-model="openHour.daysB[5]"/>
+                                        <label for="sat">Sat</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="sun" type="checkbox" ng-model="openHour.daysB[6]"/>
+                                        <label for="sun">Sun</label>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <br>
                         <button style="float:right;" class="btn btn-sm btn-danger" ng-click="shopCtrl.removeHours($index)">REMOVE</button>
@@ -100,7 +134,38 @@
                             </div>
                         </div>
                         <div class="form-group"><label class="col-sm-2 control-label">Days</label>
-                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="shopCtrl.newDays"></div>
+                            <div class="col-sm-10">
+                                <div style="text-align: left!important;">
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newmon" type="checkbox" ng-model="shopCtrl.newDays[0]"/>
+                                        <label for="newmon">Mon</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newtue" type="checkbox" ng-model="shopCtrl.newDays[1]"/>
+                                        <label for="newtue">Tue</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newwed" type="checkbox" ng-model="shopCtrl.newDays[2]"/>
+                                        <label for="newwed">Wed</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newthu" type="checkbox" ng-model="shopCtrl.newDays[3]"/>
+                                        <label for="newthu">Thu</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newfri" type="checkbox" ng-model="shopCtrl.newDays[4]"/>
+                                        <label for="newfri">Fri</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newsat" type="checkbox" ng-model="shopCtrl.newDays[5]"/>
+                                        <label for="newsat">Sat</label>
+                                    </div>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="newsun" type="checkbox" ng-model="shopCtrl.newDays[6]"/>
+                                        <label for="newsun">Sun</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <br>
                         <button ng-show="shopCtrl.sendNewHourVisible" class="btn btn-sm btn-primary" style="float:right;" ng-click="shopCtrl.postNewHours()">CONFIRM</button>

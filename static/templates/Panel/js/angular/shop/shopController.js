@@ -16,7 +16,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
     this.shop = { "name": "", "opening_hours": [], "address": "", "latitude": 0, "longitude": 0 };
     this.newOpenHour = "";
     this.newCloseHour = "";
-    this.newDays = [];
+    this.newDays = [false, false, false, false, false, false, false];
     // model copy
     this.copy = {};
     // hours
@@ -30,7 +30,17 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         this.addNewHourVisible = true;
         this.sendNewHourVisible = false;
 
-        this.shop.opening_hours.push( {days: this.newDays, open_time: this.newOpenHour, close_time: this.newCloseHour} );
+
+        this.shop.opening_hours.push( {days: [], daysB: [], open_time: this.newOpenHour, close_time: this.newCloseHour} );
+        (this.shop.opening_hours[this.shop.opening_hours.length-1]).daysB = angular.copy(this.newDays);
+
+
+        for (j=0; j<7; j++){
+            if ((this.shop.opening_hours[this.shop.opening_hours.length-1]).daysB[j]){
+                (this.shop.opening_hours[this.shop.opening_hours.length-1]).days.push((j+1));
+            }
+        }
+
 
         this.newOpenHour = "";
         this.newCloseHour = "";
@@ -65,6 +75,19 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             }
             Shop.get({shopID:this.id}, function(success){
                 this.shop = success;
+
+                for (i=0; i<this.shop.opening_hours.length; i++){
+                    this.shop.opening_hours[i].daysB = [];
+                    for (j=0; j<7; j++){
+                        if (this.shop.opening_hours[i].days.indexOf((j+1))>-1){
+                            this.shop.opening_hours[i].daysB.push(true);
+                        } else {
+                            this.shop.opening_hours[i].daysB.push(false);
+                        }
+                    }
+                }
+
+
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
@@ -123,7 +146,20 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             if (success.results.length>0){
                 this.shop.latitude = success.results[0].geometry.location.lat;
                 this.shop.longitude = success.results[0].geometry.location.lng;
+            } else {
+                return
             }
+
+            for (i=0; i<this.shop.opening_hours.length; i++){
+                this.shop.opening_hours[i].days = [];
+                for (j=0; j<7; j++){
+                    if (this.shop.opening_hours[i].daysB[j]){
+                        this.shop.opening_hours[i].days.push((j+1));
+                    }
+                }
+                //delete this.shop.opening_hours[i].daysB;
+            }
+
             if (this.id>0){
                 this.patchShop();
             } else {
@@ -135,4 +171,13 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
     }
 
     this.getShop(this.id);
+
+    // open hours
+    this.toggleDayInArray = function(value, array){
+        if ( (array.indexOf(value)) > -1 ){
+            array.splice((array.indexOf(value)), 1);
+        } else {
+            array.push(value)
+        }
+    }
 }]);
