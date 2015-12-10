@@ -55,7 +55,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             this.shopsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            this.toast.showError(error.status);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
 
@@ -77,7 +77,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             this.getShops(this.shopsCurrentPage);
             this.toast.showSuccess();
         }.bind(this), function(error){
-            this.toast.showError(error.status);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
 

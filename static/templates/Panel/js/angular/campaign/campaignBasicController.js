@@ -98,7 +98,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
             this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this));
     }
 
@@ -118,7 +118,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
             this.campaignM.setID(this.basic.id);
         }.bind(this), function(error){
             this.unlock();
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this))
 
     }

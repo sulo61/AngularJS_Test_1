@@ -108,7 +108,20 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     title: 'Error',
                     body: error,
                     showCloseButton: true,
-                    timeout: 2000
+                    timeout: 3000
+                });
+            }
+            this.showApiError = function(error){
+                e = JSON.stringify(error.data);
+                if (error.status == 500){
+                    e = "{Server Error}";
+                }
+                toaster.pop({
+                    type: 'error',
+                    title: 'Error',
+                    body: error.status + ": " + (e).substring(1, e.length-1),
+                    showCloseButton: true,
+                    timeout: 5000
                 });
             }
         }

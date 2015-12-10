@@ -92,7 +92,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this));
 
     }
@@ -113,7 +113,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this));
 
     }

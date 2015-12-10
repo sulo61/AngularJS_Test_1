@@ -35,7 +35,7 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
             this.userBackup = angular.copy(user);
             this.unlock();
         }.bind(this), function(error){
-            this.toast.showError(error.status);
+            this.toast.showApiError(error);
             this.unlock();
         });
     };
@@ -57,7 +57,7 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
         }.bind(this), function(error){
             this.user = angular.copy(this.userBackup);
             this.unlock();
-            this.toast.showError(error.status);
+            this.toast.showApiError(error);
         }.bind(this));
 
     };

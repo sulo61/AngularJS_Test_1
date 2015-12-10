@@ -47,7 +47,7 @@
                     <table class="table table-striped table-bordered table-hover ">
                         <thead>
                             <tr>
-                                <th>Active</th>
+                                <th>Used</th>
                                 <th>Minor</th>
                                 <th>Major</th>
                                 <th>Options</th>
@@ -94,7 +94,7 @@
                     <table class="table table-striped table-bordered table-hover ">
                         <thead>
                         <tr>
-                            <th>Active</th>
+                            <th>Used</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Type</th>
@@ -108,7 +108,7 @@
                             </td>
                             <td>{{ad.title}}</td>
                             <td>{{ad.description}}</td>
-                            <td>{{ad.type}}</td>
+                            <td>{{cActionCtrl.absUtils.getTypeNameFromNumber(ad.type)}}</td>
                             <td>
                                 <a class="close-link" ng-click="cActionCtrl.useNewAd(ad.id)"><i class="fa fa-plus"></i></a>
                             </td>

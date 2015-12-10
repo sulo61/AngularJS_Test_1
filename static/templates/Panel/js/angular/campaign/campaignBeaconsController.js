@@ -64,7 +64,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.beaconsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
 
@@ -86,7 +86,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this));
     }
 
@@ -103,7 +103,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.toast.showSuccess();
         }.bind(this), function(error){
             this.unlock();
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this))
 
     }

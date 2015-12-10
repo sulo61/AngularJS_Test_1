@@ -56,7 +56,7 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             this.campaignsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            this.toast.showError(error.status)
+            this.toast.showApiError(error)
             this.unlock();
         }.bind(this));
 
@@ -77,7 +77,7 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             this.getCampaigns(this.campaignsCurrentPage);
             this.toast.showSuccess()
         }.bind(this), function(error){
-            this.toast.showError(error.status);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
 

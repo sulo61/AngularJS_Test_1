@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignActionController', ['$routeParams', 'CampaignActions', 'CampaignAction', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'CampaignBeacons', 'CampaignAds', function($routeParams, CampaignActions, CampaignAction, currentPath, toast, campaignMENU, panelCache, Upload, CampaignBeacons, CampaignAds){
+angular.module('panelApp').controller('campaignActionController', ['$routeParams', 'CampaignActions', 'CampaignAction', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'CampaignBeacons', 'CampaignAds', 'absUtils', function($routeParams, CampaignActions, CampaignAction, currentPath, toast, campaignMENU, panelCache, Upload, CampaignBeacons, CampaignAds, absUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -11,6 +11,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
     this.currentPath = currentPath;
     this.toast = toast;
     this.cache = panelCache;
+    this.absUtils = absUtils;
     // action params
     this.campaignID = $routeParams.campaignID;
     this.campaignNAME = $routeParams.campaignNAME;
@@ -114,7 +115,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
                 this.getBeacons(1);
                 this.getAds(1);
             }.bind(this), function(error){
-                this.toast.showError(error);
+                this.toast.showApiError(error);
                 this.unlock();
             }.bind(this));
 
@@ -137,7 +138,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
             }
             this.beaconsCurrentPage = page;
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this));
 
     };
@@ -154,7 +155,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
             }
             this.adsCurrentPage = page;
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
         }.bind(this));
 
     };
@@ -172,7 +173,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
             this.unlock();
             this.updatePath();
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
 
@@ -191,7 +192,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
             this.unlock();
             this.updatePath();
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
     }
@@ -212,7 +213,7 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
                 // });
             }.bind(this), function (response) {
                 if (response.status > 0)
-                    this.toast.showError(response.status + ': ' + response.data);
+                    this.toast.showApiError(response);
             }.bind(this), function (evt) {
             });
         }

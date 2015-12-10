@@ -78,7 +78,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             this.unlock();
             this.updatePath();
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
 
@@ -97,7 +97,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             this.unlock();
             this.updatePath();
         }.bind(this), function(error){
-            this.toast.showError(error);
+            this.toast.showApiError(error);
             this.unlock();
         }.bind(this));
     }
@@ -118,7 +118,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
                 // });
             }.bind(this), function (response) {
                 if (response.status > 0)
-                    this.toast.showError(response.status + ': ' + response.data);
+                    this.toast.showApiError(response);
             }.bind(this), function (evt) {
             });
         }

@@ -72,7 +72,7 @@ angular.module('panelApp')
             this.itemsCurrentPage = page;
             this.unlock();
         }.bind(this), function(error){
-            toast.showError(error);
+            toast.showApiError(error);
             this.unlock();
         }.bind(this));
 
@@ -93,7 +93,7 @@ angular.module('panelApp')
             this.getItems(this.itemsCurrentPage);
             toast.showSuccess();
         }.bind(this), function(error){
-            toast.showError(error);
+            toast.showApiError(error);
             this.unlock();
         }.bind(this));
     }
