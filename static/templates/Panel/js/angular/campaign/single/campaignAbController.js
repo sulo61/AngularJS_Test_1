@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload){
+angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'absUtils', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload, absUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -11,6 +11,7 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
     this.currentPath = currentPath;
     this.toast = toast;
     this.cache = panelCache;
+    this.absUtils = absUtils;
     // award params
     this.campaignID = $routeParams.campaignID;
     this.campaignNAME = $routeParams.campaignNAME;
@@ -21,11 +22,13 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
     // model
     this.ad = { id:0 };
     this.adCOPY = {};
+    this.currentTypeName = this.absUtils.getTypeNameFromNumber(-1);
 
     this.dismiss = function(){
         this.ad = angular.copy(this.adCOPY);
     }
     this.save = function(){
+        this.ad.type = this.absUtils.getTypeNumberFromName(this.currentTypeName);
         if (this.adID>0){
             this.patchAd();
         } else {
@@ -52,6 +55,7 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
             }
             CampaignAd.get({campaignID:this.campaignID, adID:this.adID}, function(success){
                 this.ad = success;
+                this.currentTypeName = this.absUtils.getTypeNameFromNumber(this.ad.type);
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();

@@ -1,7 +1,7 @@
 angular.module('panelApp')
     .controller('campaignItemsController',
-        ['$routeParams', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignItems', 'CampaignItem',
-        function($routeParams, currentPath, toast, campaignMENU, panelCache, CampaignItems, CampaignItem){
+        ['$routeParams', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignItems', 'CampaignItem', 'absUtils',
+        function($routeParams, currentPath, toast, campaignMENU, panelCache, CampaignItems, CampaignItem, absUtils){
 
     // lock
     this.isLock = false;
@@ -11,6 +11,9 @@ angular.module('panelApp')
     this.unlock = function(){
         this.isLock = false;
     }
+
+    // utils
+    this.absUtils = absUtils;
 
     // params
     this.campaignID = $routeParams.campaignID;

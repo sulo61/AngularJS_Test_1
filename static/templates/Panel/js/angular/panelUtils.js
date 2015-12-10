@@ -42,3 +42,27 @@ angular.module('panelApp')
         }
         return new dateUtils();
     })
+    .factory('absUtils', function() {
+        absUtils = function () {
+            this.getTypeNameFromNumber = function(number){
+                typesNames = this.getTypesNames();
+                switch (number){
+                    case 0:
+                        return typesNames[0];
+                    case 1:
+                        return typesNames[1];
+                    case 2:
+                        return typesNames[2];
+                    default:
+                        return "Unknown";
+                }
+            }
+            this.getTypeNumberFromName = function(name){
+                return (((this.getTypesNames()).indexOf(name)) !== -1) ? ((this.getTypesNames()).indexOf(name)) : "Unknown";
+            }
+            this.getTypesNames = function(){
+                return ["Image without text", "Image with text", "Side image with text"];
+            }
+        }
+        return new absUtils();
+    })
