@@ -32,8 +32,9 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
-                            <span ng-show="campaignsCtrl.numberOfCampaignsItems>0">Showing {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage-campaignsCtrl.perPage+1}} to {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage>campaignsCtrl.numberOfCampaignsItems?campaignsCtrl.numberOfCampaignsItems:campaignsCtrl.campaignsCurrentPage*campaignsCtrl.perPage}} of {{campaignsCtrl.numberOfCampaignsItems}} entries</div></span>
-                        <span ng-hide="campaignsCtrl.numberOfCampaignsItems>0">There are no any Campaigns</span>
+                            <div ng-show="campaignsCtrl.numberOfCampaigns>0">Showing {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.campaignsPerPage-campaignsCtrl.campaignsPerPage+1}} to {{campaignsCtrl.campaignsCurrentPage*campaignsCtrl.campaignsPerPage>campaignsCtrl.numberOfCampaigns?campaignsCtrl.numberOfCampaigns:campaignsCtrl.campaignsCurrentPage*campaignsCtrl.campaignsPerPage}} of {{campaignsCtrl.numberOfCampaigns}} entries</div>
+                            <div ng-hide="campaignsCtrl.numberOfCampaigns>0">There are no any Campaigns</div>
+                        </div>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="campaignsCtrl.campaignsPages.length>0">
                                 <li ng-click="campaignsCtrl.campaignsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>

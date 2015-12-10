@@ -146,8 +146,6 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             if (success.results.length>0){
                 this.shop.latitude = success.results[0].geometry.location.lat;
                 this.shop.longitude = success.results[0].geometry.location.lng;
-            } else {
-                return
             }
 
             for (i=0; i<this.shop.opening_hours.length; i++){

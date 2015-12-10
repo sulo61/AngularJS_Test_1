@@ -13,12 +13,14 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
     // models
     this.shopsList = [];
     // nav
+    // models
     this.shopsList = [];
-    this.shopsPages = [];	// numbers
-    this.perPage = 5;
+    this.shopsPages = [];
+    this.shopsPerPage = 5;
     this.shopsCurrentPage = 1;
-    this.numberOfShopsItems = 0;
+    this.numberOfShops = 0;
 
+    // pagination nav
     this.shopsNavActive = function(page){
         if (page==this.shopsCurrentPage){
             return "active"
@@ -36,6 +38,7 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             this.getShops(this.shopsCurrentPage-1);
         }
     };
+    
     // api
     this.getShops = function(page){
         if (this.isLock){
@@ -48,8 +51,8 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
             this.shopsList = [];
             this.shopsPages = [];
             this.shopsList = success.results;
-            this.numberOfShopsItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfShopsItems/this.perPage)); i++) {
+            this.numberOfShops = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfShops/this.shopsPerPage)); i++) {
                 this.shopsPages.push(i+1);
             }
             this.shopsCurrentPage = page;
@@ -69,8 +72,8 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
         }
 
         Shop.delete({shopID:id}, function(){
-           this.numberOfItems = this.numberOfItems - 1;
-            if ( (this.numberOfItems <= (this.shopsCurrentPage-1) * this.perPage) && this.numberOfItems>=this.perPage){
+            this.numberOfShops = this.numberOfShops - 1;
+            if ( (this.numberOfShops <= (this.shopsCurrentPage-1) * this.shopsPerPage) && this.numberOfShops>=this.shopsPerPage ){
                 this.shopsCurrentPage = this.shopsCurrentPage - 1;
             }
             this.unlock();

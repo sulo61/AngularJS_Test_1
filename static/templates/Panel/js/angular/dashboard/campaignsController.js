@@ -13,13 +13,12 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
     this.dateUtils = dateUtils;
     // models
     this.campaignsList = [];
-    // nav
-    this.campaignsList = [];
-    this.campaignsPages = [];	// numbers
-    this.perPage = 5;
+    this.campaignsPages = [];
+    this.campaignsPerPage = 5;
     this.campaignsCurrentPage = 1;
-    this.numberOfCampaignsItems = 0;
-    // nav
+    this.numberOfCampaigns = 0;
+
+    // pagination nav
     this.campaignsNavActive = function(page){
         if (page==this.campaignsCurrentPage){
             return "active"
@@ -49,8 +48,8 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             this.campaignsList = [];
             this.campaignsPages = [];
             this.campaignsList = success.results;
-            this.numberOfCampaignsItems = success.count;
-            for (var i=0; i<Math.ceil((this.numberOfCampaignsItems/this.perPage)); i++) {
+            this.numberOfCampaigns = success.count;
+            for (var i=0; i<Math.ceil((this.numberOfCampaigns/this.campaignsPerPage)); i++) {
                 this.campaignsPages.push(i+1);
             }
             this.campaignsCurrentPage = page;
@@ -69,13 +68,13 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
         }
 
         Campaign.delete({campaignID:id}, function(){
-            this.numberOfItems = this.numberOfItems - 1;
-            if ( (this.numberOfItems <= (this.campaignsCurrentPage-1) * this.perPage) && this.numberOfItems>=this.perPage){
+            this.numberOfCampaigns = this.numberOfCampaigns - 1;
+            if ( (this.numberOfCampaigns <= (this.campaignsCurrentPage-1) * this.campaignsPerPage) && this.numberOfCampaigns>=this.campaignsPerPage ){
                 this.campaignsCurrentPage = this.campaignsCurrentPage - 1;
             }
             this.unlock();
             this.getCampaigns(this.campaignsCurrentPage);
-            this.toast.showSuccess()
+            this.toast.showSuccess();
         }.bind(this), function(error){
             this.toast.showApiError(error);
             this.unlock();

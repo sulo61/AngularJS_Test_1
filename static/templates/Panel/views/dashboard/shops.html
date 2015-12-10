@@ -30,8 +30,9 @@
 
                     <div>
                         <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
-                            <span ng-show="shopsCtrl.numberOfShopsItems>0">Showing {{shopsCtrl.shopsCurrentPage*shopsCtrl.perPage-shopsCtrl.perPage+1}} to {{shopsCtrl.shopsCurrentPage*shopsCtrl.perPage>shopsCtrl.numberOfShopsItems?shopsCtrl.numberOfShopsItems:shopsCtrl.shopsCurrentPage*shopsCtrl.perPage}} of {{shopsCtrl.numberOfShopsItems}} entries</div></span>
-                            <span ng-hide="shopsCtrl.numberOfShopsItems>0">There are no any Shops</span>
+                            <div ng-show="shopsCtrl.numberOfShops>0">Showing {{shopsCtrl.shopsCurrentPage*shopsCtrl.shopsPerPage-shopsCtrl.shopsPerPage+1}} to {{shopsCtrl.shopsCurrentPage*shopsCtrl.shopsPerPage>shopsCtrl.numberOfShops?shopsCtrl.numberOfShops:shopsCtrl.shopsCurrentPage*shopsCtrl.shopsPerPage}} of {{shopsCtrl.numberOfShops}} entries</div>
+                            <div ng-hide="shopsCtrl.numberOfShops>0">There are no any Shops</div>
+                        </div>
                         <nav style="float: right">
                             <ul class="pagination" ng-show="shopsCtrl.shopsPages.length>0">
                                 <li ng-click="shopsCtrl.shopsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
