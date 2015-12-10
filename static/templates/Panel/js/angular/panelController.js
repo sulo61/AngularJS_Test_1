@@ -112,17 +112,26 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                 });
             }
             this.showApiError = function(error){
-                e = JSON.stringify(error.data);
                 if (error.status == 500){
-                    e = "{Server Error}";
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Error',
+                        body: "Server error",
+                        showCloseButton: true,
+                        timeout: 5000
+                    });
+                } else {
+                    errors = Object.keys(error.data).map(function(k) { return (error.data)[k] });
+                    errors.forEach(function(e){
+                        toaster.pop({
+                            type: 'error',
+                            title: 'Error',
+                            body: e.join(),
+                            showCloseButton: true,
+                            timeout: 5000
+                        });
+                    })
                 }
-                toaster.pop({
-                    type: 'error',
-                    title: 'Error',
-                    body: error.status + ": " + (e).substring(1, e.length-1),
-                    showCloseButton: true,
-                    timeout: 5000
-                });
             }
         }
         return new toast();
