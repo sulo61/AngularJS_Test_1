@@ -42,7 +42,9 @@
                         <br><br><br><br>
                         <button class="btn btn-primary" type="file" ngf-select="cAwardCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
                     </div>
-
+                    <div style="text-align:center;" ng-hide="cAwardCtrl.award.id>0">
+                        Save award to show upload photo option.
+                    </div>
 
                 </div>
             </div>

@@ -39,7 +39,9 @@
                         <br><br><br><br>
                         <button class="btn btn-primary" type="file" ngf-select="cPromotionCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
                     </div>
-
+                    <div style="text-align:center;" ng-hide="cPromotionCtrl.promotion.id>0">
+                        Save promotion to show upload photo option.
+                    </div>
 
                 </div>
             </div>

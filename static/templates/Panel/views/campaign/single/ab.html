@@ -42,6 +42,9 @@
                         <br><br><br><br>
                         <button class="btn btn-primary" type="file" ngf-select="cAbCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
                     </div>
+                    <div style="text-align:center;" ng-hide="cAbCtrl.ad.id>0">
+                        Save advertisement to show upload photo option.
+                    </div>
                 </div>
             </div>
         </div>
