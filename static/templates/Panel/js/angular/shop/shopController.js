@@ -129,6 +129,18 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
 
         Shops.save(this.shop, function(success){
             this.shop = success;
+
+            for (i=0; i<this.shop.opening_hours.length; i++){
+                this.shop.opening_hours[i].daysB = [];
+                for (j=0; j<7; j++){
+                    if (this.shop.opening_hours[i].days.indexOf((j+1))>-1){
+                        this.shop.opening_hours[i].daysB.push(true);
+                    } else {
+                        this.shop.opening_hours[i].daysB.push(false);
+                    }
+                }
+            }
+
             this.id = this.shop.id;
             this.makeCopy();
             this.unlock();
