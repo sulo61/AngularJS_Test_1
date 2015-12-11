@@ -95,9 +95,15 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
     this.useNewBeacon = function(id){
         this.action.beacon = id;
     }
+    this.removeNewBeacon = function(){
+        this.action.beacon = "";
+    }
     // ad
     this.useNewAd = function(id){
         this.action.ad = id;
+    }
+    this.removeNewAd = function(){
+        this.action.ad = "";
     }
     // get action
     this.getAction = function(){

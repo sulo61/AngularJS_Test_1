@@ -61,7 +61,8 @@
                             <td>{{beacon.minor}}</td>
                             <td>{{beacon.major}}</td>
                             <td>
-                                <a class="close-link" ng-click="cActionCtrl.useNewBeacon(beacon.id)"><i class="fa fa-plus"></i></a>
+                                <a class="close-link" ng-hide="beacon.id==cActionCtrl.action.beacon" ng-click="cActionCtrl.useNewBeacon(beacon.id)"><i class="fa fa-plus"></i></a>
+                                <a class="close-link" ng-show="beacon.id==cActionCtrl.action.beacon" ng-click="cActionCtrl.removeNewBeacon()"><i class="fa fa-minus"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -110,7 +111,8 @@
                             <td>{{ad.description}}</td>
                             <td>{{cActionCtrl.absUtils.getTypeNameFromNumber(ad.type)}}</td>
                             <td>
-                                <a class="close-link" ng-click="cActionCtrl.useNewAd(ad.id)"><i class="fa fa-plus"></i></a>
+                                <a class="close-link" ng-hide="ad.id==cActionCtrl.action.ad" ng-click="cActionCtrl.useNewAd(ad.id)"><i class="fa fa-plus"></i></a>
+                                <a class="close-link" ng-show="ad.id==cActionCtrl.action.ad" ng-click="cActionCtrl.removeNewAd()"><i class="fa fa-minus"></i></a>
                             </td>
                         </tr>
                         </tbody>
