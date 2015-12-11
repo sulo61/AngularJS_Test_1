@@ -76,6 +76,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             Shop.get({shopID:this.id}, function(success){
                 this.shop = success;
                 this.parseDaysToRequest();
+                this.parseHours();
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
@@ -132,6 +133,16 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             //delete this.shop.opening_hours[i].daysB;
         }
     }
+    this.parseHours = function(){
+        for (i=0; i<this.shop.opening_hours.length; i++) {
+            if (this.shop.opening_hours[i].open_time.length>5){
+                this.shop.opening_hours[i].open_time = this.shop.opening_hours[i].open_time.substring(0,5);
+            }
+            if (this.shop.opening_hours[i].close_time.length>5){
+                this.shop.opening_hours[i].close_time = this.shop.opening_hours[i].close_time.substring(0,5);
+            }
+        }
+    }
     // post shop
     this.postShop = function(){
         if (this.isLock){
@@ -143,6 +154,7 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
         Shops.save(this.shop, function(success){
             this.shop = success;
             this.parseDaysToRequest();
+            this.parseHours();
             this.id = this.shop.id;
             this.makeCopy();
             this.unlock();
