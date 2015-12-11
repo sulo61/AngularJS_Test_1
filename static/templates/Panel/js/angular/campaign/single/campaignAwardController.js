@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAwardController', ['$routeParams', 'CampaignAwards', 'CampaignAward', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', function($routeParams, CampaignAwards, CampaignAward, currentPath, toast, campaignMENU, panelCache, Upload){
+angular.module('panelApp').controller('campaignAwardController', ['$routeParams', 'CampaignAwards', 'CampaignAward', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'awardsUtils', function($routeParams, CampaignAwards, CampaignAward, currentPath, toast, campaignMENU, panelCache, Upload, awardsUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -11,6 +11,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
     this.currentPath = currentPath;
     this.toast = toast;
     this.cache = panelCache;
+    this.awardsUtils = awardsUtils;
     // award params
     this.campaignID = $routeParams.campaignID;
     this.campaignNAME = $routeParams.campaignNAME;
@@ -21,11 +22,13 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
     // model
     this.award = { id:0 };
     this.awardCOPY = {};
+    this.currentTypeName = this.awardsUtils.getTypeNameFromNumber(-1);
 
     this.dismiss = function(){
         this.award = angular.copy(this.awardCOPY);
     }
     this.save = function(){
+        this.award.type = this.awardsUtils.getTypeNumberFromName(this.currentTypeName);
         if (this.awardID>0){
             this.patchAward();
         } else {
@@ -52,6 +55,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             }
             CampaignAward.get({campaignID:this.campaignID, awardID:this.awardID}, function(success){
                 this.award = success;
+                this.currentTypeName = this.awardsUtils.getTypeNameFromNumber(this.award.type);
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
