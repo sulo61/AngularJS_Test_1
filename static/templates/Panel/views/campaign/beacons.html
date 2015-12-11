@@ -29,11 +29,12 @@
                         </tr>
                         </tbody>
                     </table>
-
                     <div>
                         <div style="float: left" class="dataTables_info" role="status" aria-live="polite">
-                            <span ng-show="cBeaconsCtrl.numberOfBeaconsItems>0">Showing {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage-cBeaconsCtrl.perPage+1}} to {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage>cBeaconsCtrl.numberOfBeaconsItems?cBeaconsCtrl.numberOfBeaconsItems:cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage}} of {{cBeaconsCtrl.numberOfBeaconsItems}} entries</div></span>
-                        <span ng-hide="cBeaconsCtrl.numberOfBeaconsItems>0">There are no any Beacons</span>
+                            <div ng-show="cBeaconsCtrl.numberOfBeaconsItems>0">Showing {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage-cBeaconsCtrl.perPage+1}} to {{cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage>cBeaconsCtrl.numberOfBeaconsItems?cBeaconsCtrl.numberOfBeaconsItems:cBeaconsCtrl.beaconsCurrentPage*cBeaconsCtrl.perPage}} of {{cBeaconsCtrl.numberOfBeaconsItems}} entries</div>
+                            <div ng-hide="cBeaconsCtrl.numberOfBeaconsItems>0">There are no any Beacons</div>
+                        </div>
+                        
                         <nav style="float: right">
                             <ul class="pagination" ng-show="cBeaconsCtrl.beaconsPages.length>0">
                                 <li ng-click="cBeaconsCtrl.beaconsNavPrev()"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
