@@ -37,17 +37,24 @@
         <div class="col-md-6">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Photo preview</h5>
+                    <h5>Photo</h5>
                 </div>
                 <div class="ibox-content">
 
                     <div style="text-align:center;" ng-show="cAwardCtrl.award.id>0" >
-                        <img ng-show="cAwardCtrl.award.image!=null" ng-src="{{cAwardCtrl.award.image}}" alt="No image" style="width:100%"/>
                         <div style="text-align:center;" ng-hide="cAwardCtrl.award.image!=null">
                             No image.
                         </div>
+                        <div ng-show="cAwardCtrl.award.image!=null" class="cropArea" >
+                            <img-crop
+                                    image="cAwardCtrl.award.image"
+                                    result-image="cAwardCtrl.myCroppedImage"
+                                    area-type="square" >
+                            </img-crop>
+                        </div>
                         <br><br><br>
-                        <button class="btn btn-primary" type="file" ngf-select="cAwardCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">SAVE</button>
+                        <button class="btn btn-primary" type="file" ngf-select="cAwardCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
+                        <button class="btn btn-success" ng-click="cAwardCtrl.saveFile()" accept="image/*">SAVE</button>
                     </div>
                     <div style="text-align:center;" ng-hide="cAwardCtrl.award.id>0">
                         Save award to show upload photo option.
@@ -57,14 +64,7 @@
             </div>
 
 
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Photo upload</h5>
-                </div>
-                <div class="ibox-content">
-                    UPLOAD
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

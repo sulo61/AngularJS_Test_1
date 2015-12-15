@@ -1,4 +1,4 @@
-angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate', 'ngMap', 'ngStorage'])
+angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResource', 'toaster', 'ngAnimate', 'ngMap', 'ngStorage', 'ngImgCrop'])
     // django auth
     .config(['$httpProvider', function($httpProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';

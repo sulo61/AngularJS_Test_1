@@ -8091,3 +8091,9 @@ body.md-skin {
     display: none;
   }
 }
+
+.cropArea {
+  overflow: hidden;
+  width:100%;
+  height:300px;
+}

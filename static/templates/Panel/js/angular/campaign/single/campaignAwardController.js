@@ -23,6 +23,8 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
     this.award = { id:0 };
     this.awardCOPY = {};
     this.currentTypeName = this.awardsUtils.getTypeNameFromNumber(-1);
+    // cropper
+    this.myCroppedImage='';
 
     this.dismiss = function(){
         this.award = angular.copy(this.awardCOPY);
@@ -106,20 +108,16 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
         }.bind(this));
     }
     // upload photo
-    this.uploadFiles = function(file, errFiles) {
+    this.uploadFiles = function(file) {
         this.f = file;
-        this.errFile = errFiles && errFiles[0];
-        if (file) {
-            file.upload = Upload.upload({
+        if (this.f) {
+            this.f.upload = Upload.upload({
                 url: '/api/campaigns/'+this.campaignID+"/awards/"+this.awardID+"/image/",
-                data: {image: file}
+                data: {image: this.f}
             });
-            file.upload.then(function (response) {
-                this.award.image = angular.copy(response.data.image);
+            this.f.upload.then(function (response) {
                 this.toast.showSuccess();
-                // $timeout(function () {
-                //     appInfo.showFail(response.data);
-                // });
+                this.award.image = angular.copy(response.data.image);
             }.bind(this), function (response) {
                 if (response.status > 0)
                     this.toast.showApiError(response);
@@ -128,6 +126,36 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
         }
     }
 
+    this.saveFile = function () {
+        this.f = this.convertDataToFile(this.myCroppedImage, "image");
+        if (this.f) {
+            Upload.upload({
+                url: '/api/campaigns/'+this.campaignID+"/awards/"+this.awardID+"/image/",
+                data: {image: this.f}
+            }).then(function (response){
+                this.toast.showSuccess();
+                this.award.image = angular.copy(response.data.image);
+            }.bind(this), function(response){
+                if (response.status > 0)
+                    this.toast.showApiError(response);
+            })
+        }
+    }
+
 
     this.getAward(this.awardID);
+
+     this.convertDataToFile = function(dataURI, type) {
+        var byteString = atob(dataURI.split(',')[1]);
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        var bb = new Blob([ab], { type: type });
+        return bb;
+    }
+
 }]);
