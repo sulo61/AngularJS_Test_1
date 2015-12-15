@@ -45,16 +45,17 @@
                         <div style="text-align:center;" ng-hide="cAwardCtrl.award.image!=null">
                             No image.
                         </div>
-                        <div ng-show="cAwardCtrl.award.image!=null" class="cropArea" >
+                        <div ng-show="cAwardCtrl.award.image!=null" class="cropArea" style="text-align: center!important;">
                             <img-crop
                                     image="cAwardCtrl.award.image"
                                     result-image="cAwardCtrl.myCroppedImage"
-                                    area-type="square" >
+                                    area-type="square"
+                                    area-min-size=200>
                             </img-crop>
                         </div>
                         <br><br><br>
-                        <button class="btn btn-primary" type="file" ngf-select="cAwardCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
-                        <button class="btn btn-success" ng-click="cAwardCtrl.saveFile()" accept="image/*">SAVE</button>
+                        <button class="btn btn-success" type="file" ngf-select="cAwardCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
+                        <button class="btn btn-primary" ng-click="cAwardCtrl.saveFile()" accept="image/*">SAVE</button>
                     </div>
                     <div style="text-align:center;" ng-hide="cAwardCtrl.award.id>0">
                         Save award to show upload photo option.

@@ -117,6 +117,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             });
             this.f.upload.then(function (response) {
                 this.toast.showSuccess();
+                this.award.image = "";
                 this.award.image = angular.copy(response.data.image);
             }.bind(this), function (response) {
                 if (response.status > 0)
@@ -134,6 +135,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
                 data: {image: this.f}
             }).then(function (response){
                 this.toast.showSuccess();
+                this.award.image = "";
                 this.award.image = angular.copy(response.data.image);
             }.bind(this), function(response){
                 if (response.status > 0)
