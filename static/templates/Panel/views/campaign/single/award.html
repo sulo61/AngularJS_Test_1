@@ -37,14 +37,17 @@
         <div class="col-md-6">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Photo</h5>
+                    <h5>Photo preview</h5>
                 </div>
                 <div class="ibox-content">
 
                     <div style="text-align:center;" ng-show="cAwardCtrl.award.id>0" >
-                        <img ng-src="{{cAwardCtrl.award.image}}" alt="No image" style="width:100%"/>
-                        <br><br><br><br>
-                        <button class="btn btn-primary" type="file" ngf-select="cAwardCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
+                        <img ng-show="cAwardCtrl.award.image!=null" ng-src="{{cAwardCtrl.award.image}}" alt="No image" style="width:100%"/>
+                        <div style="text-align:center;" ng-hide="cAwardCtrl.award.image!=null">
+                            No image.
+                        </div>
+                        <br><br><br>
+                        <button class="btn btn-primary" type="file" ngf-select="cAwardCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">SAVE</button>
                     </div>
                     <div style="text-align:center;" ng-hide="cAwardCtrl.award.id>0">
                         Save award to show upload photo option.
