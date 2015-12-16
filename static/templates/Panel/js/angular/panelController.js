@@ -121,12 +121,13 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                         timeout: 5000
                     });
                 } else {
-                    errors = Object.keys(error.data).map(function(k) { return (error.data)[k] });
+                    errors = Object.keys(error.data).map(function(k) { return [k, ((error.data)[k])] });
+                    debugger
                     errors.forEach(function(e){
                         toaster.pop({
                             type: 'error',
-                            title: 'Error',
-                            body: e.join(),
+                            title: 'Error: '+e[0],
+                            body: e[1].join(),
                             showCloseButton: true,
                             timeout: 5000
                         });
