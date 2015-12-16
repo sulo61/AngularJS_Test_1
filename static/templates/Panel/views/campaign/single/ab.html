@@ -37,10 +37,23 @@
                     <h5>Photo</h5>
                 </div>
                 <div class="ibox-content">
+
                     <div style="text-align:center;" ng-show="cAbCtrl.ad.id>0" >
-                        <img ng-src="{{cAbCtrl.ad.image}}" alt="No image" style="width:100%"/>
-                        <br><br><br><br>
-                        <button class="btn btn-primary" type="file" ngf-select="cAbCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
+                        <div style="text-align:center;" ng-hide="cAbCtrl.ad.image!=null">
+                            No image.
+                        </div>
+                        <div ng-show="cAbCtrl.ad.image!=null" class="cropArea" style="text-align: center!important;">
+                            <img-crop
+                                    image="cAbCtrl.ad.image"
+                                    result-image="cAbCtrl.myCroppedImage"
+                                    area-type="square"
+                                    area-min-size="300"
+                                    result-image-size=300 >
+                            </img-crop>
+                        </div>
+                        <br><br><br>
+                        <button class="btn btn-success" type="file" ngf-select="cAbCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
+                        <button class="btn btn-primary" ng-click="cAbCtrl.saveFile()" accept="image/*">SAVE</button>
                     </div>
                     <div style="text-align:center;" ng-hide="cAbCtrl.ad.id>0">
                         Save advertisement to show upload photo option.

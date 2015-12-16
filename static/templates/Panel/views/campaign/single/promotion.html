@@ -35,9 +35,21 @@
                 <div class="ibox-content">
 
                     <div style="text-align:center;" ng-show="cPromotionCtrl.promotion.id>0" >
-                        <img ng-src="{{cPromotionCtrl.promotion.image}}" alt="No image" style="width:100%"/>
-                        <br><br><br><br>
-                        <button class="btn btn-primary" type="file" ngf-select="cPromotionCtrl.uploadFiles($file, $invalidFiles)" accept="image/*">UPLOAD PHOTO</button>
+                        <div style="text-align:center;" ng-hide="cPromotionCtrl.promotion.image!=null">
+                            No image.
+                        </div>
+                        <div ng-show="cPromotionCtrl.promotion.image!=null" class="cropArea" style="text-align: center!important;">
+                            <img-crop
+                                    image="cPromotionCtrl.promotion.image"
+                                    result-image="cPromotionCtrl.myCroppedImage"
+                                    area-type="square"
+                                    area-min-size="300"
+                                    result-image-size=300 >
+                            </img-crop>
+                        </div>
+                        <br><br><br>
+                        <button class="btn btn-success" type="file" ngf-select="cPromotionCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
+                        <button class="btn btn-primary" ng-click="cPromotionCtrl.saveFile()" accept="image/*">SAVE</button>
                     </div>
                     <div style="text-align:center;" ng-hide="cPromotionCtrl.promotion.id>0">
                         Save promotion to show upload photo option.
