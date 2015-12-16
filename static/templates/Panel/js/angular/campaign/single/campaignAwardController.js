@@ -135,6 +135,8 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
 
     this.saveFile = function () {
         this.f = this.photoUtils.convertDataToFile(this.myCroppedImage, "image");
+        this.f.lastModified = new Date();
+        this.f.name = "award_"+this.awardID+"_"+(new Date().getTime());
         if (this.f) {
             this.processingPhoto = true;
             Upload.upload({
