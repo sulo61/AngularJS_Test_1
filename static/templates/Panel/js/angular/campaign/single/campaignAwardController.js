@@ -113,6 +113,8 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
     // upload photo
     this.uploadFiles = function(file) {
         this.f = file;
+        this.f.lastModified = new Date();
+        this.f.name = "award_"+this.awardID+"_"+(new Date().getTime());
         if (this.f) {
             this.processingPhoto = true;
             this.f.upload = Upload.upload({
@@ -122,7 +124,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             this.f.upload.then(function (response) {
                 this.toast.showSuccess();
                 this.award.image = "";
-                this.award.image = angular.copy(response.data.image+"#"+(new Date()).getMilliseconds());
+                this.award.image = angular.copy(response.data.image);
                 this.processingPhoto = false;
             }.bind(this), function (response) {
                 this.processingPhoto = false;
@@ -145,7 +147,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             }).then(function (response){
                 this.toast.showSuccess();
                 this.award.image = "";
-                this.award.image = angular.copy(response.data.image+"#"+(new Date()).getMilliseconds());
+                this.award.image = angular.copy(response.data.image);
                 this.processingPhoto = false;
             }.bind(this), function(response){
                 this.processingPhoto = false;

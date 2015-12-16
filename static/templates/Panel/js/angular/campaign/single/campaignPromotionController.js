@@ -109,6 +109,8 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     // upload photo
     this.uploadFiles = function(file) {
         this.f = file;
+        this.f.lastModified = new Date();
+        this.f.name = "promotion_"+this.itemID+"_"+(new Date().getTime());
         if (this.f) {
             this.processingPhoto = true;
             this.f.upload = Upload.upload({
@@ -131,6 +133,8 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
 
     this.saveFile = function () {
         this.f = this.photoUtils.convertDataToFile(this.myCroppedImage, "image");
+        this.f.lastModified = new Date();
+        this.f.name = "promotion_"+this.itemID+"_"+(new Date().getTime());
         if (this.f) {
             this.processingPhoto = true;
             Upload.upload({

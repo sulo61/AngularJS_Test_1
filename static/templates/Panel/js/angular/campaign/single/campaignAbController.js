@@ -114,6 +114,8 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
     // upload photo
     this.uploadFiles = function(file) {
         this.f = file;
+        this.f.lastModified = new Date();
+        this.f.name = "ad_"+this.adID+"_"+(new Date().getTime());
         if (this.f) {
             this.processingPhoto = true;
             this.f.upload = Upload.upload({
@@ -136,6 +138,8 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
 
     this.saveFile = function () {
         this.f = this.photoUtils.convertDataToFile(this.myCroppedImage, "image");
+        this.f.lastModified = new Date();
+        this.f.name = "ad_"+this.adID+"_"+(new Date().getTime());
         if (this.f) {
             this.processingPhoto = true;
             Upload.upload({
