@@ -122,7 +122,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             this.f.upload.then(function (response) {
                 this.toast.showSuccess();
                 this.award.image = "";
-                this.award.image = angular.copy(response.data.image);
+                //this.award.image = angular.copy(response.data.image);
                 this.processingPhoto = false;
             }.bind(this), function (response) {
                 this.processingPhoto = false;
@@ -143,7 +143,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             }).then(function (response){
                 this.toast.showSuccess();
                 this.award.image = "";
-                this.award.image = angular.copy(response.data.image);
+                //this.award.image = angular.copy(response.data.image);
                 this.processingPhoto = false;
             }.bind(this), function(response){
                 this.processingPhoto = false;
