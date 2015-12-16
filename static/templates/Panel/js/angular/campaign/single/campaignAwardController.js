@@ -23,7 +23,7 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
     // model
     this.award = { id:0 };
     this.awardCOPY = {};
-    this.currentTypeName = this.awardsUtils.getTypeNameFromNumber(-1);
+    this.currentTypeName = this.awardsUtils.getTypeNameFromNumber(0);
     // cropper
     this.myCroppedImage='';
 

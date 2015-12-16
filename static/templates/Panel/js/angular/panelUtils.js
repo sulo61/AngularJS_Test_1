@@ -53,12 +53,10 @@ angular.module('panelApp')
                         return typesNames[1];
                     case 2:
                         return typesNames[2];
-                    default:
-                        return "Unknown";
                 }
             }
             this.getTypeNumberFromName = function(name){
-                return (((this.getTypesNames()).indexOf(name)) !== -1) ? ((this.getTypesNames()).indexOf(name)) : "Unknown";
+                return (((this.getTypesNames()).indexOf(name)) !== -1) ? ((this.getTypesNames()).indexOf(name)) : this.getTypesNames()[0];
             }
             this.getTypesNames = function(){
                 return ["Image without text", "Image with text", "Side image with text"];
@@ -77,12 +75,12 @@ angular.module('panelApp')
                         return typesNames[1];
                     case 2:
                         return typesNames[2];
-                    default:
-                        return "Unknown";
                 }
             }
             this.getTypeNumberFromName = function(name){
-                return (((this.getTypesNames()).indexOf(name)) !== -1) ? ((this.getTypesNames()).indexOf(name)) : "Unknown";
+                a = (((this.getTypesNames()).indexOf(name)));
+                debugger
+                return (((this.getTypesNames()).indexOf(name)) !== -1) ? ((this.getTypesNames()).indexOf(name)) : this.getTypesNames()[0];
             }
             this.getTypesNames = function(){
                 return ["Text without image", "Text with full screen image", "Text with side image"];
