@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignPromotionController', ['$routeParams', 'CampaignPromotions', 'CampaignPromotion', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', function($routeParams, CampaignPromotions, CampaignPromotion, currentPath, toast, campaignMENU, panelCache, Upload){
+angular.module('panelApp').controller('campaignPromotionController', ['$routeParams', 'CampaignPromotions', 'CampaignPromotion', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'dataImageUtils', function($routeParams, CampaignPromotions, CampaignPromotion, currentPath, toast, campaignMENU, panelCache, Upload, dataImageUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -11,6 +11,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     this.currentPath = currentPath;
     this.toast = toast;
     this.cache = panelCache;
+    this.photoUtils = dataImageUtils;
     // promotion params
     this.campaignID = $routeParams.campaignID;
     this.campaignNAME = $routeParams.campaignNAME;
@@ -124,7 +125,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     }
 
     this.saveFile = function () {
-        this.f = this.convertDataToFile(this.myCroppedImage, "image");
+        this.f = this.photoUtils.convertDataToFile(this.myCroppedImage, "image");
         if (this.f) {
             Upload.upload({
                 url: '/api/campaigns/'+this.campaignID+"/promotions/"+this.itemID+"/image/",
@@ -145,16 +146,5 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
 
 
 
-    this.convertDataToFile = function(dataURI, type) {
-        var byteString = atob(dataURI.split(',')[1]);
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
 
-        var ab = new ArrayBuffer(byteString.length);
-        var ia = new Uint8Array(ab);
-        for (var i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-        var bb = new Blob([ab], { type: type });
-        return bb;
-    }
 }]);

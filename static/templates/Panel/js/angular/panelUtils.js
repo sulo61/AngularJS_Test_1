@@ -90,3 +90,25 @@ angular.module('panelApp')
         }
         return new awardsUtils();
     })
+    .factory('dataImageUtils', function(){
+        dataImageUtils = function() {
+            this.convertDataToFile = function(dataURI, type) {
+                byteString = '';
+                byteString = atob(dataURI.split(',')[1]);
+                mimeString = ''
+                mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+                ab = [];
+                ab = new ArrayBuffer(byteString.length);
+                ia = [];
+                ia = new Uint8Array(ab);
+                for (var i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+                bb = '';
+                bb = new Blob([ab], { type: type });
+                return bb;
+            }
+        }
+        return new dataImageUtils();
+    })

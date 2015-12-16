@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'absUtils', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload, absUtils){
+angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'absUtils', 'dataImageUtils', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload, absUtils, dataImageUtils){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -12,6 +12,7 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
     this.toast = toast;
     this.cache = panelCache;
     this.absUtils = absUtils;
+    this.photoUtils = dataImageUtils;
     // ad params
     this.campaignID = $routeParams.campaignID;
     this.campaignNAME = $routeParams.campaignNAME;
@@ -129,7 +130,7 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
     }
 
     this.saveFile = function () {
-        this.f = this.convertDataToFile(this.myCroppedImage, "image");
+        this.f = this.photoUtils.convertDataToFile(this.myCroppedImage, "image");
         if (this.f) {
             Upload.upload({
                 url: '/api/campaigns/'+this.campaignID+"/ads/"+this.adID+"/image/",
@@ -147,18 +148,4 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
 
 
     this.getAd(this.adID);
-
-
-    this.convertDataToFile = function(dataURI, type) {
-        var byteString = atob(dataURI.split(',')[1]);
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
-        var ab = new ArrayBuffer(byteString.length);
-        var ia = new Uint8Array(ab);
-        for (var i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-        var bb = new Blob([ab], { type: type });
-        return bb;
-    }
 }]);
