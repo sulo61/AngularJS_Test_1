@@ -47,6 +47,18 @@
                                     result-image-size=300 >
                             </img-crop>
                         </div>
+                        <br>
+                        <div class="sk-spinner sk-spinner-cube-grid" ng-show="cPromotionCtrl.processingPhoto">
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                        </div>
                         <br><br><br>
                         <button class="btn btn-success" type="file" ngf-select="cPromotionCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
                         <button class="btn btn-primary" ng-click="cPromotionCtrl.saveFile()" accept="image/*">SAVE</button>

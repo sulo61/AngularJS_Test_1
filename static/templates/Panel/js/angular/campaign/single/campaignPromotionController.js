@@ -24,6 +24,8 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     this.promotionCOPY = {};
     // cropper
     this.myCroppedImage='';
+    // load
+    this.processingPhoto = false;
 
     this.dismiss = function(){
         this.promotion = angular.copy(this.promotionCOPY);
@@ -108,6 +110,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     this.uploadFiles = function(file) {
         this.f = file;
         if (this.f) {
+            this.processingPhoto = true;
             this.f.upload = Upload.upload({
                 url: '/api/campaigns/'+this.campaignID+"/promotions/"+this.itemID+"/image/",
                 data: {image: this.f}
@@ -116,7 +119,9 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
                 this.toast.showSuccess();
                 this.promotion.image = "";
                 this.promotion.image = angular.copy(response.data.image);
+                this.processingPhoto = false;
             }.bind(this), function (response) {
+                this.processingPhoto = false;
                 if (response.status > 0)
                     this.toast.showApiError(response);
             }.bind(this), function (evt) {
@@ -127,6 +132,7 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
     this.saveFile = function () {
         this.f = this.photoUtils.convertDataToFile(this.myCroppedImage, "image");
         if (this.f) {
+            this.processingPhoto = true;
             Upload.upload({
                 url: '/api/campaigns/'+this.campaignID+"/promotions/"+this.itemID+"/image/",
                 data: {image: this.f}
@@ -134,7 +140,9 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
                 this.toast.showSuccess();
                 this.promotion.image = "";
                 this.promotion.image = angular.copy(response.data.image);
+                this.processingPhoto = false;
             }.bind(this), function(response){
+                this.processingPhoto = false;
                 if (response.status > 0)
                     this.toast.showApiError(response);
             })

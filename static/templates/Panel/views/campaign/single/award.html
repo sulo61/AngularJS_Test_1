@@ -54,6 +54,18 @@
                                     result-image-size=300 >
                             </img-crop>
                         </div>
+                        <br>
+                        <div class="sk-spinner sk-spinner-cube-grid" ng-show="cAwardCtrl.processingPhoto">
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                            <div class="sk-cube"></div>
+                        </div>
                         <br><br><br>
                         <button class="btn btn-success" type="file" ngf-select="cAwardCtrl.uploadFiles($file)" accept="image/*">UPLOAD NEW PHOTO</button>
                         <button class="btn btn-primary" ng-click="cAwardCtrl.saveFile()" accept="image/*">SAVE</button>
@@ -61,6 +73,18 @@
                     <div style="text-align:center;" ng-hide="cAwardCtrl.award.id>0">
                         Save award to show upload photo option.
                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
                 </div>
             </div>
