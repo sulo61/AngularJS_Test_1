@@ -91,7 +91,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         }
         return new currentPath();
     })
-    .factory('toast', function(toaster){
+    .factory('toast', function(toaster, errorDictonary){
         toast = function () {
             this.showSuccess = function () {
                 toaster.pop({
@@ -126,7 +126,7 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     errors.forEach(function(e){
                         toaster.pop({
                             type: 'error',
-                            title: 'Error: '+e[0],
+                            title: 'Error: '+errorDictonary.getErrorPrettyName(e[0]),
                             body: e[1].join(),
                             showCloseButton: true,
                             timeout: 5000

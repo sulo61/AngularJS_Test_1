@@ -112,3 +112,23 @@ angular.module('panelApp')
         }
         return new dataImageUtils();
     })
+    .factory('errorDictonary', function() {
+        errorDictonary = function() {
+            this.getErrorPrettyName = function(fieldName){
+                return (this.dictonary[fieldName]!=null)?this.dictonary[fieldName]:fieldName;
+            }
+            this.dictonary = {
+                "start_date": "Start date",
+                "end_date": "End date",
+                "name": "Name",
+                "address": "Address",
+                "opening_hours": "Opening hours",
+                "open_hours": "Opening hours",
+                "title": "Title",
+                "type": "Type",
+                "ad": "Advertisement",
+                "old_password": "Old password"
+            }
+        }
+        return new errorDictonary();
+    })
