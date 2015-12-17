@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', 'toast', 'dateUtils', function(currentPath, Campaigns, Campaign, toast, dateUtils){
+angular.module('panelApp').controller('campaignsController', ['currentPath', 'Campaigns', 'Campaign', 'toast', 'dateUtils', 'pageLoader', function(currentPath, Campaigns, Campaign, toast, dateUtils, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -44,6 +44,8 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             this.lock();
         }
 
+        pageLoader.showLoader();
+
         Campaigns.get({page:page}, function(success){
             this.campaignsList = [];
             this.campaignsPages = [];
@@ -54,9 +56,11 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
             }
             this.campaignsCurrentPage = page;
             this.unlock();
+            pageLoader.hideLoader();
         }.bind(this), function(error){
             this.toast.showApiError(error)
             this.unlock();
+            pageLoader.hideLoader();
         }.bind(this));
 
     };

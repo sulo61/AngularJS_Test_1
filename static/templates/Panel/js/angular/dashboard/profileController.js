@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('profileController', ['currentPath', 'User', 'toast', function(currentPath, User, toast){
+angular.module('panelApp').controller('profileController', ['currentPath', 'User', 'toast', 'pageLoader', function(currentPath, User, toast, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -24,19 +24,23 @@ angular.module('panelApp').controller('profileController', ['currentPath', 'User
     // api
     // get user
     this.getUser = function(){
-
         if (this.isLock){
             return;
         } else {
             this.lock();
         }
+
+        pageLoader.showLoader();
+
         User.get(function(user) {
             this.user = angular.copy(user);
             this.userBackup = angular.copy(user);
             this.unlock();
+            pageLoader.hideLoader()
         }.bind(this), function(error){
             this.toast.showApiError(error);
             this.unlock();
+            pageLoader.hideLoader()
         });
     };
 

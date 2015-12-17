@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'absUtils', 'dataImageUtils', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload, absUtils, dataImageUtils){
+angular.module('panelApp').controller('campaignAbController', ['$routeParams', 'CampaignAds', 'CampaignAd', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'absUtils', 'dataImageUtils', 'pageLoader', function($routeParams, CampaignAds, CampaignAd, currentPath, toast, campaignMENU, panelCache, Upload, absUtils, dataImageUtils, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -58,15 +58,21 @@ angular.module('panelApp').controller('campaignAbController', ['$routeParams', '
             } else {
                 this.lock();
             }
+
+            pageLoader.showLoader();
+
+
             CampaignAd.get({campaignID:this.campaignID, adID:this.adID}, function(success){
                 this.ad = success;
                 this.currentTypeName = this.absUtils.getTypeNameFromNumber(this.ad.type);
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
+                pageLoader.hideLoader();
             }.bind(this), function(error){
                 this.toast.showApiError(error);
                 this.unlock();
+                pageLoader.hideLoader();
             }.bind(this));
 
         } else {

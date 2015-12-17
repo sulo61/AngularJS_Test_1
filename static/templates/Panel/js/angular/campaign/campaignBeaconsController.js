@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBeaconsController', ['$routeParams', 'CampaignBeacons', 'CampaignBeacon', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignBeaconsGenerate', function($routeParams, CampaignBeacons, CampaignBeacon, currentPath, toast, campaignMENU, panelCache, CampaignBeaconsGenerate){
+angular.module('panelApp').controller('campaignBeaconsController', ['$routeParams', 'CampaignBeacons', 'CampaignBeacon', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignBeaconsGenerate', 'pageLoader', function($routeParams, CampaignBeacons, CampaignBeacon, currentPath, toast, campaignMENU, panelCache, CampaignBeaconsGenerate, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -52,6 +52,7 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             this.lock();
         }
 
+        pageLoader.showLoader();
 
         CampaignBeacons.get({campaignID:this.id, page:page, pagination:true}, function(success){
             this.beaconsList = [];
@@ -63,9 +64,11 @@ angular.module('panelApp').controller('campaignBeaconsController', ['$routeParam
             }
             this.beaconsCurrentPage = page;
             this.unlock();
+            pageLoader.hideLoader();
         }.bind(this), function(error){
             this.toast.showApiError(error);
             this.unlock();
+            pageLoader.hideLoader();
         }.bind(this));
 
     };

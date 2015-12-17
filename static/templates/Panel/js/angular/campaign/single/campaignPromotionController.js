@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignPromotionController', ['$routeParams', 'CampaignPromotions', 'CampaignPromotion', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'dataImageUtils', function($routeParams, CampaignPromotions, CampaignPromotion, currentPath, toast, campaignMENU, panelCache, Upload, dataImageUtils){
+angular.module('panelApp').controller('campaignPromotionController', ['$routeParams', 'CampaignPromotions', 'CampaignPromotion', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'dataImageUtils', 'pageLoader', function($routeParams, CampaignPromotions, CampaignPromotion, currentPath, toast, campaignMENU, panelCache, Upload, dataImageUtils, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -55,14 +55,20 @@ angular.module('panelApp').controller('campaignPromotionController', ['$routePar
             } else {
                 this.lock();
             }
+
+            pageLoader.showLoader();
+
+
             CampaignPromotion.get({campaignID:this.campaignID, itemID:this.itemID}, function(success){
                 this.promotion = success;
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
+                pageLoader.hideLoader();
             }.bind(this), function(error){
                 this.toast.showError(error);
                 this.unlock();
+                pageLoader.hideLoader();
             }.bind(this));
 
         }  else {

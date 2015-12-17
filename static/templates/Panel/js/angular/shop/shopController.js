@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'currentPath', 'toast', 'Shop', 'Shops', 'GoogleCoords', function($scope, $http, $routeParams, $timeout, Upload, currentPath, toast, Shop, Shops, GoogleCoords){
+angular.module('panelApp').controller('shopController', ['$scope', '$http', '$routeParams', '$timeout', 'Upload', 'currentPath', 'toast', 'Shop', 'Shops', 'GoogleCoords', 'pageLoader', function($scope, $http, $routeParams, $timeout, Upload, currentPath, toast, Shop, Shops, GoogleCoords, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -73,6 +73,9 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
             } else {
                 this.lock();
             }
+
+            pageLoader.showLoader();
+
             Shop.get({shopID:this.id}, function(success){
                 this.shop = success;
                 this.parseDaysToRequest();
@@ -80,9 +83,11 @@ angular.module('panelApp').controller('shopController', ['$scope', '$http', '$ro
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
+                pageLoader.hideLoader();
             }.bind(this), function(error){
                 this.unlock();
                 this.toast.showError(error);
+                pageLoader.hideLoader();
             }.bind(this));
         } else {
             this.currentPath.setPath("Shops / New shop");

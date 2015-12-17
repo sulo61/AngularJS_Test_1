@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'dateUtils', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU, panelCache, dateUtils){
+angular.module('panelApp').controller('campaignBasicController', ['$routeParams', 'Campaign', 'Campaigns', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'dateUtils', 'pageLoader', function($routeParams, Campaign, Campaigns, currentPath, toast, campaignMENU, panelCache, dateUtils, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -68,6 +68,10 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
             } else {
                 this.lock();
             }
+
+            pageLoader.showLoader();
+
+
             Campaign.get({campaignID:this.id}, function(success){
                 this.basic = success;
                 this.basic.beacons = [];
@@ -75,9 +79,11 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
                 this.unlock();
                 this.updatePath();
                 this.getDates();
+                pageLoader.hideLoader();
             }.bind(this), function(error){
                 this.toast.showError(error);
                 this.unlock();
+                pageLoader.hideLoader();
             }.bind(this));
         } else {
             this.currentPath.setPath("Campaign / New campaign");

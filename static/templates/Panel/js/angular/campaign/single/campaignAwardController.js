@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignAwardController', ['$routeParams', 'CampaignAwards', 'CampaignAward', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'awardsUtils', 'dataImageUtils', function($routeParams, CampaignAwards, CampaignAward, currentPath, toast, campaignMENU, panelCache, Upload, awardsUtils, dataImageUtils){
+angular.module('panelApp').controller('campaignAwardController', ['$routeParams', 'CampaignAwards', 'CampaignAward', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'awardsUtils', 'dataImageUtils', 'pageLoader', function($routeParams, CampaignAwards, CampaignAward, currentPath, toast, campaignMENU, panelCache, Upload, awardsUtils, dataImageUtils, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -58,15 +58,21 @@ angular.module('panelApp').controller('campaignAwardController', ['$routeParams'
             } else {
                 this.lock();
             }
+
+            pageLoader.showLoader();
+
+
             CampaignAward.get({campaignID:this.campaignID, awardID:this.awardID}, function(success){
                 this.award = success;
                 this.currentTypeName = this.awardsUtils.getTypeNameFromNumber(this.award.type);
                 this.makeCopy();
                 this.unlock();
                 this.updatePath();
+                pageLoader.hideLoader();
             }.bind(this), function(error){
                 this.toast.showError(error);
                 this.unlock();
+                pageLoader.hideLoader();
             }.bind(this));
 
         }  else {

@@ -8108,7 +8108,7 @@ body.md-skin {
   bottom: 0;
   right: 0;
   z-index: 10000;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+  opacity: 0.5;
+  filter: alpha(opacity=50);
   padding-top: 30%;
 }

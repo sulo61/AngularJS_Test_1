@@ -1,4 +1,4 @@
-angular.module('panelApp').controller('campaignActionController', ['$routeParams', 'CampaignActions', 'CampaignAction', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'CampaignBeacons', 'CampaignAds', 'absUtils', function($routeParams, CampaignActions, CampaignAction, currentPath, toast, campaignMENU, panelCache, Upload, CampaignBeacons, CampaignAds, absUtils){
+angular.module('panelApp').controller('campaignActionController', ['$routeParams', 'CampaignActions', 'CampaignAction', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'Upload', 'CampaignBeacons', 'CampaignAds', 'absUtils', 'pageLoader', function($routeParams, CampaignActions, CampaignAction, currentPath, toast, campaignMENU, panelCache, Upload, CampaignBeacons, CampaignAds, absUtils, pageLoader){
     // lock
     this.isLock = false;
     this.lock = function(){
@@ -113,6 +113,10 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
             } else {
                 this.lock();
             }
+
+            pageLoader.showLoader();
+
+
             CampaignAction.get({campaignID:this.campaignID, actionID:this.actionID}, function(success){
                 this.action = success;
                 this.makeCopy();
@@ -120,9 +124,11 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
                 this.updatePath();
                 this.getBeacons(1);
                 this.getAds(1);
+                pageLoader.hideLoader();
             }.bind(this), function(error){
                 this.toast.showApiError(error);
                 this.unlock();
+                pageLoader.hideLoader();
             }.bind(this));
 
         }  else {

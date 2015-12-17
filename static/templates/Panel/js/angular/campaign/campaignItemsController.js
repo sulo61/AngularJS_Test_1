@@ -1,7 +1,7 @@
 angular.module('panelApp')
     .controller('campaignItemsController',
-        ['$routeParams', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignItems', 'CampaignItem', 'absUtils',
-        function($routeParams, currentPath, toast, campaignMENU, panelCache, CampaignItems, CampaignItem, absUtils){
+        ['$routeParams', 'currentPath', 'toast', 'campaignMENU', 'panelCache', 'CampaignItems', 'CampaignItem', 'absUtils', 'pageLoader',
+        function($routeParams, currentPath, toast, campaignMENU, panelCache, CampaignItems, CampaignItem, absUtils, pageLoader){
 
     // lock
     this.isLock = false;
@@ -61,6 +61,8 @@ angular.module('panelApp')
             this.lock();
         }
 
+        pageLoader.showLoader();
+
         CampaignItems.get({campaignID:this.campaignID, pageNAME:this.pageName, page:page}, function(success){
             this.itemsList = [];
             this.itemsPages = [];
@@ -71,9 +73,11 @@ angular.module('panelApp')
             }
             this.itemsCurrentPage = page;
             this.unlock();
+            pageLoader.hideLoader();
         }.bind(this), function(error){
             toast.showApiError(error);
             this.unlock();
+            pageLoader.hideLoader();
         }.bind(this));
 
     };
