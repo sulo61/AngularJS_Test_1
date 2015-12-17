@@ -29,6 +29,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
     // dismiss
     this.dismiss = function(){
         this.basic = angular.copy(this.basicCopy);
+        this.getDates();
     }
     // copy
     this.makeCopy = function(response){
