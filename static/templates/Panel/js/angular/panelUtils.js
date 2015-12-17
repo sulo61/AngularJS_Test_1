@@ -79,7 +79,6 @@ angular.module('panelApp')
             }
             this.getTypeNumberFromName = function(name){
                 a = (((this.getTypesNames()).indexOf(name)));
-                debugger
                 return (((this.getTypesNames()).indexOf(name)) !== -1) ? ((this.getTypesNames()).indexOf(name)) : this.getTypesNames()[0];
             }
             this.getTypesNames = function(){

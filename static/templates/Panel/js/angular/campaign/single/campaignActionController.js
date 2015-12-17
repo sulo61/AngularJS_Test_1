@@ -51,7 +51,6 @@ angular.module('panelApp').controller('campaignActionController', ['$routeParams
     }
 
     this.updatePath = function () {
-        debugger
         this.currentPath.setPath("Campaign / " + this.cache.getCampaignName(this.campaignID) + " / Actions / " + this.action.id);
         this.currentPath.setPage(this.action.id);
     }

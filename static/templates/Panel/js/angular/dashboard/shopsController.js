@@ -68,7 +68,6 @@ angular.module('panelApp').controller('shopsController', ['currentPath', 'Shops'
 
     };
     this.deleteShop = function(id){
-        debugger
         if (this.isLock){
             return;
         } else {

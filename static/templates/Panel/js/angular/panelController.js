@@ -134,7 +134,6 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     });
                 } else {
                     errors = Object.keys(error.data).map(function(k) { return [k, ((error.data)[k])] });
-                    debugger
                     errors.forEach(function(e){
                         toaster.pop({
                             type: 'error',
