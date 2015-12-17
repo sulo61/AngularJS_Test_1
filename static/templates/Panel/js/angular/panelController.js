@@ -134,7 +134,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                     });
                 } else {
                     errors = Object.keys(error.data).map(function(k) { return [k, ((error.data)[k])] });
-                    errors.forEach(function(e){
+                    errors.forEach(function(e) {
+                        console.log(e[0]);
+                        if (document.getElementById(e[0])!=null) {
+                            document.getElementById(e[0]).className = document.getElementById(e[0]).className + " has-error"
+                        }
                         toaster.pop({
                             type: 'error',
                             title: 'Error: '+errorDictonary.getErrorPrettyName(e[0]),
@@ -143,6 +147,11 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
                             timeout: 5000
                         });
                     })
+                }
+            }
+            this.removeError = function(element){
+                if (document.getElementById(element)!=null) {
+                    document.getElementById(element).className = document.getElementById(element).className.replace(/(?:^|\s)has-error(?!\S)/g, '');
                 }
             }
         }

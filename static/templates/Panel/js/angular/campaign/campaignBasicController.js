@@ -61,6 +61,7 @@ angular.module('panelApp').controller('campaignBasicController', ['$routeParams'
         this.basic.start_date = dateUtils.getTimestampFromDateTimePicker(this.startDate, this.startHour);
         this.basic.end_date = dateUtils.getTimestampFromDateTimePicker(this.endDate, this.endHour);
     }
+
     // api
     this.getBasic = function(){
         if (this.id>0){

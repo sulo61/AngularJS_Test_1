@@ -5,37 +5,37 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <form method="get" class="form-horizontal">
-                        <div class="form-group"><label class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="cBasicCtrl.basic.name"></div>
+                        <div class="form-group" id="name"><label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" ng-model="cBasicCtrl.basic.name" ng-click="cBasicCtrl.toast.removeError('name')"></div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Start date</label>
+                        <div class="form-group" id="start_date"><label class="col-sm-2 control-label">Start date</label>
                             <div class="col-sm-10">
                                 <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  ng-model="cBasicCtrl.startDate">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  ng-model="cBasicCtrl.startDate" ng-click="cBasicCtrl.toast.removeError('start_date')">
                                 </div>
                                 <br>
                                 <div class="input-group clockpicker" data-autoclose="true">
                                     <span class="input-group-addon">
                                         <span class="fa fa-clock-o"></span>
                                     </span>
-                                    <input type="text" class="form-control" ng-model="cBasicCtrl.startHour">
+                                    <input type="text" class="form-control" ng-model="cBasicCtrl.startHour" ng-click="cBasicCtrl.toast.removeError('start_date')">
 
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group"><label class="col-sm-2 control-label">End date</label>
+                        <div class="form-group" id="end_date"><label class="col-sm-2 control-label">End date</label>
                             <div class="col-sm-10">
                                 <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  ng-model="cBasicCtrl.endDate">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control"  ng-model="cBasicCtrl.endDate" ng-click="cBasicCtrl.toast.removeError('end_date')">
                                 </div>
                                 <br>
                                 <div class="input-group clockpicker" data-autoclose="true">
                                     <span class="input-group-addon">
                                         <span class="fa fa-clock-o"></span>
                                     </span>
-                                    <input type="text" class="form-control" ng-model="cBasicCtrl.endHour">
+                                    <input type="text" class="form-control" ng-model="cBasicCtrl.endHour" ng-click="cBasicCtrl.toast.removeError('end_date')">
                                 </div>
 
                             </div>
