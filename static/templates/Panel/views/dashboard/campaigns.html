@@ -18,7 +18,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="campaign in campaignsCtrl.campaignsList">
+                        <tr ng-repeat="campaign in campaignsCtrl.campaignsList" ng-style=campaignsCtrl.isCampaignActive(campaign) >
                             <td>{{campaign.name}}</td>
                             <td>{{campaignsCtrl.dateUtils.getPrettyDateFromTimestamp(campaign.start_date)}} </td>
                             <td>{{campaignsCtrl.dateUtils.getPrettyDateFromTimestamp(campaign.end_date)}} </td>

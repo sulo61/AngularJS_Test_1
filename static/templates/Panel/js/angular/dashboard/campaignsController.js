@@ -17,6 +17,19 @@ angular.module('panelApp').controller('campaignsController', ['currentPath', 'Ca
     this.campaignsPerPage = 5;
     this.campaignsCurrentPage = 1;
     this.numberOfCampaigns = 0;
+    // is active
+    this.isCampaignActive = function(campaign){
+        if (!campaign.is_active){
+            return {};
+        }
+        if ((new Date(campaign.start_date)) > (new Date())){
+            return {};
+        }
+        if ((new Date(campaign.end_date)) < (new Date())){
+            return {};
+        }
+        return { 'border-right': '2pt solid limegreen', 'border-left': '2pt solid limegreen' };
+    }
 
     // pagination nav
     this.campaignsNavActive = function(page){
