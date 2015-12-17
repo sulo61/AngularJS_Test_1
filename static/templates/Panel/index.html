@@ -63,6 +63,7 @@
 
 <body ng-app="panelApp" ng-controller="panelController as panelCtrl" >
 <toaster-container></toaster-container>
+
 <div id="wrapper">
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
@@ -104,6 +105,13 @@
     </nav>
 
     <div id="page-wrapper" class="gray-bg">
+
+        <div class="pageLoader" ng-show="panelCtrl.pageLoader.isLoading">
+            <div class="sk-spinner sk-spinner-wandering-cubes">
+                <div class="sk-cube1"></div>
+                <div class="sk-cube2"></div>
+            </div>
+        </div>
 
         <div class="border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -152,7 +160,6 @@
 
     </div>
 </div>
-
 
 </body>
 </html>

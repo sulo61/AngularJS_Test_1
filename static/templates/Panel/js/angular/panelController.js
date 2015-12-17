@@ -91,6 +91,18 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
         }
         return new currentPath();
     })
+    .factory('pageLoader', function(){
+        pageLoader = function () {
+            this.isLoading = false;
+            this.showLoader = function (){
+                this.isLoading = true;
+            }
+            this.hideLoader = function (){
+                this.isLoading = false;
+            }
+        }
+        return new pageLoader();
+    })
     .factory('toast', function(toaster, errorDictonary){
         toast = function () {
             this.showSuccess = function () {
@@ -225,8 +237,9 @@ angular.module('panelApp', ['ui.bootstrap', 'ngRoute', 'ngFileUpload', 'ngResour
             }
         };
     })
-    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU, panelCache){
+    .controller("panelController", function($window, currentPath, Logout, User, toast, campaignMENU, panelCache, pageLoader){
         this.currentPath = currentPath;
+        this.pageLoader = pageLoader;
         this.toast = toast;
         this.campaignM = campaignMENU;
         this.cache = panelCache;
