@@ -395,6 +395,41 @@ class ShopTest(TestCase):
         response = self.client.patch('/api/shops/{0}/'.format(id), data, format='json')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
+    def test_opening_hours_empty_string(self):
+        data = {
+            "name": "Nowy sklep",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3
+                    ],
+
+                    "open_time": "08:00",
+                    "close_time": "18:00"
+                },
+                {
+                    "days": [
+                        4,
+                        5,
+                        6,
+                        7
+                    ],
+
+                    "open_time": '',
+                    "close_time": ''
+                }
+            ],
+            "address": u'Złota podkowa 33 1',
+            "latitude": 51.655457,
+            "longitude": 16.1067049
+        }
+
+        id = self.create_shop()
+        response = self.client.patch('/api/shops/{0}/'.format(id), data, format='json')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
 
 class Awards(TestCase):
     def setUp(self):

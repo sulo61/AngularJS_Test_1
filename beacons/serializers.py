@@ -139,8 +139,26 @@ class CampaignSerializer(serializers.ModelSerializer):
 
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
-    open_time = TimeField(allow_null=True, format="%H:%M")
+    open_time = TimeField(required=False, allow_null=True, format="%H:%M")
     close_time = TimeField(allow_null=True, format="%H:%M")
+
+    def is_valid(self, raise_exception=False):
+        if 'open_time' in self.initial_data:
+            if self.initial_data['open_time'] == '':
+                self.initial_data['open_time'] = None
+        if 'close_time' in self.initial_data:
+            if self.initial_data['close_time'] == '':
+                self.initial_data['close_time'] = None
+        return super(OpeningHoursSerializer, self).is_valid(raise_exception)
+
+    def run_validation(self, data):
+        if 'open_time' in data:
+            if data['open_time'] == '':
+                data['open_time'] = None
+        if 'close_time' in data:
+            if data['close_time'] == '':
+                data['close_time'] = None
+        return super(OpeningHoursSerializer, self).run_validation(data)
 
     class Meta:
         model = OpeningHours
@@ -217,6 +235,10 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
         for openingHours in instance.opening_hours.all():
             openingHours.days = days_data[counter].get('days')
             openingHours.open_time = days_data[counter].get('open_time')
+            if openingHours.open_time == '':
+                openingHours.open_time = None
+            if openingHours.close_time == '':
+                openingHours.close_time = None
             openingHours.close_time = days_data[counter].get('close_time')
             openingHours.save()
             counter += 1
