@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import TimeField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, IntegerField
 
@@ -140,9 +141,13 @@ class CampaignSerializer(serializers.ModelSerializer):
 
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
+    open_time = TimeField(format="%H:%M")
+    close_time = TimeField(format="%H:%M")
+
     class Meta:
         model = OpeningHours
         fields = ('days', 'open_time', 'close_time')
+
 
 
 class ShopSerializer(serializers.HyperlinkedModelSerializer):

@@ -215,8 +215,8 @@ class ShopTest(TestCase):
                         6,
                         7
                     ],
-                    "open_time": "10:00:00",
-                    "close_time": "20:00:00"
+                    "open_time": "10:00",
+                    "close_time": "20:00"
                 }
             ],
             "address": "Some Street",
@@ -244,15 +244,15 @@ class ShopTest(TestCase):
                         4,
                         5
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }, {
                     "days": [
                         6,
                         7
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }
             ],
             "address": "Some Street 2",
@@ -275,20 +275,20 @@ class ShopTest(TestCase):
                         4,
                         5
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }, {
                     "days": [
                         6
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }, {
                     "days": [
                         7
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }
             ],
             "address": "Some Street 2",
@@ -316,8 +316,8 @@ class ShopTest(TestCase):
                         6,
                         7
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }
             ],
             "address": "Some Street 2",
@@ -342,15 +342,15 @@ class ShopTest(TestCase):
                         4,
                         5
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }, {
                     "days": [
                         6,
                         7
                     ],
-                    "open_time": "12:00:00",
-                    "close_time": "22:00:00"
+                    "open_time": "12:00",
+                    "close_time": "22:00"
                 }
             ],
             "address": "Some Street 2",
