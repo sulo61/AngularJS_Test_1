@@ -200,9 +200,11 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
             raise ValidationError(detail={'opening_hours': ['Days should ends with 7']})
 
         day_before = None
+        count = 0
         for opening_hour in opening_hours:
+            count += 1
             if not opening_hour:
-                raise ValidationError(detail={'opening_hours': ['This field shouldn\'t be empty']})
+                raise ValidationError(detail={'opening_hours{0}'.format(count): ['This field shouldn\'t be empty']})
 
             get = str(opening_hour.get('open_time'))
             if not (get == 'None' or get == ''):
@@ -210,14 +212,15 @@ class ShopSerializer(serializers.HyperlinkedModelSerializer):
                 if not (hour_get == 'None' or hour_get == ''):
                     if time.strptime(get, "%H:%M") >= \
                             time.strptime(hour_get, "%H:%M"):
-                        raise ValidationError(detail={'open_hours': ['open_time should be before close_time']})
+                        raise ValidationError(
+                            detail={'open_hours{0}'.format(count): ['open_time should be before close_time']})
 
             for day in opening_hour.get('days'):
                 if day_before is None:
                     day_before = day
                     continue
                 if day != day_before + 1:
-                    raise ValidationError(detail={'open_hours': ['Days should by ordered constantly form 1 to 7']})
+                    raise ValidationError(detail={'open_hours{0}'.format(count): ['Days should by ordered constantly form 1 to 7']})
 
                 day_before = day
         return True
