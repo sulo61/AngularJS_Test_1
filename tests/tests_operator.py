@@ -1,8 +1,6 @@
+# coding=utf-8
 import json
-
 from django.test import TestCase
-
-
 # Create your tests here.
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -151,7 +149,6 @@ class TestCampaign(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_campaign_no_data(self):
-
         data = {
         }
 
@@ -362,6 +359,41 @@ class ShopTest(TestCase):
         shop = json.loads(response.content)
         id = shop.get('id')
         return id
+
+    def test_opening_hours_nullable(self):
+        data = {
+            "name": "Nowy sklep",
+            "opening_hours": [
+                {
+                    "days": [
+                        1,
+                        2,
+                        3
+                    ],
+
+                    "open_time": "08:00",
+                    "close_time": "18:00"
+                },
+                {
+                    "days": [
+                        4,
+                        5,
+                        6,
+                        7
+                    ],
+
+                    "open_time": None,
+                    "close_time": None
+                }
+            ],
+            "address": u'Złota podkowa 33 1',
+            "latitude": 51.655457,
+            "longitude": 16.1067049
+        }
+
+        id = self.create_shop()
+        response = self.client.patch('/api/shops/{0}/'.format(id), data, format='json')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
 
 class Awards(TestCase):

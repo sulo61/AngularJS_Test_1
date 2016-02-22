@@ -192,3 +192,10 @@ class SdkUserPermission(TestCase):
 
     def test_get_active_campaign(self):
         create_campaign(self, active=True)
+
+
+class ScanBeacons(TestCase):
+    def setUp(self):
+        super(ScanBeacons, self).setUp()
+        self.client = test_utils.register_login_user(self)
+        id, client_operator = create_campaign(self, self.client_operator)

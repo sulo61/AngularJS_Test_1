@@ -1,5 +1,4 @@
 import time
-
 from django.contrib.auth import authenticate, logout, login
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -9,7 +8,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import TimeField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer, IntegerField
-
 from beacons.models import Beacon, Campaign, Shop, OpeningHours, Ad, ActionBeacon, Promotion, Award, BeaconUser, \
     UserAwards
 
@@ -141,13 +139,12 @@ class CampaignSerializer(serializers.ModelSerializer):
 
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
-    open_time = TimeField(format="%H:%M")
-    close_time = TimeField(format="%H:%M")
+    open_time = TimeField(allow_null=True, format="%H:%M")
+    close_time = TimeField(allow_null=True, format="%H:%M")
 
     class Meta:
         model = OpeningHours
         fields = ('days', 'open_time', 'close_time')
-
 
 
 class ShopSerializer(serializers.HyperlinkedModelSerializer):
@@ -336,7 +333,8 @@ class AwardSerializerGet(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance = super(AwardSerializerGet, self).update(instance, validated_data)
         if 'request' in self.context:
-            award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+            award_favourite, created = UserAwards.objects.get_or_create(award=instance,
+                                                                        user=self.context['request'].user)
             if 'favorite' in self.initial_data:
                 award_favourite.favorite = self.initial_data.get('favorite')
 
@@ -376,7 +374,8 @@ class UserAwardDetail(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if 'request' in self.context:
-            award_favourite, created = UserAwards.objects.get_or_create(award=instance, user=self.context['request'].user)
+            award_favourite, created = UserAwards.objects.get_or_create(award=instance,
+                                                                        user=self.context['request'].user)
             if 'favorite' in self.initial_data:
                 award_favourite.favorite = self.initial_data.get('favorite')
 
