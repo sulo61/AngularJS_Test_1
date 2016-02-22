@@ -1,5 +1,4 @@
 import json
-
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -64,3 +63,46 @@ def create_campaign(self, client, active=False):
                 u'is_active': active,
             }]})
     return id
+
+
+def create_add(self, campaign_id, client_operator):
+    data = {
+        'title': 'Title',
+        "description": "description",
+        "type": 1,
+    }
+    response = client_operator.post('/api/campaigns/{0}/ads/'.format(campaign_id), data=data, format='json')
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    return response.data.get('id')
+
+
+def create_action(self):
+    data = {
+        'count': 5
+    }
+    response = self.client_operator.post(u'/api/campaigns/{0}/create_beacons/'.format(self.campaign_id), data=data,
+                                         format='json')
+    beacon_id = response.data[0].get('id')
+    data = {
+        'beacon': beacon_id,
+        'ad': self.ad_id,
+        'points': 1000,
+        'time_limit': 1000
+    }
+    response = self.client_operator.post('/api/campaigns/{0}/actions/'.format(self.campaign_id), data=data)
+    self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+    return response.data.get('id')
+
+
+def get_api_key(self, operator_client):
+    response = operator_client.get('/api/user/', format='json')
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertIsNotNone(response.content, 'User data are unavailable')
+    response_data = json.loads(response.content)
+    self.assertTrue('api_key' in response_data)
+    return response_data['api_key']
+
+
+def generate_api_key_header(param):
+    return {'HTTP_API_KEY': param}

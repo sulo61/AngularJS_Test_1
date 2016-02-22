@@ -1,9 +1,10 @@
 import json
+
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from tests import test_utils
-from tests.test_utils import register_login_user
+from tests.test_utils import register_login_user, create_action
 
 __author__ = 'Mateusz'
 
@@ -197,5 +198,65 @@ class SdkUserPermission(TestCase):
 class ScanBeacons(TestCase):
     def setUp(self):
         super(ScanBeacons, self).setUp()
-        self.client = test_utils.register_login_user(self)
-        id, client_operator = create_campaign(self, self.client_operator)
+        self.client = APIClient()
+        register_login_user(self)
+        self.campaign_id, self.client_operator = create_campaign(self, True)
+        self.ad_id = test_utils.create_add(self, self.campaign_id, self.client_operator)
+
+    def test_create_beacons(self):
+        data = {
+            'count': 5
+        }
+        response = self.client_operator.post(u'/api/campaigns/{0}/create_beacons/'.format(self.campaign_id), data=data,
+                                             format='json')
+
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def test_create_action(self):
+        data = {
+            'count': 5
+        }
+        response = self.client_operator.post(u'/api/campaigns/{0}/create_beacons/'.format(self.campaign_id), data=data,
+                                             format='json')
+        beacon_id = response.data[0].get('id')
+        data = {
+            'beacon': beacon_id,
+            'ad': self.ad_id,
+            'points': 1000,
+            'time_limit': 1000
+        }
+        response = self.client_operator.post('/api/campaigns/{0}/actions/'.format(self.campaign_id), data=data)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetActionByBeacon(TestCase):
+    def setUp(self):
+        super(GetActionByBeacon, self).setUp()
+        self.client = APIClient()
+        register_login_user(self)
+        self.campaign_id, self.client_operator = create_campaign(self, True)
+        self.ad_id = test_utils.create_add(self, self.campaign_id, self.client_operator)
+        self.action_id = create_action(self)
+
+        data = {
+            'count': 5
+        }
+        response = self.client_operator.post(u'/api/campaigns/{0}/create_beacons/'.format(self.campaign_id), data=data,
+                                             format='json')
+        self.beacon = response.data[0]
+
+    def test_get_action(self):
+        response = self.client.get(
+            '/api/campaigns/{0}/action/?minor={1}&major={2}'.format(self.campaign_id, self.beacon.get('minor'),
+                                                                    self.beacon.get('major')),
+            **test_utils.generate_api_key_header(test_utils.get_api_key(self, self.client_operator)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), {
+            "id": 5,
+            "title": "",
+            "minor": 4,
+            "major": 2,
+            "UUID": "00000000-0000-0000-0000-000000000000",
+            "user_points": 1000,
+            "messages": ["You gathered 1000 POINTS"]
+        })
