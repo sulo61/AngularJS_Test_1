@@ -312,6 +312,7 @@ class PromotionSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = Promotion
         fields = ('id', 'title', 'description', 'points', 'image')
+        read_only_fields = ('image',)
 
 
 class PromotionsSerializer(serializers.ModelSerializer):
